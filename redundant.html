@@ -37,7 +37,7 @@
             margin: 0 auto;
         }
 
-        /* Device Control Panel Layout */
+        /* Device Selection Control Panel */
         .device-panel {
             background: #f6f8fa;
             border: 1px solid #e1e4e8;
@@ -72,48 +72,54 @@
             transform: translateY(-1px);
         }
         
-        /* Popup Overlay using Pure CSS Target Intersections */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; top: 0; width: 100%; height: 100%; 
-            background-color: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(3px);
-            text-decoration: none;
-        }
-        
-        /* Activate popup when targeted via anchor hash links */
-        .modal:target {
-            display: block;
-        }
-        
-        .modal-content {
-            background-color: #ffffff;
-            margin: 10% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; max-width: 800px;
+        /* Inline Configuration Display Box (Hidden by default) */
+        .config-box {
+            display: none;
+            background-color: #fafbfc;
+            border: 2px solid #0366d6;
             border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            padding: 15px;
+            margin: 20px 0;
+            cursor: pointer; /* Pointer finger indicates that clicking the box itself hides it */
+            box-shadow: 0 2px 8px rgba(3, 102, 214, 0.1);
             position: relative;
-            cursor: default;
         }
-        .close-hint {
-            float: right;
-            font-size: 12px;
-            background-color: #eaecef;
-            padding: 2px 8px;
-            border-radius: 4px;
+
+        /* Display the box when its ID is targeted by the link button */
+        .config-box:target {
+            display: block;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .close-hint-text {
+            display: block;
+            font-size: 11px;
             color: #586069;
-            text-decoration: none;
+            margin-bottom: 5px;
+            font-style: italic;
+            text-align: right;
         }
+
         pre {
-            background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto;
+            background-color: #f6f8fa;
+            padding: 16px;
+            border-radius: 6px;
+            overflow: auto;
             font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 13px; line-height: 1.45; color: #24292e; border: 1px solid #e1e4e8; max-height: 450px;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #24292e;
+            border: 1px solid #e1e4e8;
+            max-height: 400px;
+            margin: 0;
             text-align: left;
         }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .status-badge { background-color: #28a745; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; }
         ul { padding-left: 2em; }
         li { margin-top: 0.25em; }
@@ -134,23 +140,22 @@
 
     <!-- 2. Interactive Device Selection Links (No JavaScript required!) -->
     <div class="device-panel">
-        <strong>📋 Device Directory:</strong> Click a device button below to show its configuration in a popup window:
+        <strong>📋 Device Directory:</strong> Click a device button below to show its running configuration box directly on the page:
         <div class="device-grid">
-            <a href="#pop-r1" class="device-btn">Router R1</a>
-            <a href="#pop-r2" class="device-btn">Router R2</a>
-            <a href="#pop-asa1" class="device-btn">ASA Firewall 1</a>
-            <a href="#pop-asa2" class="device-btn">ASA Firewall 2</a>
-            <a href="#pop-nex1" class="device-btn">Nexus NEX-SW1</a>
-            <a href="#pop-nex2" class="device-btn">Nexus NEX-SW2</a>
+            <a href="#box-r1" class="device-btn">Router R1</a>
+            <a href="#box-r2" class="device-btn">Router R2</a>
+            <a href="#box-asa1" class="device-btn">ASA Firewall 1</a>
+            <a href="#box-asa2" class="device-btn">ASA Firewall 2</a>
+            <a href="#box-nex1" class="device-btn">Nexus NEX-SW1</a>
+            <a href="#box-nex2" class="device-btn">Nexus NEX-SW2</a>
         </div>
     </div>
 
-    <!-- 3. Self-Contained Modal Popups -->
-    <a href="#" id="pop-r1" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <a href="#" class="close-hint">✕ Click here or outside to close</a>
-            <h3 style="margin-top: 0; color: #0366d6;">Edge Router R1 Configuration</h3>
-            <pre><code>! --- Edge Router R1 Configuration ---
+    <!-- 3. Self-Contained Inline Configuration Boxes (Clicking on the box hides it instantly) -->
+    <a href="#" id="box-r1" class="config-box" style="text-decoration: none; color: inherit;">
+        <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
+        <h3 style="margin-top: 0; color: #0366d6;">Edge Router R1 Configuration</h3>
+        <pre><code>! --- Edge Router R1 Configuration ---
 hostname R1
 !
 router isis
@@ -166,14 +171,12 @@ interface GigabitEthernet0/2
  ip address 192.168.10.2 255.255.255.0
  vrrp 10 ip 192.168.10.1
  vrrp 10 priority 110</code></pre>
-        </div>
     </a>
 
-    <a href="#" id="pop-r2" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <a href="#" class="close-hint">✕ Click here or outside to close</a>
-            <h3 style="margin-top: 0; color: #0366d6;">Edge Router R2 Configuration</h3>
-            <pre><code>! --- Edge Router R2 Configuration ---
+    <a href="#" id="box-r2" class="config-box" style="text-decoration: none; color: inherit;">
+        <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
+        <h3 style="margin-top: 0; color: #0366d6;">Edge Router R2 Configuration</h3>
+        <pre><code>! --- Edge Router R2 Configuration ---
 hostname R2
 !
 interface GigabitEthernet0/1
@@ -185,14 +188,12 @@ interface GigabitEthernet0/2
  ip address 192.168.10.3 255.255.255.0
  vrrp 10 ip 192.168.10.1
  vrrp 10 priority 100</code></pre>
-        </div>
     </a>
 
-    <a href="#" id="pop-asa1" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <a href="#" class="close-hint">✕ Click here or outside to close</a>
-            <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW1 Firewall Configuration</h3>
-            <pre><code>: --- ASA-FW1 (ACTIVE) Running Config ---
+    <a href="#" id="box-asa1" class="config-box" style="text-decoration: none; color: inherit;">
+        <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
+        <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW1 Firewall Configuration</h3>
+        <pre><code>: --- ASA-FW1 (ACTIVE) Running Config ---
 ASA Version 9.8(3)
 hostname asa-fw1
 !
@@ -212,14 +213,12 @@ interface GigabitEthernet0/6
 failover
 failover lan unit primary
 failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2</code></pre>
-        </div>
     </a>
 
-    <a href="#" id="pop-asa2" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <a href="#" class="close-hint">✕ Click here or outside to close</a>
-            <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW2 Firewall Configuration</h3>
-            <pre><code>: --- ASA-FW2 (STANDBY) Running Config ---
+    <a href="#" id="box-asa2" class="config-box" style="text-decoration: none; color: inherit;">
+        <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
+        <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW2 Firewall Configuration</h3>
+        <pre><code>: --- ASA-FW2 (STANDBY) Running Config ---
 ASA Version 9.8(3)
 hostname asa-fw2
 !
@@ -228,14 +227,13 @@ failover lan unit secondary
 failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
 !
 ! [Configuration synchronized automatically across stateful clustering pipeline]</code></pre>
-        </div>
+    </div>
     </a>
 
-    <a href="#" id="pop-nex1" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <a href="#" class="close-hint">✕ Click here or outside to close</a>
-            <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW1 Configuration</h3>
-            <pre><code>! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
+    <a href="#" id="box-nex1" class="config-box" style="text-decoration: none; color: inherit;">
+        <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
+        <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW1 Configuration</h3>
+        <pre><code>! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
 version 10.3(9)
 hostname nex-sw1
 !
@@ -252,11 +250,10 @@ interface Vlan20
         </div>
     </a>
 
-    <a href="#" id="pop-nex2" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <a href="#" class="close-hint">✕ Click here or outside to close</a>
-            <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW2 Configuration</h3>
-            <pre><code>! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
+    <a href="#" id="box-nex2" class="config-box" style="text-decoration: none; color: inherit;">
+        <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
+        <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW2 Configuration</h3>
+        <pre><code>! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
 version 10.3(9)
 hostname nex-sw2
 !
