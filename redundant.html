@@ -14,7 +14,7 @@
             padding: 20px;
             background-color: #ffffff;
         }
-        h1, h2, h3 {
+        h1, h2 {
             border-bottom: 1px solid #eaecef;
             padding-bottom: 0.3em;
             color: #24292e;
@@ -37,7 +37,7 @@
             margin: 0 auto;
         }
 
-        /* Device Control Panel Navigation List */
+        /* Device Navigation List Layout */
         .device-panel {
             background: #f6f8fa;
             border: 1px solid #e1e4e8;
@@ -64,29 +64,46 @@
             text-align: center;
             transition: all 0.2s ease;
         }
-        .device-btn:hover, .device-btn.active {
+        .device-btn:hover {
             background-color: #f0f6fc;
             border-color: #0366d6;
-            color: #0a6cff;
             transform: translateY(-1px);
         }
         
-        /* Configuration Wrapper (Hidden by Default) */
-        .config-display-container {
-            display: none;
-            margin-top: 25px;
-            background-color: #ffffff;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
+        /* Modal Popup Styling */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(3px);
+            cursor: pointer; /* Pointer cue indicating clicking the backdrop closes it */
         }
-        .config-header {
-            margin-top: 0;
-            font-size: 1.25em;
-            color: #0366d6;
-            border-bottom: 1px solid #eaecef;
-            padding-bottom: 5px;
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 800px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: relative;
+            cursor: default; /* Keeps internal content click behavior normal */
+            animation: popIn 0.2s cubic-bezier(0.1, 0.8, 0.25, 1);
+        }
+        .close-hint {
+            float: right;
+            font-size: 12px;
+            background-color: #eaecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #586069;
         }
         pre {
             background-color: #f6f8fa;
@@ -98,11 +115,11 @@
             line-height: 1.45;
             color: #24292e;
             border: 1px solid #e1e4e8;
-            max-height: 500px;
+            max-height: 450px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes popIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .status-badge { 
@@ -118,39 +135,42 @@
     <h1>Enterprise Multi-Tier Redundant Network Architecture</h1>
     <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
 
-    <!-- 1. Network Topology Image -->
+    <!-- 1. Network Topology Image Linked Flawlessly -->
     <h2>Network Topology Diagram</h2>
     <div class="topology-container">
-        <img src="https://github.com" 
+        <img src="https://github.com/user-attachments/assets/904bcb6f-974c-4aa9-8fc2-4ffbf3c6ab4c" 
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
     </div>
 
     <!-- 2. Interactive Device Selection List -->
     <div class="device-panel">
-        <strong>📋 Network Device Directory:</strong> Click a device below to dynamically show its running configuration:
+        <strong>📋 Device Directory:</strong> Click a device button below to trigger its configuration popup overlay:
         <div class="device-grid">
-            <button class="device-btn" id="btn-r1" onclick="displayConfig('r1')">Router R1</button>
-            <button class="device-btn" id="btn-r2" onclick="displayConfig('r2')">Router R2</button>
-            <button class="device-btn" id="btn-asa1" onclick="displayConfig('asa1')">ASA Firewall 1</button>
-            <button class="device-btn" id="btn-asa2" onclick="displayConfig('asa2')">ASA Firewall 2</button>
-            <button class="device-btn" id="btn-nex1" onclick="displayConfig('nex1')">Nexus NEX-SW1</button>
-            <button class="device-btn" id="btn-nex2" onclick="displayConfig('nex2')">Nexus NEX-SW2</button>
+            <button class="device-btn" onclick="togglePopup('r1')">Router R1</button>
+            <button class="device-btn" onclick="togglePopup('r2')">Router R2</button>
+            <button class="device-btn" onclick="togglePopup('asa1')">ASA Firewall 1</button>
+            <button class="device-btn" onclick="togglePopup('asa2')">ASA Firewall 2</button>
+            <button class="device-btn" onclick="togglePopup('nex1')">Nexus NEX-SW1</button>
+            <button class="device-btn" onclick="togglePopup('nex2')">Nexus NEX-SW2</button>
         </div>
     </div>
 
-    <!-- 3. Dynamic Configuration Viewer Container (Populates on Click) -->
-    <div class="config-display-container" id="configViewer">
-        <h3 class="config-header" id="configTitle">Device Configuration</h3>
-        <pre><code id="configCode"></code></pre>
+    <!-- 3. Configuration Modal Popup (Clicking it anywhere closes it instantly) -->
+    <div id="configModal" class="modal" onclick="closePopup()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-hint">Click anywhere or outside to dismiss popup</span>
+            <h3 id="modalTitle" style="margin-top: 0; color: #0366d6;">Device Configuration</h3>
+            <pre><code id="modalCode"></code></pre>
+        </div>
     </div>
 
-    <!-- Architectural Documentation Content Matrix -->
+    <!-- Architectural Documentation Matrix -->
     <h2>Configured Protocols & Network Matrix</h2>
     <ul>
         <li><strong>BGP:</strong> Peerings established across ISP boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
         <li><strong>OSPF:</strong> Core backbone routing across edge routers, ASA firewalls, and Nexus core switches.</li>
-        <li><strong>First-Hop Redundancy:</strong> VRRP active at edge layers (192.168.10.1); HSRP deployed at Nexus core.</li>
+        <li><strong>First-Hop Redundant Protocols:</strong> VRRP active at edge layers (192.168.10.1); HSRP deployed at Nexus core layers.</li>
         <li><strong>vPC & LACP:</strong> Implemented across Core layers and FW distribution switches to block loops without Spanning Tree bottlenecks.</li>
     </ul>
 
@@ -162,7 +182,6 @@
     </ul>
 
     <script>
-        // Secure internal database storing network system configurations
         const configDatabase = {
             r1: `! --- Edge Router R1 Configuration ---
 hostname R1
@@ -281,20 +300,3 @@ vpc domain 10
 interface Vlan20
   no shutdown
   ip address 192.168.20.4/24
-  ip router ospf 1 area 0.0.0.0
-!
-interface Vlan50
-  ip address 192.168.50.3/24
-  hsrp 50
-    preempt
-    priority 100
-    ip 192.168.50.1`
-        };
-
-        // Handles dynamically revealing and switching configurations on click actions
-        function displayConfig(deviceKey) {
-            const viewer = document.getElementById('configViewer');
-            const titleElement = document.getElementById('configTitle');
-            const codeElement = document.getElementById('configCode');
-            
-            const deviceNames = {
