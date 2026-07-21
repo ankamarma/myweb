@@ -1,148 +1,156 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Bento Portfolio</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
+    <title>Enterprise Network Infrastructure Showcase</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
         }
-    </script>
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--card-bg);
+            padding-bottom: 1.5rem;
+        }
+
+        h1 {
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .showcase-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .img-container {
+            width: 100%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #334155;
+            margin: 1.5rem 0;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .img-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .badge-list {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: #334155;
+            color: var(--accent-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .interactive-btn {
+            background-color: var(--accent-blue);
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .interactive-btn:hover {
+            opacity: 0.9;
+        }
+
+        .status-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            background: #0f172a;
+            border-left: 4px solid var(--accent-green);
+            display: none;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 transition-colors duration-300 min-h-screen p-6">
+<body>
 
-    <!-- Header & Theme Toggle -->
-    <header class="max-w-5xl mx-auto flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-3xl font-extrabold tracking-tight">Enterprise Network Topology</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Interactive documentation & validation lab.</p>
-        </div>
-        <button id="theme-toggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:scale-105 active:scale-95 transition-all duration-200">
-            <span id="toggle-icon-light" class="hidden dark:inline">☀️ Light Mode</span>
-            <span id="toggle-icon-dark" class="inline dark:hidden">🌙 Dark Mode</span>
-        </button>
-    </header>
+    <div class="container">
+        <header>
+            <h1>High-Availability Network Topology</h1>
+            <p>Multi-tier enterprise network infrastructure simulation and validation project.</p>
+        </header>
 
-    <!-- Interactive Filter Buttons -->
-    <div class="max-w-5xl mx-auto flex gap-2 mb-6 overflow-x-auto pb-2">
-        <button class="filter-btn active px-4 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white transition-all" data-filter="all">All Layers</button>
-        <button class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" data-filter="edge">Edge Routing</button>
-        <button class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" data-filter="security">Security / FW</button>
-        <button class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" data-filter="core">Core / Switch</button>
+        <main>
+            <div class="showcase-card">
+                <h2>Infrastructure Diagram</h2>
+                
+                <!-- Replace URL below with your raw GitHub image path or absolute image link -->
+                <div class="img-container">
+                    <img src="https://github.com" alt="Network Infrastructure Topology">
+                </div>
+
+                <p>This layout visualizes dual-homed edge routing peering, active/standby stateful firewall clustering (Cisco ASA), and multi-chassis link aggregation (Nexus vPC) running downstream into segmented departmental VLANs.</p>
+                
+                <div class="badge-list">
+                    <span class="badge">BGP / VRRP</span>
+                    <span class="badge">Cisco ASA HA</span>
+                    <span class="badge">Nexus vPC</span>
+                    <span class="badge">OSPF Routing</span>
+                </div>
+
+                <button class="interactive-btn" id="simulateBtn">Run Convergence Test</button>
+                <div class="status-box" id="statusResult"></div>
+            </div>
+        </main>
     </div>
 
-    <!-- Bento Grid Layout -->
-    <main class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        <!-- Card 1: Large Intro (Always Visible) -->
-        <div class="bento-card md:col-span-2 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 shadow-sm flex flex-col justify-between group hover:shadow-md transition-all duration-300" data-category="all">
-            <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-blue-500">Project Overview</span>
-                <h2 class="text-2xl font-bold mt-2 group-hover:text-blue-500 transition-colors">High-Availability Architecture</h2>
-                <p class="text-slate-600 dark:text-slate-300 mt-2 text-sm leading-relaxed">
-                    This project showcases a highly available, resilient enterprise multi-tier network topology designed to eliminate single points of failure.
-                </p>
-            </div>
-            <div class="mt-6 flex gap-2">
-                <span class="px-2.5 py-1 text-xs rounded-md bg-slate-100 dark:bg-slate-700 font-mono">Dual-ISP</span>
-                <span class="px-2.5 py-1 text-xs rounded-md bg-slate-100 dark:bg-slate-700 font-mono">vPC Clustering</span>
-            </div>
-        </div>
-
-        <!-- Card 2: Edge Layer (Filterable) -->
-        <div class="bento-card p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:scale-[1.01] hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-category="edge">
-            <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-500">Edge Layer</span>
-                <h3 class="text-lg font-bold mt-2">BGP & VRRP Peering</h3>
-                <p class="text-slate-600 dark:text-slate-300 mt-1 text-xs">
-                    Leverages BGP across dual ISPs with VRRP tracking for outbound path failover.
-                </p>
-            </div>
-            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <span class="text-xs font-medium text-emerald-500 flex items-center gap-1">● Active / Active</span>
-                <span class="text-xs font-mono text-slate-400">R1 / R2</span>
-            </div>
-        </div>
-
-        <!-- Card 3: Security Tier (Filterable) -->
-        <div class="bento-card p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:scale-[1.01] hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-category="security">
-            <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-amber-500">Security Tier</span>
-                <h3 class="text-lg font-bold mt-2">Cisco ASA Clustering</h3>
-                <p class="text-slate-600 dark:text-slate-300 mt-1 text-xs">
-                    Stateful Active/Standby firewall clustering via high-speed state synchronization links.
-                </p>
-            </div>
-            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <span class="text-xs font-medium text-amber-500 flex items-center gap-1">● Stateful Sync</span>
-                <span class="text-xs font-mono text-slate-400">ASA-FW1</span>
-            </div>
-        </div>
-
-        <!-- Card 4: Core Switching (Filterable) -->
-        <div class="bento-card md:col-span-2 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:scale-[1.01] hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-category="core">
-            <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-purple-500">Core Distribution</span>
-                <h3 class="text-lg font-bold mt-2">Nexus Multi-Chassis EtherChannel (vPC)</h3>
-                <p class="text-slate-600 dark:text-slate-300 mt-1 text-xs">
-                    Deploys LACP and vPC across Nexus distribution layers to eliminate Spanning Tree blocks while guaranteeing sub-second convergence.
-                </p>
-            </div>
-            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <span class="text-xs font-medium text-purple-500 flex items-center gap-1">● HSRP Active</span>
-                <span class="text-xs font-mono text-slate-400">VLANs 50/60/70/80</span>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- JavaScript For Interactivity -->
     <script>
-        // 1. Theme Toggle Logic
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-
-        themeToggleBtn.addEventListener('click', () => {
-            if (htmlElement.classList.contains('dark')) {
-                htmlElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                htmlElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-
-        // 2. Dynamic Bento Filter Logic
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const bentoCards = document.querySelectorAll('.bento-card');
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Update active button styles
-                filterButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
-                filterButtons.forEach(btn => btn.classList.add('bg-white', 'dark:bg-slate-800'));
-                
-                button.classList.remove('bg-white', 'dark:bg-slate-800');
-                button.classList.add('bg-blue-600', 'text-white');
-
-                const filterValue = button.getAttribute('data-filter');
-
-                // Animate and hide/show cards
-                bentoCards.forEach(card => {
-                    const cardCategory = card.getAttribute('data-category');
-                    
-                    if (filterValue === 'all' || cardCategory === filterValue || cardCategory === 'all') {
-                        card.style.display = 'flex';
-                        setTimeout(() => card.style.opacity = '1', 10);
-                    } else {
-                        card.style.opacity = '0';
-                        card.style.display = 'none';
-                    }
-                });
-            });
+        document.getElementById('simulateBtn').addEventListener('click', function() {
+            const statusBox = document.getElementById('statusResult');
+            statusBox.style.display = 'block';
+            statusBox.innerHTML = '<strong>Simulating Core Outage...</strong><br>Primary Link Dropped. BGP reconverging... VRRP transitioning secondary to active. Stateful firewall replication active. <strong>Sub-second convergence verified!</strong>';
         });
     </script>
 </body>
