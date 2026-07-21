@@ -21,7 +21,6 @@
         }
         h1 { font-size: 2em; }
         h2 { font-size: 1.5em; margin-top: 24px; }
-        h3 { font-size: 1.25em; margin-top: 20px; color: #0366d6; }
         
         .topology-container {
             position: relative;
@@ -45,9 +44,6 @@
             border-radius: 6px;
             padding: 20px;
             margin: 20px 0;
-            position: sticky;
-            top: 10px;
-            z-index: 100;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .device-grid {
@@ -68,16 +64,29 @@
             text-align: center;
             transition: all 0.2s ease;
         }
-        .device-btn:hover {
+        .device-btn:hover, .device-btn.active {
             background-color: #f0f6fc;
             border-color: #0366d6;
+            color: #0a6cff;
             transform: translateY(-1px);
         }
         
-        /* Configuration Blocks */
-        .config-block {
-            margin-bottom: 30px;
-            scroll-margin-top: 180px; /* Prevents sticky header from blocking text */
+        /* Configuration Wrapper (Hidden by Default) */
+        .config-display-container {
+            display: none;
+            margin-top: 25px;
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .config-header {
+            margin-top: 0;
+            font-size: 1.25em;
+            color: #0366d6;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 5px;
         }
         pre {
             background-color: #f6f8fa;
@@ -91,6 +100,11 @@
             border: 1px solid #e1e4e8;
             max-height: 500px;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .status-badge { 
             background-color: #28a745; color: white; padding: 3px 8px; 
             border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; 
@@ -104,33 +118,53 @@
     <h1>Enterprise Multi-Tier Redundant Network Architecture</h1>
     <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
 
-    <!-- 1. Network Topology Image with your real link -->
+    <!-- 1. Network Topology Image -->
     <h2>Network Topology Diagram</h2>
     <div class="topology-container">
-        <img src="https://github.com/user-attachments/assets/904bcb6f-974c-4aa9-8fc2-4ffbf3c6ab4c" 
+        <img src="https://github.com" 
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
     </div>
 
-    <!-- 2. Interactive Device Navigation List -->
+    <!-- 2. Interactive Device Selection List -->
     <div class="device-panel">
-        <strong>📋 Quick Jump List:</strong> Click a device below to scroll directly to its detailed running configuration:
+        <strong>📋 Network Device Directory:</strong> Click a device below to dynamically show its running configuration:
         <div class="device-grid">
-            <button class="device-btn" onclick="scrollToDevice('r1')">Router R1</button>
-            <button class="device-btn" onclick="scrollToDevice('r2')">Router R2</button>
-            <button class="device-btn" onclick="scrollToDevice('asa1')">ASA Firewall 1</button>
-            <button class="device-btn" onclick="scrollToDevice('asa2')">ASA Firewall 2</button>
-            <button class="device-btn" onclick="scrollToDevice('nex1')">Nexus NEX-SW1</button>
-            <button class="device-btn" onclick="scrollToDevice('nex2')">Nexus NEX-SW2</button>
+            <button class="device-btn" id="btn-r1" onclick="displayConfig('r1')">Router R1</button>
+            <button class="device-btn" id="btn-r2" onclick="displayConfig('r2')">Router R2</button>
+            <button class="device-btn" id="btn-asa1" onclick="displayConfig('asa1')">ASA Firewall 1</button>
+            <button class="device-btn" id="btn-asa2" onclick="displayConfig('asa2')">ASA Firewall 2</button>
+            <button class="device-btn" id="btn-nex1" onclick="displayConfig('nex1')">Nexus NEX-SW1</button>
+            <button class="device-btn" id="btn-nex2" onclick="displayConfig('nex2')">Nexus NEX-SW2</button>
         </div>
     </div>
 
-    <!-- 3. Complete Running Configurations Section -->
-    <h2>Device Running Configurations</h2>
+    <!-- 3. Dynamic Configuration Viewer Container (Populates on Click) -->
+    <div class="config-display-container" id="configViewer">
+        <h3 class="config-header" id="configTitle">Device Configuration</h3>
+        <pre><code id="configCode"></code></pre>
+    </div>
 
-    <div class="config-block" id="cfg-r1">
-        <h3>Edge Router R1 (Active Gateway)</h3>
-        <pre><code>! --- Edge Router R1 Configuration ---
+    <!-- Architectural Documentation Content Matrix -->
+    <h2>Configured Protocols & Network Matrix</h2>
+    <ul>
+        <li><strong>BGP:</strong> Peerings established across ISP boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
+        <li><strong>OSPF:</strong> Core backbone routing across edge routers, ASA firewalls, and Nexus core switches.</li>
+        <li><strong>First-Hop Redundancy:</strong> VRRP active at edge layers (192.168.10.1); HSRP deployed at Nexus core.</li>
+        <li><strong>vPC & LACP:</strong> Implemented across Core layers and FW distribution switches to block loops without Spanning Tree bottlenecks.</li>
+    </ul>
+
+    <h2>High Availability (HA) Failover Testing</h2>
+    <ul>
+        <li><strong>Edge Router Drop:</strong> <span class="status-badge">PASS</span> BGP reconverges; VRRP targets failover line seamlessly.</li>
+        <li><strong>Active Firewall Crash (ASA-FW1):</strong> <span class="status-badge">PASS</span> Stateful synchronization over 192.168.100.0/30 updates ASA-FW2 dynamically.</li>
+        <li><strong>Core Nexus Switch Outage:</strong> <span class="status-badge">PASS</span> vPC domains keep downstream distribution lines up.</li>
+    </ul>
+
+    <script>
+        // Secure internal database storing network system configurations
+        const configDatabase = {
+            r1: `! --- Edge Router R1 Configuration ---
 hostname R1
 !
 router isis
@@ -145,12 +179,9 @@ interface GigabitEthernet0/2
  description LINK-TO-INTERNAL
  ip address 192.168.10.2 255.255.255.0
  vrrp 10 ip 192.168.10.1
- vrrp 10 priority 110</code></pre>
-    </div>
+ vrrp 10 priority 110`,
 
-    <div class="config-block" id="cfg-r2">
-        <h3>Edge Router R2 (Standby Gateway)</h3>
-        <pre><code>! --- Edge Router R2 Configuration ---
+            r2: `! --- Edge Router R2 Configuration ---
 hostname R2
 !
 interface GigabitEthernet0/1
@@ -161,12 +192,9 @@ interface GigabitEthernet0/2
  description LINK-TO-INTERNAL
  ip address 192.168.10.3 255.255.255.0
  vrrp 10 ip 192.168.10.1
- vrrp 10 priority 100</code></pre>
-    </div>
+ vrrp 10 priority 100`,
 
-    <div class="config-block" id="cfg-asa1">
-        <h3>Cisco ASA-FW1 Firewall (Active Node)</h3>
-        <pre><code>: --- ASA-FW1 (ACTIVE) Running Config ---
+            asa1: `: --- ASA-FW1 (ACTIVE) Running Config ---
 ASA Version 9.8(3)
 hostname asa-fw1
 !
@@ -195,12 +223,9 @@ failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.
 router ospf 1
  router-id 3.3.3.3
  network 192.168.10.0 255.255.255.0 area 0
- network 192.168.20.0 255.255.255.0 area 0</code></pre>
-    </div>
+ network 192.168.20.0 255.255.255.0 area 0`,
 
-    <div class="config-block" id="cfg-asa2">
-        <h3>Cisco ASA-FW2 Firewall (Standby Node)</h3>
-        <pre><code>: --- ASA-FW2 (STANDBY) Running Config ---
+            asa2: `: --- ASA-FW2 (STANDBY) Running Config ---
 ASA Version 9.8(3)
 hostname asa-fw2
 !
@@ -210,12 +235,9 @@ failover lan interface FO_LINK GigabitEthernet0/3
 failover link FO_LINK GigabitEthernet0/3
 failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
 !
-! [Configuration synchronized automatically across stateful clustering pipeline]</code></pre>
-    </div>
+! [Configuration synchronized automatically across stateful clustering pipeline]`,
 
-    <div class="config-block" id="cfg-nex1">
-        <h3>Cisco Nexus Core Switch NEX-SW1 (Primary HSRP Node)</h3>
-        <pre><code>! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
+            nex1: `! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
 version 10.3(9)
 hostname nex-sw1
 !
@@ -240,12 +262,9 @@ interface Vlan50
   hsrp 50
     preempt
     priority 110
-    ip 192.168.50.1</code></pre>
-    </div>
+    ip 192.168.50.1`,
 
-    <div class="config-block" id="cfg-nex2">
-        <h3>Cisco Nexus Core Switch NEX-SW2 (Secondary HSRP Node)</h3>
-        <pre><code>! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
+            nex2: `! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
 version 10.3(9)
 hostname nex-sw2
 !
@@ -269,33 +288,13 @@ interface Vlan50
   hsrp 50
     preempt
     priority 100
-    ip 192.168.50.1</code></pre>
-    </div>
+    ip 192.168.50.1`
+        };
 
-    <!-- Architectural Documentation Content Matrix -->
-    <h2>Configured Protocols & Network Matrix</h2>
-    <ul>
-        <li><strong>BGP:</strong> Peerings established across ISP boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
-        <li><strong>OSPF:</strong> Core backbone routing across edge routers, ASA firewalls, and Nexus core switches.</li>
-        <li><strong>First-Hop Redundancy:</strong> VRRP active at edge layers (192.168.10.1); HSRP deployed at Nexus core.</li>
-        <li><strong>vPC & LACP:</strong> Implemented across Core layers and FW distribution switches to block loops without Spanning Tree bottlenecks.</li>
-    </ul>
-
-    <h2>High Availability (HA) Failover Testing</h2>
-    <ul>
-        <li><strong>Edge Router Drop:</strong> <span class="status-badge">PASS</span> BGP reconverges; VRRP targets failover line seamlessly.</li>
-        <li><strong>Active Firewall Crash (ASA-FW1):</strong> <span class="status-badge">PASS</span> Stateful synchronization over 192.168.100.0/30 updates ASA-FW2 dynamically.</li>
-        <li><strong>Core Nexus Switch Outage:</strong> <span class="status-badge">PASS</span> vPC domains keep downstream distribution lines up.</li>
-    </ul>
-
-    <script>
-        // Smooth scrolling function to target matching ID blocks
-        function scrollToDevice(deviceKey) {
-            const element = document.getElementById('cfg-' + deviceKey);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-    </script>
-</body>
-</html>
+        // Handles dynamically revealing and switching configurations on click actions
+        function displayConfig(deviceKey) {
+            const viewer = document.getElementById('configViewer');
+            const titleElement = document.getElementById('configTitle');
+            const codeElement = document.getElementById('configCode');
+            
+            const deviceNames = {
