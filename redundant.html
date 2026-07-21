@@ -119,11 +119,12 @@
         <!-- Image with Map Linked -->
         <img src="https://githubusercontent.com" 
              usemap="#network-map" 
+             id="network-img"
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
 
-        <!-- Clickable Area Coordinates mapped out for a standard 1000px width layout -->
-        <map name="network-map">
+        <!-- Clickable Area Coordinates mapped out for baseline width 1000px layout -->
+        <map name="network-map" id="network-map">
             <area shape="rect" coords="410,60,455,120" alt="R1" onclick="showConfig('r1')">
             <area shape="rect" coords="585,60,630,120" alt="R2" onclick="showConfig('r2')">
             <area shape="rect" coords="310,480,365,545" alt="ASA-FW1" onclick="showConfig('asa1')">
