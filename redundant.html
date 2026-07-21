@@ -1,157 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Network Infrastructure Showcase</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --accent-blue: #38bdf8;
-            --accent-green: #4ade80;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            max-width: 900px;
-            width: 100%;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            border-bottom: 2px solid var(--card-bg);
-            padding-bottom: 1.5rem;
-        }
-
-        h1 {
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .showcase-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            margin-bottom: 2rem;
-        }
-
-        .img-container {
-            width: 100%;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #334155;
-            margin: 1.5rem 0;
-        }
-
-        .img-container img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .img-container img:hover {
-            transform: scale(1.02);
-        }
-
-        .badge-list {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        .badge {
-            background: #334155;
-            color: var(--accent-blue);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .interactive-btn {
-            background-color: var(--accent-blue);
-            color: #000;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
-            margin-top: 1rem;
-        }
-
-        .interactive-btn:hover {
-            opacity: 0.9;
-        }
-
-        .status-box {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 6px;
-            background: #0f172a;
-            border-left: 4px solid var(--accent-green);
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Website</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header with navigation -->
+  <header>
+    <nav>
+      <ul>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="project.html">Projectss</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="about.html">About Me</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>
+    </li>
+      </ul>
+    </nav>
+  </header>
 
-    <div class="container">
-        <header>
-            <h1>High-Availability Network Topology</h1>
-            <p>Multi-tier enterprise network infrastructure simulation and validation project.</p>
-        </header>
+  <!-- Home Section -->
+  <section id="home">
+    <h1>Welcome to My Personal Website</h1>
+    <p>About me</p>
+ 
 
-        <main>
-            <div class="showcase-card">
-                <h2>Infrastructure Diagram</h2>
-                
-                <!-- Replace URL below with your raw GitHub image path or absolute image link -->
-                <div class="img-container">
-                    <img src="https://github.com" alt="Network Infrastructure Topology">
-                </div>
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <p>If you'd like to get in touch, feel free to reach out by email at <a href="mailto:ankachingm@gmail.com">ankachingm@gmail.com</a> or connect with me on <a href="https://www.linkedin.com/">LinkedIn</a>.</p>
+  </section>
 
-                <p>This layout visualizes dual-homed edge routing peering, active/standby stateful firewall clustering (Cisco ASA), and multi-chassis link aggregation (Nexus vPC) running downstream into segmented departmental VLANs.</p>
-                
-                <div class="badge-list">
-                    <span class="badge">BGP / VRRP</span>
-                    <span class="badge">Cisco ASA HA</span>
-                    <span class="badge">Nexus vPC</span>
-                    <span class="badge">OSPF Routing</span>
-                </div>
-
-                <button class="interactive-btn" id="simulateBtn">Run Convergence Test</button>
-                <div class="status-box" id="statusResult"></div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        document.getElementById('simulateBtn').addEventListener('click', function() {
-            const statusBox = document.getElementById('statusResult');
-            statusBox.style.display = 'block';
-            statusBox.innerHTML = '<strong>Simulating Core Outage...</strong><br>Primary Link Dropped. BGP reconverging... VRRP transitioning secondary to active. Stateful firewall replication active. <strong>Sub-second convergence verified!</strong>';
-        });
-    </script>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Ankaching Marma. All Rights Reserved.</p>
+  </footer>
 </body>
 </html>
