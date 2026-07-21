@@ -112,18 +112,18 @@
     <!-- Interactive Diagram Section -->
     <h2>Interactive Network Topology</h2>
     <div class="instructions">
-        💡 <strong>Interactive Diagram:</strong> Click directly on <strong>R1, R2, ASA-FW1, ASA-FW2, NEX-SW1, or NEX-SW2</strong> in the image below to view its running configuration.
+        💡 <strong>Interactive Diagram:</strong> Click directly on <strong>R1, R2, ASA-FW1, ASA-FW2, NEX-SW1, or NEX-SW2</strong> in the image below to view its running configuration snippet.
     </div>
 
     <div class="topology-container">
-        <!-- Image with Map Linked -->
-        <img src="https://githubusercontent.com" 
+        <!-- Embedded with your exact GitHub asset link layout -->
+        <img src="https://github.com/user-attachments/assets/904bcb6f-974c-4aa9-8fc2-4ffbf3c6ab4c" 
              usemap="#network-map" 
              id="network-img"
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
 
-        <!-- Clickable Area Coordinates mapped out for baseline width 1000px layout -->
+        <!-- Clickable Area Coordinates mapped out for baseline width layout -->
         <map name="network-map" id="network-map">
             <area shape="rect" coords="410,60,455,120" alt="R1" onclick="showConfig('r1')">
             <area shape="rect" coords="585,60,630,120" alt="R2" onclick="showConfig('r2')">
@@ -143,11 +143,11 @@
         </div>
     </div>
 
-    <!-- Rest of the Project Documentation -->
+    <!-- Project Documentation Matrix -->
     <h2>Configured Protocols & Network Matrix</h2>
     <ul>
         <li><strong>BGP:</strong> Peerings established across ISP boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
-        <li><strong>OSPF:</strong> core backbone routing across edge routers, ASA firewalls, and Nexus core switches.</li>
+        <li><strong>OSPF:</strong> Core backbone routing across edge routers, ASA firewalls, and Nexus core switches.</li>
         <li><strong>First-Hop Redundancy:</strong> VRRP active at edge layers (192.168.10.1); HSRP deployed at Nexus core.</li>
         <li><strong>vPC & LACP:</strong> Implemented across Core layers and FW distribution switches to block loops without Spanning Tree bottlenecks.</li>
     </ul>
@@ -161,7 +161,6 @@
 
     <!-- Embedded JavaScript Data Stores for your configs -->
     <script>
-        // Database containing your real Cisco IOS, ASA, and Nexus configurations
         const configDatabase = {
             r1: `! --- Edge Router R1 Configuration ---
 hostname R1
@@ -290,7 +289,7 @@ interface Vlan50
     ip 192.168.50.1`
         };
 
-        // Modal Control Functionality
+        // Modal Controls
         const modal = document.getElementById("configModal");
         const titleElement = document.getElementById("modalDeviceTitle");
         const codeElement = document.getElementById("modalConfigCode");
@@ -301,3 +300,4 @@ interface Vlan50
                 r2: "Edge Router R2 (Standby Gateway)",
                 asa1: "Cisco ASA-FW1 Firewall (Active)",
                 asa2: "Cisco ASA-FW2 Firewall (Standby)",
+                nex1: "Cisco Nexus Core Switch NEX-SW1",
