@@ -22,7 +22,6 @@
         h1 { font-size: 2em; }
         h2 { font-size: 1.5em; margin-top: 24px; }
         
-        /* Topology Container */
         .topology-container {
             position: relative;
             margin: 20px 0;
@@ -44,16 +43,11 @@
             border-radius: 0 6px 6px 0;
             font-size: 14px;
         }
-
-        /* Modal / Popup Box Styles */
         .modal {
             display: none; 
             position: fixed; 
             z-index: 1000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
+            left: 0; top: 0; width: 100%; height: 100%; 
             overflow: auto; 
             background-color: rgba(0,0,0,0.6); 
             backdrop-filter: blur(3px);
@@ -63,42 +57,21 @@
             margin: 10% auto; 
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; 
-            max-width: 800px;
+            width: 80%; max-width: 800px;
             border-radius: 6px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: relative;
         }
         .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 20px;
+            color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 20px;
         }
-        .close-btn:hover {
-            color: #24292e;
-        }
-        
-        /* Configuration Code Block Styling */
+        .close-btn:hover { color: #24292e; }
         pre {
-            background-color: #f6f8fa;
-            padding: 16px;
-            border-radius: 6px;
-            overflow: auto;
+            background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto;
             font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 13px;
-            line-height: 1.45;
-            color: #24292e;
-            border: 1px solid #e1e4e8;
-            max-height: 400px;
+            font-size: 13px; line-height: 1.45; color: #24292e; border: 1px solid #e1e4e8; max-height: 400px;
         }
-        
-        .status-badge {
-            background-color: #28a745; color: white; padding: 3px 8px;
-            border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block;
-        }
+        .status-badge { background-color: #28a745; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; }
         ul { padding-left: 2em; }
         li { margin-top: 0.25em; }
         area { cursor: pointer; }
@@ -109,32 +82,30 @@
     <h1>Enterprise Multi-Tier Redundant Network Architecture</h1>
     <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
 
-    <!-- Interactive Diagram Section -->
     <h2>Interactive Network Topology</h2>
     <div class="instructions">
         💡 <strong>Interactive Diagram:</strong> Click directly on <strong>R1, R2, ASA-FW1, ASA-FW2, NEX-SW1, or NEX-SW2</strong> in the image below to view its running configuration snippet.
     </div>
 
     <div class="topology-container">
-        <!-- Embedded with your exact GitHub asset link layout -->
-        <img src="https://github.com/user-attachments/assets/904bcb6f-974c-4aa9-8fc2-4ffbf3c6ab4c" 
+        <!-- Image Map using exact structural links -->
+        <img src="https://github.com" 
              usemap="#network-map" 
              id="network-img"
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
 
-        <!-- Clickable Area Coordinates mapped out for baseline width layout -->
+        <!-- Clickable Area Coordinates mapped out for true 1712px pixel layout -->
         <map name="network-map" id="network-map">
-            <area shape="rect" coords="410,60,455,120" alt="R1" onclick="showConfig('r1')">
-            <area shape="rect" coords="585,60,630,120" alt="R2" onclick="showConfig('r2')">
-            <area shape="rect" coords="310,480,365,545" alt="ASA-FW1" onclick="showConfig('asa1')">
-            <area shape="rect" coords="665,480,720,545" alt="ASA-FW2" onclick="showConfig('asa2')">
-            <area shape="rect" coords="310,645,355,705" alt="NEX-SW1" onclick="showConfig('nex1')">
-            <area shape="rect" coords="675,645,720,705" alt="NEX-SW2" onclick="showConfig('nex2')">
+            <area shape="rect" coords="680,60,790,210" alt="R1" onclick="showConfig('r1')">
+            <area shape="rect" coords="990,60,1100,210" alt="R2" onclick="showConfig('r2')">
+            <area shape="rect" coords="510,780,630,940" alt="ASA-FW1" onclick="showConfig('asa1')">
+            <area shape="rect" coords="1120,780,1240,940" alt="ASA-FW2" onclick="showConfig('asa2')">
+            <area shape="rect" coords="510,1030,620,1160" alt="NEX-SW1" onclick="showConfig('nex1')">
+            <area shape="rect" coords="1130,1030,1240,1160" alt="NEX-SW2" onclick="showConfig('nex2')">
         </map>
     </div>
 
-    <!-- The Configuration Modal Popup -->
     <div id="configModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -143,7 +114,6 @@
         </div>
     </div>
 
-    <!-- Project Documentation Matrix -->
     <h2>Configured Protocols & Network Matrix</h2>
     <ul>
         <li><strong>BGP:</strong> Peerings established across ISP boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
@@ -159,137 +129,16 @@
         <li><strong>Core Nexus Switch Outage:</strong> <span class="status-badge">PASS</span> vPC domains keep downstream distribution lines up.</li>
     </ul>
 
-    <!-- Embedded JavaScript Data Stores for your configs -->
     <script>
         const configDatabase = {
-            r1: `! --- Edge Router R1 Configuration ---
-hostname R1
-!
-router isis
- net 49.0001.0000.0000.0001.00
- is-type level-2-only
-!
-interface GigabitEthernet0/1
- description LINK-TO-ISP1
- ip address 192.168.9.1 255.255.255.252
-!
-interface GigabitEthernet0/2
- description LINK-TO-INTERNAL
- ip address 192.168.10.2 255.255.255.0
- vrrp 10 ip 192.168.10.1
- vrrp 10 priority 110`,
-
-            r2: `! --- Edge Router R2 Configuration ---
-hostname R2
-!
-interface GigabitEthernet0/1
- description LINK-TO-ISP2
- ip address 192.168.8.1 255.255.255.252
-!
-interface GigabitEthernet0/2
- description LINK-TO-INTERNAL
- ip address 192.168.10.3 255.255.255.0
- vrrp 10 ip 192.168.10.1
- vrrp 10 priority 100`,
-
-            asa1: `: --- ASA-FW1 (ACTIVE) Running Config ---
-ASA Version 9.8(3)
-hostname asa-fw1
-!
-interface GigabitEthernet0/1
- description LINK-FW-SW
- nameif OUTSIDE
- security-level 0
- ip address 192.168.10.4 255.255.255.0 standby 192.168.10.5
-!
-interface GigabitEthernet0/3
- description LAN/STATE Failover Interface
-!
-interface GigabitEthernet0/6
- description LINK-TO-NEX-SW
- nameif inside
- security-level 100
- ip address 192.168.20.1 255.255.255.0
- ospf mtu-ignore
-!
-failover
-failover lan unit primary
-failover lan interface FO_LINK GigabitEthernet0/3
-failover link FO_LINK GigabitEthernet0/3
-failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
-!
-router ospf 1
- router-id 3.3.3.3
- network 192.168.10.0 255.255.255.0 area 0
- network 192.168.20.0 255.255.255.0 area 0`,
-
-            asa2: `: --- ASA-FW2 (STANDBY) Running Config ---
-ASA Version 9.8(3)
-hostname asa-fw2
-!
-failover
-failover lan unit secondary
-failover lan interface FO_LINK GigabitEthernet0/3
-failover link FO_LINK GigabitEthernet0/3
-failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
-!
-! [Configuration synchronized automatically from Active Node stateful pipeline]`,
-
-            nex1: `! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
-version 10.3(9)
-hostname nex-sw1
-!
-feature ospf
-feature interface-vlan
-feature lacp
-feature vpc
-!
-vpc domain 10
-  role priority 1000
-  peer-keepalive destination 10.0.0.2 source 10.0.0.1 vrf default
-  peer-gateway
-!
-interface Vlan20
-  no shutdown
-  ip address 192.168.20.3/24
-  ip ospf mtu-ignore
-  ip router ospf 1 area 0.0.0.0
-!
-interface Vlan50
-  ip address 192.168.50.2/24
-  hsrp 50
-    preempt
-    priority 110
-    ip 192.168.50.1`,
-
-            nex2: `! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
-version 10.3(9)
-hostname nex-sw2
-!
-feature ospf
-feature interface-vlan
-feature lacp
-feature vpc
-!
-vpc domain 10
-  role priority 2000
-  peer-keepalive destination 10.0.0.1 source 10.0.0.2 vrf default
-  peer-gateway
-!
-interface Vlan20
-  no shutdown
-  ip address 192.168.20.4/24
-  ip router ospf 1 area 0.0.0.0
-!
-interface Vlan50
-  ip address 192.168.50.3/24
-  hsrp 50
-    preempt
-    priority 100
-    ip 192.168.50.1`
+            r1: `! --- Edge Router R1 Configuration ---\nhostname R1\n!\nrouter isis\n net 49.0001.0000.0000.0001.00\n is-type level-2-only\n!\ninterface GigabitEthernet0/1\n description LINK-TO-ISP1\n ip address 192.168.9.1 255.255.255.252`,
+            r2: `! --- Edge Router R2 Configuration ---\nhostname R2\n!\ninterface GigabitEthernet0/1\n description LINK-TO-ISP2\n ip address 192.168.8.1 255.255.255.252`,
+            asa1: `: --- ASA-FW1 (ACTIVE) Running Config ---\nASA Version 9.8(3)\nhostname asa-fw1\n!\ninterface GigabitEthernet0/6\n description LINK-TO-NEX-SW\n nameif inside\n security-level 100\n ip address 192.168.20.1 255.255.255.0\n ospf mtu-ignore`,
+            asa2: `: --- ASA-FW2 (STANDBY) Running Config ---\nASA Version 9.8(3)\nhostname asa-fw2\n!\nfailover\nfailover lan unit secondary\n! [Configuration synchronized automatically from Active Node stateful pipeline]`,
+            nex1: `! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---\nversion 10.3(9)\nhostname nex-sw1\n!\nfeature ospf\nfeature vpc\n!\nvpc domain 10\n  role priority 1000\n  peer-keepalive destination 10.0.0.2 source 10.0.0.1 vrf default`,
+            nex2: `! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---\nversion 10.3(9)\nhostname nex-sw2\n!\nfeature ospf\nfeature vpc\n!\nvpc domain 10\n  role priority 2000\n  peer-keepalive destination 10.0.0.1 source 10.0.0.2 vrf default`
         };
 
-        // Modal Controls
         const modal = document.getElementById("configModal");
         const titleElement = document.getElementById("modalDeviceTitle");
         const codeElement = document.getElementById("modalConfigCode");
@@ -301,3 +150,43 @@ interface Vlan50
                 asa1: "Cisco ASA-FW1 Firewall (Active)",
                 asa2: "Cisco ASA-FW2 Firewall (Standby)",
                 nex1: "Cisco Nexus Core Switch NEX-SW1",
+                nex2: "Cisco Nexus Core Switch NEX-SW2"
+            };
+            titleElement.innerText = formattedNames[deviceKey] || "Device Configuration";
+            codeElement.innerText = configDatabase[deviceKey] || "No configuration snippet available.";
+            modal.style.display = "block";
+        }
+
+        function closeModal() { modal.style.display = "none"; }
+        window.onclick = function(event) { if (event.target == modal) closeModal(); }
+
+        /**
+         * Responsive Map Scaling
+         * Captures intrinsic image values and scales coordinates on device footprint mutations.
+         */
+        const img = document.getElementById('network-img');
+        const map = document.getElementById('network-map');
+        const areas = map.getElementsByTagName('area');
+        const baseWidth = 1712; // Adjusted to match the exact 1712 width asset spec
+
+        for (let i = 0; i < areas.length; i++) {
+            areas[i].dataset.coords = areas[i].getAttribute('coords');
+        }
+
+        function resizeMap() {
+            const currentWidth = img.clientWidth;
+            const ratio = currentWidth / baseWidth;
+
+            for (let i = 0; i < areas.length; i++) {
+                const originalCoords = areas[i].dataset.coords.split(',');
+                const newCoords = originalCoords.map(val => Math.round(parseInt(val) * ratio));
+                areas[i].setAttribute('coords', newCoords.join(','));
+            }
+        }
+
+        window.addEventListener('resize', resizeMap);
+        img.addEventListener('load', resizeMap);
+        setTimeout(resizeMap, 500); // Fail-safe window processing hook
+    </script>
+</body>
+</html>
