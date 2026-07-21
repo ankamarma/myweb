@@ -82,7 +82,6 @@
             overflow: auto; 
             background-color: rgba(0,0,0,0.6); 
             backdrop-filter: blur(3px);
-            cursor: pointer; /* Pointer cue indicating clicking the backdrop closes it */
         }
         .modal-content {
             background-color: #ffffff;
@@ -94,7 +93,6 @@
             border-radius: 6px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             position: relative;
-            cursor: default; /* Keeps internal content click behavior normal */
             animation: popIn 0.2s cubic-bezier(0.1, 0.8, 0.25, 1);
         }
         .close-hint {
@@ -135,17 +133,17 @@
     <h1>Enterprise Multi-Tier Redundant Network Architecture</h1>
     <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
 
-    <!-- 1. Network Topology Image Linked Flawlessly -->
+    <!-- 1. Network Topology Image -->
     <h2>Network Topology Diagram</h2>
     <div class="topology-container">
-        <img src="https://github.com/user-attachments/assets/904bcb6f-974c-4aa9-8fc2-4ffbf3c6ab4c" 
+        <img src="https://github.com" 
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
     </div>
 
     <!-- 2. Interactive Device Selection List -->
     <div class="device-panel">
-        <strong>📋 Device Directory:</strong> Click a device button below to trigger its configuration popup overlay:
+        <strong>📋 Device Directory:</strong> Click a device button below to show its configuration in a popup window:
         <div class="device-grid">
             <button class="device-btn" onclick="togglePopup('r1')">Router R1</button>
             <button class="device-btn" onclick="togglePopup('r2')">Router R2</button>
@@ -156,10 +154,10 @@
         </div>
     </div>
 
-    <!-- 3. Configuration Modal Popup (Clicking it anywhere closes it instantly) -->
+    <!-- 3. Configuration Modal Popup (Clicking anywhere on this layout closes it instantly) -->
     <div id="configModal" class="modal" onclick="closePopup()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-hint">Click anywhere or outside to dismiss popup</span>
+        <div class="modal-content">
+            <span class="close-hint">Click anywhere inside or outside this box to close</span>
             <h3 id="modalTitle" style="margin-top: 0; color: #0366d6;">Device Configuration</h3>
             <pre><code id="modalCode"></code></pre>
         </div>
@@ -300,3 +298,14 @@ vpc domain 10
 interface Vlan20
   no shutdown
   ip address 192.168.20.4/24
+  ip router ospf 1 area 0.0.0.0
+!
+interface Vlan50
+  ip address 192.168.50.3/24
+  hsrp 50
+    preempt
+    priority 100
+    ip 192.168.50.1`
+        };
+
+        const modal = document.getElementById('configModal');
