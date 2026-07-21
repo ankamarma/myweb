@@ -1,181 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Network Infrastructure & Redundancy Documentation</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 35px 20px;
-            text-align: center;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 25px;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2.3em;
-            letter-spacing: 0.5px;
-        }
-        header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-            font-size: 1.1em;
-        }
-        section {
-            background: white;
-            margin-bottom: 25px;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 5px solid #2a5298;
-        }
-        h2 {
-            color: #1e3c72;
-            margin-top: 0;
-            border-bottom: 2px solid #eaedd0;
-            padding-bottom: 8px;
-            font-size: 1.6em;
-        }
-        h3 {
-            color: #2a5298;
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-        p {
-            margin: 10px 0;
-            text-align: justify;
-        }
-        ul, ol {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        th {
-            background-color: #1e3c72;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 0.5px;
-        }
-        tr:hover {
-            background-color: #fcfcfc;
-        }
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85em;
-            text-transform: uppercase;
-        }
-        .badge-active { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .badge-standby { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-        .badge-success { background-color: #e2f0d9; color: #385723; border: 1px solid #c5e0b4; }
-        .network-tag {
-            background-color: #e9ecef;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: Consolas, monospace;
-            font-size: 0.9em;
-            color: #495057;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Website</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header with navigation -->
+  <header>
+    <nav>
+      <ul>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="project.html">Projectss</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="about.html">About Me</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>
+    </li>
+      </ul>
+    </nav>
+  </header>
 
-<div class="container">
+  <!-- Home Section -->
+  <section id="home">
+    <h1>Welcome to My Personal Website</h1>
+    <p>Hello! I'm Ankaching Marma.I am a goal-driven individual with a strong computer and network hardware background. 
+      My interests lie in IT, networking, and cybersecurity, where I continuously seek to expand my knowledge and skills. 
+      I am a proactive learner with a passion for technology and a proven ability to work effectively as part of a team.
+    </p>
+  </section>
 
-    <header>
-        <h1>High-Availability Enterprise Topology</h1>
-        <p>Comprehensive Infrastructure, Protocol Design, and Redundancy Validation</p>
-    </header>
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2>Projects</h2>
+  <div class="project">
+  <h3>
+    <a href="redundant.html" target="_blank">
+      Redundant Network Topology
+    </a>
+  </h3>
+  <p>Network scanning and reconnaissance project using Nmap to identify hosts, open ports, services, and potential security risks.</p>
+</div>
+    <div class="project">
+      <h3>Project 2</h3>
+      <p>A brief description of Project 2, including any unique aspects or interesting functionality.</p>
+    </div>
+    <!-- Add more projects as needed -->
+  </section>
 
-    <!-- METADATA & ENVIRONMENT SECTION -->
-    <section id="environment">
-        <h2>1. Infrastructure & System Components</h2>
-        <p>
-            To achieve a resilient design capable of supporting enterprise workloads, the entire logical infrastructure is emulated on dedicated physical hardware using advanced bare-metal and simulation tools:
-        </p>
-        <ul>
-            <li><strong>Hardware Platform:</strong> Cisco UCS C220 M4 High-Density Rack Server, offering the heavy compute capabilities needed to run multiple network operating system nodes concurrently.</li>
-            <li><strong>Virtualization Host:</strong> VMware ESXi Type-1 Hypervisor, providing dedicated resource scheduling, memory allocation, and virtual switching isolation.</li>
-            <li><strong>Simulation Orchestrator:</strong> GNS3 (Graphical Network Simulator-3), hosting fully virtualized router and security kernels directly mapping to authentic device software.</li>
-            <li><strong>End-User Client Nodes:</strong> Includes <span class="network-tag">UbuntuDesktopGuest20.04.4-2</span> and <span class="network-tag">Windows7-1</span> virtual workstations configured within downstream access-layer loops to validate network paths.</li>
-        </ul>
-    </section>
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <p>If you'd like to get in touch, feel free to reach out by email at <a href="mailto:ankachingm@gmail.com">your-email@example.com</a> or connect with me on <a href="https://www.linkedin.com/">LinkedIn</a>.</p>
+  </section>
 
-    <!-- TOPOLOGY DESCRIPTION SECTION -->
-    <section id="topology">
-        <h2>2. Network Topology Architecture</h2>
-        <p>
-            The network architecture deploys a highly available, multi-tier layout structured to completely eliminate single points of failure from the edge down to the access endpoints:
-        </p>
-        <ul>
-            <li>
-                <strong>Dual-Homed WAN Edge:</strong> Features connections to two discrete Internet Service Providers (<span class="network-tag">ISP1</span> and <span class="network-tag">ISP2</span>) using independent transit subnets. Boundary control is distributed across Edge Routers <span class="network-tag">R1</span> and <span class="network-tag">R2</span>.
-            </li>
-            <li>
-                <strong>Demilitarized / Transit Layer (VLAN 10):</strong> An isolated external-facing network loop linking edge routers to the firewall interfaces. To safeguard connectivity, intermediate switches <span class="network-tag">FW-SW1</span> and <span class="network-tag">FW-SW2</span> carry cross-connected paths linked over a Link Aggregation Control Protocol (LACP) trunk.
-            </li>
-            <li>
-                <strong>Stateful Security Tier:</strong> Implements a pair of Cisco Adaptive Security Appliances (<span class="network-tag">ASA-FW1</span> and <span class="network-tag">ASA-FW2</span>). <span class="badge badge-active">ASA-FW1</span> acts as the Primary Active firewall, whereas <span class="badge badge-standby">ASA-FW2</span> remains in a Hot Standby state. They continuously mirror connection tables across a dedicated physical <span class="network-tag">FAILOVER-LINK</span> (<span class="network-tag">192.168.100.0/30</span>).
-            </li>
-            <li>
-                <strong>Resilient Aggregation Core:</strong> Powered by Cisco Nexus switches (<span class="network-tag">NEX-SW13</span> and <span class="network-tag">NEX-SW2</span>) running Multi-Chassis EtherChannel technology to present a unified loop-free backbone routing directly into the internal production zones (<span class="network-tag">VLAN 20</span>).
-            </li>
-            <li>
-                <strong>Segmented Access Tiers:</strong> Downstream switches (<span class="network-tag">LAN-SW1</span> and <span class="network-tag">LAN-SW2</span>) deliver secure access directly to physical endpoints, systematically parsing departmental broadcasts.
-            </li>
-        </ul>
-    </section>
-
-    <!-- PROTOCOLS USED SECTION -->
-    <section id="protocols">
-        <h2>3. Implemented Protocol Framework</h2>
-        <p>
-            To manage optimal traffic flow and sub-second convergence, a sophisticated layer of switching and routing protocols is woven tightly throughout the environment:
-        </p>
-        
-        <h3>Core Protocol Implementation</h3>
-        <ul>
-            <li><strong>BGP (Border Gateway Protocol):</strong> Handles exterior routing path vector decisions. Edge nodes run external BGP peerings—<span class="network-tag">R1</span> peers with <span class="network-tag">ISP1 (ASN-62001)</span> under <span class="network-tag">ASN-63001</span>, and <span class="network-tag">R2</span> peers with <span class="network-tag">ISP2 (ASN-62002)</span>—guaranteeing deterministic multi-homed provider visibility.</li>
-            <li><strong>OSPF (Open Shortest Path First):</strong> Operates as the internal gateway routing backbone protocol across all routers, firewall interfaces, and core Nexus distribution nodes to automatically map internal topological transit paths.</li>
-            <li><strong>VRRP (Virtual Router Redundancy Protocol):</strong> Deployed over the edge interface space to bundle <span class="network-tag">R1</span> and <span class="network-tag">R2</span>. It advertises a shared Virtual Gateway IP of <span class="network-tag">192.168.10.1</span> to the external transit switches.</li>
-            <li><strong>HSRP (Hot Standby Router Protocol):</strong> Provisioned exclusively across the Cisco Nexus core switch tier to distribute highly available first-hop default gateways across internal production zones.</li>
-            <li><strong>vPC (Virtual Port Channel):</strong> Configured between the Nexus switches to group multiple discrete interfaces across distinct chassis into logical bundles, bypassing rigid Spanning Tree blocking states while enabling all links to forward active traffic.</li>
-            <li><strong>LACP (Link Aggregation Control Protocol):</strong> Standardized throughout all core inter-switch trunk connections to aggregate bandwidth, maximize link density, and provide dynamic link failure detection.</li>
-        </ul>
-
-        <h3>VLAN Fabric Structural Mapping</h3>
-        <ul>
-            <li><strong>VLAN 10 (OUTSIDE Context):</strong> Bound to network segment <span class="network-tag">192.168.20.0/24</span> for transit handling.</li>
-            <li><strong>VLAN 20 (INSIDE Context):</strong> Bound to network segment <span class="network-tag">192.168.10.0/24</span> for secure corporate traffic.</li>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Ankaching Marma. All Rights Reserved.</p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
