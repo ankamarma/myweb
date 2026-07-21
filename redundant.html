@@ -22,10 +22,12 @@
         h1 { font-size: 2em; }
         h2 { font-size: 1.5em; margin-top: 24px; }
         
+        /* Modern Container replacing old Image Maps */
         .topology-container {
             position: relative;
-            margin: 20px 0;
-            text-align: center;
+            max-width: 100%;
+            margin: 20px auto;
+            display: inline-block;
         }
         .topology-img {
             max-width: 100%;
@@ -33,8 +35,30 @@
             border: 1px solid #e1e4e8;
             border-radius: 6px;
             display: block;
-            margin: 0 auto;
         }
+        
+        /* Clickable Hotspots over devices based on percentage spacing */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            background-color: rgba(3, 102, 214, 0); /* Invisible by default */
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        /* Highlight items faintly when hovering */
+        .hotspot:hover {
+            background-color: rgba(3, 102, 214, 0.15); 
+            border: 1px dashed #0366d6;
+        }
+
+        /* Pixel-perfect positioning grids translated from your 1712x1176 diagram layout */
+        #hotspot-r1   { top: 4.5%;  left: 39.5%; width: 6.5%; height: 13%; }
+        #hotspot-r2   { top: 4.5%;  left: 57.5%; width: 6.5%; height: 13%; }
+        #hotspot-asa1 { top: 66.0%; left: 29.5%; width: 7.5%; height: 14%; }
+        #hotspot-asa2 { top: 66.0%; left: 65.0%; width: 7.5%; height: 14%; }
+        #hotspot-nex1 { top: 87.0%; left: 29.5%; width: 6.5%; height: 11%; }
+        #hotspot-nex2 { top: 87.0%; left: 66.0%; width: 6.5%; height: 11%; }
+
         .instructions {
             background-color: #f6f8fa;
             border-left: 4px solid #0366d6;
@@ -74,7 +98,6 @@
         .status-badge { background-color: #28a745; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; }
         ul { padding-left: 2em; }
         li { margin-top: 0.25em; }
-        area { cursor: pointer; }
     </style>
 </head>
 <body>
@@ -84,26 +107,22 @@
 
     <h2>Interactive Network Topology</h2>
     <div class="instructions">
-        💡 <strong>Interactive Diagram:</strong> Click directly on <strong>R1, R2, ASA-FW1, ASA-FW2, NEX-SW1, or NEX-SW2</strong> in the image below to view its running configuration snippet.
+        💡 <strong>Interactive Diagram:</strong> Hover and click directly on <strong>R1, R2, ASA-FW1, ASA-FW2, NEX-SW1, or NEX-SW2</strong> to pull up live running diagnostics.
     </div>
 
+    <!-- Layout Container holding clean percentage layers -->
     <div class="topology-container">
-        <!-- Image Map using exact structural links -->
         <img src="https://github.com" 
-             usemap="#network-map" 
-             id="network-img"
              alt="Enterprise Redundant Network Topology" 
              class="topology-img">
 
-        <!-- Clickable Area Coordinates mapped out for true 1712px pixel layout -->
-        <map name="network-map" id="network-map">
-            <area shape="rect" coords="680,60,790,210" alt="R1" onclick="showConfig('r1')">
-            <area shape="rect" coords="990,60,1100,210" alt="R2" onclick="showConfig('r2')">
-            <area shape="rect" coords="510,780,630,940" alt="ASA-FW1" onclick="showConfig('asa1')">
-            <area shape="rect" coords="1120,780,1240,940" alt="ASA-FW2" onclick="showConfig('asa2')">
-            <area shape="rect" coords="510,1030,620,1160" alt="NEX-SW1" onclick="showConfig('nex1')">
-            <area shape="rect" coords="1130,1030,1240,1160" alt="NEX-SW2" onclick="showConfig('nex2')">
-        </map>
+        <!-- Clickable transparent button elements layered perfectly on top -->
+        <div class="hotspot" id="hotspot-r1" title="Edge Router R1" onclick="showConfig('r1')"></div>
+        <div class="hotspot" id="hotspot-r2" title="Edge Router R2" onclick="showConfig('r2')"></div>
+        <div class="hotspot" id="hotspot-asa1" title="Cisco ASA Firewall 1" onclick="showConfig('asa1')"></div>
+        <div class="hotspot" id="hotspot-asa2" title="Cisco ASA Firewall 2" onclick="showConfig('asa2')"></div>
+        <div class="hotspot" id="hotspot-nex1" title="Nexus Core Switch 1" onclick="showConfig('nex1')"></div>
+        <div class="hotspot" id="hotspot-nex2" title="Nexus Core Switch 2" onclick="showConfig('nex2')"></div>
     </div>
 
     <div id="configModal" class="modal">
@@ -159,34 +178,6 @@
 
         function closeModal() { modal.style.display = "none"; }
         window.onclick = function(event) { if (event.target == modal) closeModal(); }
-
-        /**
-         * Responsive Map Scaling
-         * Captures intrinsic image values and scales coordinates on device footprint mutations.
-         */
-        const img = document.getElementById('network-img');
-        const map = document.getElementById('network-map');
-        const areas = map.getElementsByTagName('area');
-        const baseWidth = 1712; // Adjusted to match the exact 1712 width asset spec
-
-        for (let i = 0; i < areas.length; i++) {
-            areas[i].dataset.coords = areas[i].getAttribute('coords');
-        }
-
-        function resizeMap() {
-            const currentWidth = img.clientWidth;
-            const ratio = currentWidth / baseWidth;
-
-            for (let i = 0; i < areas.length; i++) {
-                const originalCoords = areas[i].dataset.coords.split(',');
-                const newCoords = originalCoords.map(val => Math.round(parseInt(val) * ratio));
-                areas[i].setAttribute('coords', newCoords.join(','));
-            }
-        }
-
-        window.addEventListener('resize', resizeMap);
-        img.addEventListener('load', resizeMap);
-        setTimeout(resizeMap, 500); // Fail-safe window processing hook
     </script>
 </body>
 </html>
