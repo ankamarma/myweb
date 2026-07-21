@@ -1,4 +1,5 @@
 web-image/multinetwork.png
+https://github.com/ankamarma/web-image/blob/16511c101048c01b96363e39f6df9d6ee6961be0/multinetwork.png
 This project showcases a highly available (HA), resilient enterprise multi-tier network topology designed to eliminate single points of failure. The architecture integrates redundant Internet Service Providers (ISPs), edge routing failover, stateful firewall clustering, and multi-chassis link aggregation down to the access layer. 
 
 Key Features & Technologies 
