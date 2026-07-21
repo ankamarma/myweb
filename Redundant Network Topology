@@ -24,5 +24,5 @@ Topology Architecture
 Takeaways 
 This project highlights advanced competence in building fault-tolerant enterprise networks. By combining Layer 2 scale-out protocols (vPC, LACP) with Layer 3 redundancy protocols (BGP, VRRP, HSRP) and stateful security appliances, the design achieves enterprise-grade resilience capable of maintaining business continuity under multi-point hardware failures. 
 
-AI responses may include mistakes.
+
 
