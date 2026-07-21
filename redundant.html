@@ -224,16 +224,61 @@ router bgp 63001
         <h3 style="margin-top: 0; color: #0366d6;">Edge Router R2 Configuration</h3>
         <pre><code>! --- Edge Router R2 Configuration ---
 hostname R2
+
 !
-interface GigabitEthernet0/1
+interface GigabitEthernet1
  description LINK-TO-ISP2
- ip address 192.168.8.1 255.255.255.252
+ ip address 192.168.8.2 255.255.255.252
+ ip ospf lls disable
+ negotiation auto
+ no mop enabled
+ no mop sysid
 !
-interface GigabitEthernet0/2
- description LINK-TO-INTERNAL
+interface GigabitEthernet2
+ description TRANSIT_VLAN10_TO_FW-SW2
  ip address 192.168.10.3 255.255.255.0
+ ip ospf lls disable
+ negotiation auto
  vrrp 10 ip 192.168.10.1
- vrrp 10 priority 100</code></pre>
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ ip address 192.168.11.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf lls disable
+ ip ospf 1 area 0
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet4
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+router ospf 1
+ router-id 192.168.10.3
+ network 192.168.10.0 0.0.0.255 area 0
+!
+router bgp 63001
+ bgp log-neighbor-changes
+ neighbor 192.168.8.1 remote-as 63002
+ neighbor 192.168.8.1 description LINK-TO-ISP2
+ !
+ address-family ipv4
+  network 192.168.10.0
+  network 192.168.20.0
+  network 192.168.50.0
+  network 192.168.60.0
+  network 192.168.70.0
+  network 192.168.80.0
+  neighbor 192.168.8.1 activate
+ exit-address-family
+!
+</code></pre>
     </a>
 
     <a href="#" id="box-asa1" class="config-box" style="text-decoration: none; color: inherit;">
