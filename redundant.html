@@ -285,8 +285,8 @@ router bgp 63001
         <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
         <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW1 Firewall Configuration</h3>
         <pre><code>: --- ASA-FW1 (ACTIVE) Running Config ---
-ASA Version 9.8(3)
 hostname asa-fw1
+mac-address auto prefix 0
 !
 interface GigabitEthernet0/1
  description LINK-FW-SW
@@ -294,16 +294,47 @@ interface GigabitEthernet0/1
  security-level 0
  ip address 192.168.10.4 255.255.255.0 standby 192.168.10.5
 !
+interface GigabitEthernet0/3
+ description LAN/STATE Failover Interface
+!
 interface GigabitEthernet0/6
- description LINK-TO-NEX-SW
+ description LINK-TO-NEX-SW1
  nameif inside
  security-level 100
- ip address 192.168.20.1 255.255.255.0
- ospf mtu-ignore
+ ip address 192.168.20.1 255.255.255.0 standby 192.168.20.2
+!
+interface Management0/0
+ ip address 192.168.90.2 255.255.255.0
+!
+object-group network INSIDE_NETWORKS
+ network-object 192.168.50.0 255.255.255.0
+ network-object 192.168.60.0 255.255.255.0
+ network-object 192.168.70.0 255.255.255.0
+ network-object 192.168.80.0 255.255.255.0
+ network-object 192.168.20.0 255.255.255.0
+!
+access-list INSIDE_IN extended permit OSPF object-group INSIDE_NETWORKS any
+access-list INSIDE_IN extended permit ip object-group INSIDE_NETWORKS object-group INSIDE_NETWORKS
+access-list INSIDE_IN extended permit tcp object-group INSIDE_NETWORKS any eq www
+access-list INSIDE_IN extended permit tcp object-group INSIDE_NETWORKS any eq https
+access-list INSIDE_IN extended permit udp object-group INSIDE_NETWORKS any eq domain
+access-list INSIDE_IN extended permit tcp object-group INSIDE_NETWORKS any eq domain
+access-list INSIDE_IN extended permit icmp object-group INSIDE_NETWORKS any
 !
 failover
 failover lan unit primary
-failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2</code></pre>
+failover lan interface FO_LINK GigabitEthernet0/3
+failover link FO_LINK GigabitEthernet0/3
+failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
+!
+router ospf 1
+ router-id 3.3.3.3
+ network 192.168.10.0 255.255.255.0 area 0
+ network 192.168.20.0 255.255.255.0 area 0
+ log-adj-changes
+ default-information originate
+!
+</code></pre>
     </a>
 
     <a href="#" id="box-asa2" class="config-box" style="text-decoration: none; color: inherit;">
