@@ -530,19 +530,131 @@ router ospf 1
         <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
         <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW2 Configuration</h3>
         <pre><code>! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
-version 10.3(9)
+
 hostname nex-sw2
-!
 feature ospf
+feature interface-vlan
+feature hsrp
+feature lacp
 feature vpc
+!
+vlan 1,20,50,60,70,80
 !
 vpc domain 10
   role priority 2000
-  peer-keepalive destination 10.0.0.1 source 10.0.0.2 vrf default
+  peer-keepalive destination 192.168.30.1 source 192.168.30.2 vrf default
+  peer-gateway
+  layer3 peer-router
 !
 interface Vlan20
+  no shutdown
+  no ip redirects
   ip address 192.168.20.4/24
-  ip router ospf 1 area 0.0.0.0</code></pre>
+  no ipv6 redirects
+  ip ospf mtu-ignore
+  ip router ospf 1 area 0.0.0.0
+!
+interface Vlan50
+  no shutdown
+  no ip redirects
+  ip address 192.168.50.3/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 1 area 0.0.0.0
+  hsrp 50
+    preempt
+    ip 192.168.50.1
+!
+interface Vlan60
+  no shutdown
+  no ip redirects
+  ip address 192.168.60.3/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 1 area 0.0.0.0
+  hsrp 60
+    preempt
+    ip 192.168.60.1
+!
+interface Vlan70
+  no shutdown
+  no ip redirects
+  ip address 192.168.70.3/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 1 area 0.0.0.0
+  hsrp 70
+    preempt
+    ip 192.168.70.1
+!
+interface Vlan80
+  no shutdown
+  no ip redirects
+  ip address 192.168.80.3/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 1 area 0.0.0.0
+  hsrp 80
+    preempt
+    ip 192.168.80.1
+!
+interface port-channel2
+  description LINK-TO-ACCESS-SW1-VPC
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  vpc 2
+!
+interface port-channel3
+  description LINK-TO-ACCESS-SW2-VPC
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  vpc 3
+!
+interface port-channel101
+  description vPC-PEER-LINK
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  spanning-tree port type network
+  vpc peer-link
+!
+interface Ethernet1/1
+  description LINK-TO-NEX-SW1 (Peer-Link)
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  channel-group 101 mode active
+!
+interface Ethernet1/2
+  description LINK-TO-NEX-SW1 (Peer-Link)
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  channel-group 101 mode active
+!
+interface Ethernet1/3
+  description vPC-PEER-KEEPALIVE-LINK
+  no switchport
+  ip address 192.168.30.2/30
+  no shutdown
+!
+interface Ethernet1/4
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  channel-group 2 mode active
+!
+interface Ethernet1/5
+  description MEMBER-OF-VPC-3
+  switchport mode trunk
+  switchport trunk allowed vlan 20,50,60,70,80
+  channel-group 3 mode active
+!
+interface Ethernet1/6
+  description LINK-TO-ASA-FIREWALL
+  switchport access vlan 20
+!
+router ospf 1
+  router-id 192.168.20.4
+  default-information originate
+  log-adjacency-changes
+</code></pre>
         </div>
     </a>
 
