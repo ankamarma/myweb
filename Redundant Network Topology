@@ -1,4 +1,5 @@
 This project showcases a highly available (HA), resilient enterprise multi-tier network topology designed to eliminate single points of failure. The architecture integrates redundant Internet Service Providers (ISPs), edge routing failover, stateful firewall clustering, and multi-chassis link aggregation down to the access layer. 
+
 Key Features & Technologies 
 
 • Dual-Homed Edge Routing: Leverages BGP peering across two distinct Service Providers ( and ) with autonomous system boundaries (, , and ). 
@@ -20,9 +21,5 @@ The infrastructure was rigorously stress-tested against multiple catastrophic fa
 3. Security Appliance Failure: Active  drops; stateful failover triggers, allowing  to take over connections without dropping existing sessions. 
 4. Core Nexus Switch Failure: Core peer switch drops; vPC and HSRP instantly absorb the load with zero disruption to end-user segments. 
 
-Topology Architecture 
 Takeaways 
 This project highlights advanced competence in building fault-tolerant enterprise networks. By combining Layer 2 scale-out protocols (vPC, LACP) with Layer 3 redundancy protocols (BGP, VRRP, HSRP) and stateful security appliances, the design achieves enterprise-grade resilience capable of maintaining business continuity under multi-point hardware failures. 
-
-
-
