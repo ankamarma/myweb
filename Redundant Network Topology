@@ -1,0 +1,28 @@
+This project showcases a highly available (HA), resilient enterprise multi-tier network topology designed to eliminate single points of failure. The architecture integrates redundant Internet Service Providers (ISPs), edge routing failover, stateful firewall clustering, and multi-chassis link aggregation down to the access layer. 
+Key Features & Technologies 
+
+• Dual-Homed Edge Routing: Leverages BGP peering across two distinct Service Providers ( and ) with autonomous system boundaries (, , and ). 
+• Gateway Redundancy: Implements VRRP () across edge routers (/) to ensure seamless outbound routing failover. 
+• Stateful Firewall Clustering: Features Cisco ASA firewalls ( and ) in an Active/Standby failover pair utilizing a dedicated state synchronization link (). 
+• Link Aggregation & Loop Avoidance: Deploys LACP and Multi-Chassis EtherChannel (vPC) across core distribution layers ( and ) to maximize bandwidth and prevent Layer 2 loops without Spanning Tree blocks. 
+• First-Hop Redundancy: Employs HSRP at the Nexus core layer to provide resilient default gateways for internal VLANs. 
+• Network Segmentation: Logically isolates traffic using distinct broadcast domains: 
+
+	• VLAN 10: Outside / Demilitarized Zone () 
+	• VLAN 20: Inside / Corporate LAN () 
+	• VLANs 50/60/70/80: Segmented departmental and management subnets. 
+
+Redundancy Validation & Testing 
+The infrastructure was rigorously stress-tested against multiple catastrophic failure scenarios to guarantee continuous uptime and sub-second convergence. External connectivity () remained uninterrupted during the following simulated outages: 
+
+1. ISP Link / Edge Router Failure: Primary route drops; BGP reconverges and VRRP transitions the standby router to active. 
+2. Firewall Switch Failure:  drops; LACP links adapt immediately to reroute traffic through . 
+3. Security Appliance Failure: Active  drops; stateful failover triggers, allowing  to take over connections without dropping existing sessions. 
+4. Core Nexus Switch Failure: Core peer switch drops; vPC and HSRP instantly absorb the load with zero disruption to end-user segments. 
+
+Topology Architecture 
+Takeaways 
+This project highlights advanced competence in building fault-tolerant enterprise networks. By combining Layer 2 scale-out protocols (vPC, LACP) with Layer 3 redundancy protocols (BGP, VRRP, HSRP) and stateful security appliances, the design achieves enterprise-grade resilience capable of maintaining business continuity under multi-point hardware failures. 
+
+AI responses may include mistakes.
+
