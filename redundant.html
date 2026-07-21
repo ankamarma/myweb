@@ -37,7 +37,7 @@
             margin: 0 auto;
         }
 
-        /* Device Navigation List Layout */
+        /* Device Control Panel Layout */
         .device-panel {
             background: #f6f8fa;
             border: 1px solid #e1e4e8;
@@ -63,6 +63,8 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.2s ease;
+            text-decoration: none;
+            display: block;
         }
         .device-btn:hover {
             background-color: #f0f6fc;
@@ -70,30 +72,32 @@
             transform: translateY(-1px);
         }
         
-        /* Modal Popup Styling */
+        /* Popup Overlay using Pure CSS Target Intersections */
         .modal {
             display: none; 
             position: fixed; 
             z-index: 1000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
+            left: 0; top: 0; width: 100%; height: 100%; 
             background-color: rgba(0,0,0,0.6); 
             backdrop-filter: blur(3px);
+            text-decoration: none;
         }
+        
+        /* Activate popup when targeted via anchor hash links */
+        .modal:target {
+            display: block;
+        }
+        
         .modal-content {
             background-color: #ffffff;
             margin: 10% auto; 
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; 
-            max-width: 800px;
+            width: 80%; max-width: 800px;
             border-radius: 6px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             position: relative;
-            animation: popIn 0.2s cubic-bezier(0.1, 0.8, 0.25, 1);
+            cursor: default;
         }
         .close-hint {
             float: right;
@@ -102,28 +106,15 @@
             padding: 2px 8px;
             border-radius: 4px;
             color: #586069;
+            text-decoration: none;
         }
         pre {
-            background-color: #f6f8fa;
-            padding: 16px;
-            border-radius: 6px;
-            overflow: auto;
+            background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto;
             font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 13px;
-            line-height: 1.45;
-            color: #24292e;
-            border: 1px solid #e1e4e8;
-            max-height: 450px;
+            font-size: 13px; line-height: 1.45; color: #24292e; border: 1px solid #e1e4e8; max-height: 450px;
+            text-align: left;
         }
-        @keyframes popIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .status-badge { 
-            background-color: #28a745; color: white; padding: 3px 8px; 
-            border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; 
-        }
+        .status-badge { background-color: #28a745; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; }
         ul { padding-left: 2em; }
         li { margin-top: 0.25em; }
     </style>
@@ -133,7 +124,7 @@
     <h1>Enterprise Multi-Tier Redundant Network Architecture</h1>
     <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
 
-    <!-- 1. Network Topology Image -->
+    <!-- 1. Network Topology Image Layout -->
     <h2>Network Topology Diagram</h2>
     <div class="topology-container">
         <img src="https://github.com" 
@@ -141,47 +132,25 @@
              class="topology-img">
     </div>
 
-    <!-- 2. Interactive Device Selection List -->
+    <!-- 2. Interactive Device Selection Links (No JavaScript required!) -->
     <div class="device-panel">
         <strong>📋 Device Directory:</strong> Click a device button below to show its configuration in a popup window:
         <div class="device-grid">
-            <button class="device-btn" onclick="togglePopup('r1')">Router R1</button>
-            <button class="device-btn" onclick="togglePopup('r2')">Router R2</button>
-            <button class="device-btn" onclick="togglePopup('asa1')">ASA Firewall 1</button>
-            <button class="device-btn" onclick="togglePopup('asa2')">ASA Firewall 2</button>
-            <button class="device-btn" onclick="togglePopup('nex1')">Nexus NEX-SW1</button>
-            <button class="device-btn" onclick="togglePopup('nex2')">Nexus NEX-SW2</button>
+            <a href="#pop-r1" class="device-btn">Router R1</a>
+            <a href="#pop-r2" class="device-btn">Router R2</a>
+            <a href="#pop-asa1" class="device-btn">ASA Firewall 1</a>
+            <a href="#pop-asa2" class="device-btn">ASA Firewall 2</a>
+            <a href="#pop-nex1" class="device-btn">Nexus NEX-SW1</a>
+            <a href="#pop-nex2" class="device-btn">Nexus NEX-SW2</a>
         </div>
     </div>
 
-    <!-- 3. Configuration Modal Popup (Clicking anywhere on this layout closes it instantly) -->
-    <div id="configModal" class="modal" onclick="closePopup()">
-        <div class="modal-content">
-            <span class="close-hint">Click anywhere inside or outside this box to close</span>
-            <h3 id="modalTitle" style="margin-top: 0; color: #0366d6;">Device Configuration</h3>
-            <pre><code id="modalCode"></code></pre>
-        </div>
-    </div>
-
-    <!-- Architectural Documentation Matrix -->
-    <h2>Configured Protocols & Network Matrix</h2>
-    <ul>
-        <li><strong>BGP:</strong> Peerings established across ISP boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
-        <li><strong>OSPF:</strong> Core backbone routing across edge routers, ASA firewalls, and Nexus core switches.</li>
-        <li><strong>First-Hop Redundant Protocols:</strong> VRRP active at edge layers (192.168.10.1); HSRP deployed at Nexus core layers.</li>
-        <li><strong>vPC & LACP:</strong> Implemented across Core layers and FW distribution switches to block loops without Spanning Tree bottlenecks.</li>
-    </ul>
-
-    <h2>High Availability (HA) Failover Testing</h2>
-    <ul>
-        <li><strong>Edge Router Drop:</strong> <span class="status-badge">PASS</span> BGP reconverges; VRRP targets failover line seamlessly.</li>
-        <li><strong>Active Firewall Crash (ASA-FW1):</strong> <span class="status-badge">PASS</span> Stateful synchronization over 192.168.100.0/30 updates ASA-FW2 dynamically.</li>
-        <li><strong>Core Nexus Switch Outage:</strong> <span class="status-badge">PASS</span> vPC domains keep downstream distribution lines up.</li>
-    </ul>
-
-    <script>
-        const configDatabase = {
-            r1: `! --- Edge Router R1 Configuration ---
+    <!-- 3. Self-Contained Modal Popups -->
+    <a href="#" id="pop-r1" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <a href="#" class="close-hint">✕ Click here or outside to close</a>
+            <h3 style="margin-top: 0; color: #0366d6;">Edge Router R1 Configuration</h3>
+            <pre><code>! --- Edge Router R1 Configuration ---
 hostname R1
 !
 router isis
@@ -196,9 +165,15 @@ interface GigabitEthernet0/2
  description LINK-TO-INTERNAL
  ip address 192.168.10.2 255.255.255.0
  vrrp 10 ip 192.168.10.1
- vrrp 10 priority 110`,
+ vrrp 10 priority 110</code></pre>
+        </div>
+    </a>
 
-            r2: `! --- Edge Router R2 Configuration ---
+    <a href="#" id="pop-r2" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <a href="#" class="close-hint">✕ Click here or outside to close</a>
+            <h3 style="margin-top: 0; color: #0366d6;">Edge Router R2 Configuration</h3>
+            <pre><code>! --- Edge Router R2 Configuration ---
 hostname R2
 !
 interface GigabitEthernet0/1
@@ -209,9 +184,15 @@ interface GigabitEthernet0/2
  description LINK-TO-INTERNAL
  ip address 192.168.10.3 255.255.255.0
  vrrp 10 ip 192.168.10.1
- vrrp 10 priority 100`,
+ vrrp 10 priority 100</code></pre>
+        </div>
+    </a>
 
-            asa1: `: --- ASA-FW1 (ACTIVE) Running Config ---
+    <a href="#" id="pop-asa1" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <a href="#" class="close-hint">✕ Click here or outside to close</a>
+            <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW1 Firewall Configuration</h3>
+            <pre><code>: --- ASA-FW1 (ACTIVE) Running Config ---
 ASA Version 9.8(3)
 hostname asa-fw1
 !
@@ -220,9 +201,6 @@ interface GigabitEthernet0/1
  nameif OUTSIDE
  security-level 0
  ip address 192.168.10.4 255.255.255.0 standby 192.168.10.5
-!
-interface GigabitEthernet0/3
- description LAN/STATE Failover Interface
 !
 interface GigabitEthernet0/6
  description LINK-TO-NEX-SW
@@ -233,79 +211,76 @@ interface GigabitEthernet0/6
 !
 failover
 failover lan unit primary
-failover lan interface FO_LINK GigabitEthernet0/3
-failover link FO_LINK GigabitEthernet0/3
-failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
-!
-router ospf 1
- router-id 3.3.3.3
- network 192.168.10.0 255.255.255.0 area 0
- network 192.168.20.0 255.255.255.0 area 0`,
+failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2</code></pre>
+        </div>
+    </a>
 
-            asa2: `: --- ASA-FW2 (STANDBY) Running Config ---
+    <a href="#" id="pop-asa2" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <a href="#" class="close-hint">✕ Click here or outside to close</a>
+            <h3 style="margin-top: 0; color: #0366d6;">Cisco ASA-FW2 Firewall Configuration</h3>
+            <pre><code>: --- ASA-FW2 (STANDBY) Running Config ---
 ASA Version 9.8(3)
 hostname asa-fw2
 !
 failover
 failover lan unit secondary
-failover lan interface FO_LINK GigabitEthernet0/3
-failover link FO_LINK GigabitEthernet0/3
 failover interface ip FO_LINK 192.168.100.1 255.255.255.252 standby 192.168.100.2
 !
-! [Configuration synchronized automatically across stateful clustering pipeline]`,
+! [Configuration synchronized automatically across stateful clustering pipeline]</code></pre>
+        </div>
+    </a>
 
-            nex1: `! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
+    <a href="#" id="pop-nex1" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <a href="#" class="close-hint">✕ Click here or outside to close</a>
+            <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW1 Configuration</h3>
+            <pre><code>! --- NEXUS CORE SWITCH NEX-SW1 Configuration ---
 version 10.3(9)
 hostname nex-sw1
 !
 feature ospf
-feature interface-vlan
-feature lacp
 feature vpc
 !
 vpc domain 10
   role priority 1000
   peer-keepalive destination 10.0.0.2 source 10.0.0.1 vrf default
-  peer-gateway
 !
 interface Vlan20
-  no shutdown
   ip address 192.168.20.3/24
-  ip ospf mtu-ignore
-  ip router ospf 1 area 0.0.0.0
-!
-interface Vlan50
-  ip address 192.168.50.2/24
-  hsrp 50
-    preempt
-    priority 110
-    ip 192.168.50.1`,
+  ip router ospf 1 area 0.0.0.0</code></pre>
+        </div>
+    </a>
 
-            nex2: `! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
+    <a href="#" id="pop-nex2" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <a href="#" class="close-hint">✕ Click here or outside to close</a>
+            <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW2 Configuration</h3>
+            <pre><code>! --- NEXUS CORE SWITCH NEX-SW2 Configuration ---
 version 10.3(9)
 hostname nex-sw2
 !
 feature ospf
-feature interface-vlan
-feature lacp
 feature vpc
 !
 vpc domain 10
   role priority 2000
   peer-keepalive destination 10.0.0.1 source 10.0.0.2 vrf default
-  peer-gateway
 !
 interface Vlan20
-  no shutdown
   ip address 192.168.20.4/24
-  ip router ospf 1 area 0.0.0.0
-!
-interface Vlan50
-  ip address 192.168.50.3/24
-  hsrp 50
-    preempt
-    priority 100
-    ip 192.168.50.1`
-        };
+  ip router ospf 1 area 0.0.0.0</code></pre>
+        </div>
+    </a>
 
-        const modal = document.getElementById('configModal');
+    <!-- Architectural Documentation Matrix -->
+    <h2>Configured Protocols & Network Matrix</h2>
+    <ul>
+        <li><strong>BGP:</strong> Peerings established across boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
+        <li><strong>OSPF:</strong> Core backbone routing across edge nodes, ASA firewalls, and Nexus switches.</li>
+        <li><strong>First-Hop Protocols:</strong> VRRP tracking at edge paths; HSRP deployed at Nexus core structures.</li>
+    </ul>
+
+    <h2>High Availability (HA) Failover Testing</h2>
+    <ul>
+        <li><strong>Edge Router Drop:</strong> <span class="status-badge">PASS</span> BGP reconverges; VRRP targets failover line seamlessly.</li>
