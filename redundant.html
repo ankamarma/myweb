@@ -141,9 +141,23 @@
              class="topology-img">
     </div>
 
-   <!-- 2. Interactive Device Selection Links (No JavaScript required!) -->
-<div class="device-panel">
-    <strong>📋 Device Directory:</strong> Click a device button below to show its running configuration box directly on the page:
+<!-- 2. Interactive Device Selection Links (No JavaScript required!) -->
+<div class="device-panel" style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-left: 6px solid #0366d6; padding: 24px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin: 20px 0;">
+    
+    <!-- Eye-Catching Header Section -->
+    <div style="display: inline-flex; align-items: center; background-color: #0366d6; color: white; padding: 6px 16px; border-radius: 30px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; box-shadow: 0 4px 10px rgba(3, 102, 214, 0.2);">
+        <span style="margin-right: 8px;">📋</span> Device Directory
+    </div>
+    
+    <h3 style="font-size: 20px; color: #24292e; margin: 0 0 6px 0; font-weight: 700; letter-spacing: -0.01em;">
+        Interactive Configuration Viewer
+    </h3>
+    
+    <p style="font-size: 15px; color: #586069; margin: 0 0 20px 0; line-height: 1.5;">
+        Click a device button below to instantly reveal its active running configuration box directly on the page.
+    </p>
+
+    <!-- Your Existing Device Button Grid -->
     <div class="device-grid">
         <a href="#box-isp1" class="device-btn">ISP1</a>
         <a href="#box-isp2" class="device-btn">ISP2</a>
@@ -159,6 +173,7 @@
         <a href="#box-lan2" class="device-btn">LAN-SW2</a>
     </div>
 </div>
+
 
 <!-- 3. Self-Contained Inline Configuration Boxes (Clicking on the box hides it instantly) -->
 <a href="#" id="box-isp1" class="config-box" style="text-decoration: none; color: inherit;">
