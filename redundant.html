@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Redundant Network Topology</title>
+    <title>Redundant Network Topology</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -131,7 +131,7 @@
     <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
 
     <!-- 1. Network Topology Image Layout -->
-    <h2>Network Topology Diagram</h2>
+    <h2>Network Topology Diagram on GNS3</h2>
    <div class="topology-container">
         <!-- Embedded with your exact GitHub asset link layout -->
         <img src="https://github.com/user-attachments/assets/904bcb6f-974c-4aa9-8fc2-4ffbf3c6ab4c" 
@@ -145,12 +145,18 @@
     <div class="device-panel">
         <strong>📋 Device Directory:</strong> Click a device button below to show its running configuration box directly on the page:
         <div class="device-grid">
-            <a href="#box-r1" class="device-btn">Router R1</a>
-            <a href="#box-r2" class="device-btn">Router R2</a>
-            <a href="#box-asa1" class="device-btn">ASA Firewall 1</a>
-            <a href="#box-asa2" class="device-btn">ASA Firewall 2</a>
-            <a href="#box-nex1" class="device-btn">Nexus NEX-SW1</a>
-            <a href="#box-nex2" class="device-btn">Nexus NEX-SW2</a>
+             <a href="#box-r1" class="device-btn">ISP1</a>
+            <a href="#box-r2" class="device-btn">ISP2</a>
+            <a href="#box-r1" class="device-btn">R1</a>
+            <a href="#box-r2" class="device-btn">R2</a>
+             <a href="#box-r1" class="device-btn">FW-SW1</a>
+            <a href="#box-r2" class="device-btn">FW-SW2</a>
+            <a href="#box-asa1" class="device-btn">ASA-FW1</a>
+            <a href="#box-asa2" class="device-btn">ASA-FW2</a>
+            <a href="#box-nex1" class="device-btn">NEX-SW1</a>
+            <a href="#box-nex2" class="device-btn">NEX-SW2</a>
+             <a href="#box-r1" class="device-btn">LAN-SW1</a>
+            <a href="#box-r2" class="device-btn">LAN-SW2</a>
         </div>
     </div>
 
@@ -659,6 +665,19 @@ router ospf 1
     </a>
 
     <!-- Architectural Documentation Matrix -->
+     <h2>Tools Used</h2>
+    <ul class="tools-list">
+        <li><strong>Hardware Infrastructure:</strong> Cisco UCS C220 M4 Rack Server provides high-performance physical computing cores and heavy RAM allocation.</li>
+            <li><strong>Hypervisor Environment:</strong> VMware ESXi virtualization layer hosts the underlying cloud management and appliance containers efficiently.</li>
+            <li><strong>Network Emulator Platform:</strong> GNS3 (Graphical Network Simulator-3) maps, orchestrates, and processes multi-vendor network topology components.</li>
+         <li><strong>Routing Image:</strong> Cisco CSR1000V Virtual Edge Router running Cisco IOS XE Software (Version 17.03.08a Amsterdam) drives upstream gateway paths using BGP, OSPF, NAT and VRRP.</li>
+         <li><strong>Stateful Security Inspection:</strong> Cisco ASAv (Version 9.8.3) executes stateful firewall clustering via an Active/Standby failover pair to enforce access control lists and secure zone transitions.</li>
+        <li><strong>Core Core Switching & Routing Layer:</strong> Cisco Nexus 9000v (v10.3.9) runs NX-OS software to deliver multi-chassis vPC link aggregation, HSRP hot-standby gateways, and high-speed inter-VLAN routing across internal broadcast domains.</li>
+        <li><strong>LAN Access Switching:</strong> Cisco vIOS L2 Switch Image (Version 15.2) processes access-layer host connectivity, VLAN segmentation, and LACP trunks.</li>
+        </ul>
+        
+    </ul>
+
     <h2>Configured Protocols & Network Matrix</h2>
     <ul>
         <li><strong>BGP:</strong> Peerings established across boundaries (ASN-62001, ASN-62002, ASN-63001).</li>
