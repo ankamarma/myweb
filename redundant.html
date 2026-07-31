@@ -128,7 +128,20 @@
 <body>
 
     <h1>Enterprise Multi-Tier Redundant Network Architecture</h1>
-    <p>This repository showcases a highly resilient, enterprise-grade multi-tier network architecture built to eliminate single points of failure.</p>
+     <section class="portfolio-intro">
+        <h2>Reliable Corporate Network &amp; Security Project</h2>
+        <p>In this lab, I designed the network for redundancy using various protocols to ensure it stays online even when parts of it break. By deploying backup hardware, extra cables, and automatic failover systems, the network keeps computers connected to the internet, keeps traffic secure, and automatically reroutes data without any manual work when devices fail.</p>
+    </section>
+
+    <section class="portfolio-topology">
+        <h3>Network Topology Overview</h3>
+        <p>This network design has no single points of failure by combining two internet routers (R1/R2) running <strong>BGP</strong> and <strong>VRRP</strong> for instant backup internet, two Cisco <strong>ASA Firewalls</strong> that share data to keep security active, and core Cisco Nexus switches using <strong>vPC</strong>, <strong>HSRP</strong>, and <strong>LACP</strong> to make sure office computers never lose their connection if a cable or switch stops working.</p>
+    </section>
+
+    <section class="portfolio-topology">
+        <h3>Network Topology Overview</h3>
+        <p>This network design has no single points of failure by combining two internet routers (R1/R2) running <strong>BGP</strong> and <strong>VRRP</strong> for instant backup internet, two Cisco <strong>ASA Firewalls</strong> that share data to keep security active, and core Cisco Nexus switches using <strong>vPC</strong>, <strong>HSRP</strong>, and <strong>LACP</strong> to make sure office computers never lose their connection if a cable or switch stops working.</p>
+    </section>
 
     <!-- 1. Network Topology Image Layout -->
     <h2>Network Topology Diagram on GNS3</h2>
@@ -964,14 +977,13 @@ end</code></pre>
         
     </ul>
 
-   <h3>Validation &amp; Redundancy Testing Performed</h3>
-    <p>Successfully executed chaos engineering and failover testing to guarantee continuous upstream connectivity (<code>ping 8.8.8.8</code>) from endpoints (Ubuntu/Windows) during simulated infrastructure crashes:</p>
+  <h3>Validation &amp; Redundancy Testing Performed</h3>
+    <p>Successfully tested the network by suspending cables and turning off gear to ensure computers (Ubuntu/Windows) never lost their internet connection (<code>ping 8.8.8.8</code>):</p>
     <ul>
-        <li><strong>ISP/Router Blackouts:</strong> Confirmed sub-second BGP convergence and VRRP standby-to-active transition.</li>
-        <li><strong>Security Appliance Failures:</strong> Validated uninterrupted stateful packet inspection during hard cutovers of the active firewall.</li>
-        <li><strong>Core &amp; Distribution Outages:</strong> Verified automated traffic rerouting across active LACP paths during core switch power loss.</li>
+        <li><strong>Internet &amp; Router Crashes:</strong> Confirmed the backup internet path automatically takes over in less than one second.</li>
+        <li><strong>Firewall Failures:</strong> Verified that active security connections do not drop when the main firewall turns off.</li>
+        <li><strong>Switch Outages:</strong> Proved that data instantly reroutes through remaining switches and cables without losing any packets.</li>
     </ul>
-
 
 
         
