@@ -964,15 +964,20 @@ end</code></pre>
         
     </ul>
 
-    <h2>Test Done</h2>
+   <h3>Validation &amp; Redundancy Testing Performed</h3>
+    <p>Successfully executed chaos engineering and failover testing to guarantee continuous upstream connectivity (<code>ping 8.8.8.8</code>) from endpoints (Ubuntu/Windows) during simulated infrastructure crashes:</p>
     <ul>
-        <li><strong>Edge Router Drop:</strong> <span class="status-badge">PASS</span> BGP reconverges; VRRP targets failover line seamlessly.</li>
-
+        <li><strong>ISP/Router Blackouts:</strong> Confirmed sub-second BGP convergence and VRRP standby-to-active transition.</li>
+        <li><strong>Security Appliance Failures:</strong> Validated uninterrupted stateful packet inspection during hard cutovers of the active firewall.</li>
+        <li><strong>Core &amp; Distribution Outages:</strong> Verified automated traffic rerouting across active LACP paths during core switch power loss.</li>
+    </ul>
 
 
 
         
-<h2>Active Infrastructure Components</h2>
+<h2>Evidences</h2>
+        
+<h11>Click Any Pictures to Enlarge</h1>
 
 <!-- CSS Styles for Layout and Interactive Modal Window -->
 <style>
