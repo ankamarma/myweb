@@ -1,96 +1,284 @@
-/* Reset and Basic Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-  }
-  
-  /* Navigation Styling */
-  header {
-    background-color: #4CAF50;
-    padding: 1em;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-  }
-  
-  nav ul li {
-    margin: 0 1em;
-  }
-  
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-  
-  nav ul li a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Section Styling */
-  section {
-    padding: 2em;
-    text-align: center;
-  }
-  
-  #home h1 {
-    font-size: 2em;
-    margin-bottom: 0.5em;
-  }
-  
-  #projects h2, #contact h2 {
-    font-size: 1.8em;
-    margin-top: 1em;
-    color: #4CAF50;
-  }
-  
-  .project {
-    margin: 1em 0;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 1em;
-  }
-  
-  .project h3 {
-    font-size: 1.5em;
-    color: #333;
-  }
-  
-  /* Footer Styling */
-  footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1em 0;
-    font-size: 1em;
-    margin-top: 2em;
-  }
-  
-  /* Responsive Styling */
-  @media (max-width: 600px) {
-    nav ul {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    nav ul li {
-      margin: 0.5em 0;
-    }
-  
-    #home h1 {
-      font-size: 1.5em;
+/* ===================================
+   RESET
+=================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* ===================================
+   BODY
+=================================== */
+
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background:#f4f6f9;
+    color:#333;
+    line-height:1.7;
+}
+
+/* ===================================
+   HEADER
+=================================== */
+
+header{
+    background:#1565c0;
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+/* ===================================
+   NAVIGATION
+=================================== */
+
+nav{
+    max-width:1200px;
+    margin:auto;
+}
+
+nav ul{
+    display:flex;
+    justify-content:center;
+    list-style:none;
+}
+
+nav ul li{
+    margin:0 20px;
+}
+
+nav ul li a{
+    display:block;
+    padding:18px 0;
+    color:#fff;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:600;
+    transition:.3s;
+}
+
+nav ul li a:hover{
+    color:#90caf9;
+}
+
+/* ===================================
+   MAIN SECTION
+=================================== */
+
+section{
+    width:90%;
+    max-width:1000px;
+    margin:40px auto;
+    background:#fff;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+}
+
+/* ===================================
+   ABOUT
+=================================== */
+
+#about{
+    text-align:left;
+}
+
+/* ===================================
+   CONTACT
+=================================== */
+
+.contact{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.contact h1{
+    color:#1565c0;
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.contact h3{
+    color:#555;
+    font-weight:500;
+    margin-bottom:20px;
+}
+
+.contact p{
+    margin:6px 0;
+}
+
+/* ===================================
+   HEADINGS
+=================================== */
+
+h2{
+    color:#1565c0;
+    margin-top:35px;
+    margin-bottom:15px;
+    border-bottom:2px solid #1565c0;
+    padding-bottom:8px;
+}
+
+h3{
+    color:#0d47a1;
+    margin-bottom:8px;
+}
+
+h4{
+    color:#666;
+    margin-bottom:15px;
+}
+
+/* ===================================
+   PARAGRAPH
+=================================== */
+
+p{
+    margin-bottom:15px;
+}
+
+/* ===================================
+   LINKS
+=================================== */
+
+a{
+    color:#1565c0;
+}
+
+a:hover{
+    color:#0d47a1;
+}
+
+/* ===================================
+   COMPANY CARDS
+=================================== */
+
+.company{
+    background:#f8f9fa;
+    border-left:5px solid #1565c0;
+    padding:20px;
+    margin:25px 0;
+    border-radius:8px;
+}
+
+/* ===================================
+   LISTS
+=================================== */
+
+.company ul{
+    margin-left:22px;
+    padding-left:15px;
+}
+
+.company li{
+    margin-bottom:10px;
+}
+
+/* ===================================
+   SKILLS
+=================================== */
+
+.skills{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.skills p{
+    background:#f8f9fa;
+    padding:15px;
+    border-left:4px solid #1565c0;
+    border-radius:6px;
+    margin:0;
+}
+
+/* ===================================
+   HR
+=================================== */
+
+hr{
+    border:none;
+    border-top:1px solid #ddd;
+    margin:35px 0;
+}
+
+/* ===================================
+   FOOTER
+=================================== */
+
+footer{
+    background:#1565c0;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+/* ===================================
+   PROJECT PAGE
+=================================== */
+
+.project{
+    background:#fff;
+    padding:20px;
+    margin:20px 0;
+    border-left:5px solid #1565c0;
+    border-radius:8px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.project h3{
+    color:#1565c0;
+}
+
+/* ===================================
+   HOME PAGE
+=================================== */
+
+#home{
+    text-align:center;
+}
+
+#home h1{
+    font-size:42px;
+    color:#1565c0;
+    margin-bottom:20px;
+}
+
+/* ===================================
+   MOBILE
+=================================== */
+
+@media (max-width:768px){
+
+    nav ul{
+        flex-direction:column;
+        align-items:center;
     }
 
+    nav ul li{
+        margin:8px 0;
+    }
+
+    section{
+        width:95%;
+        padding:20px;
+    }
+
+    .skills{
+        grid-template-columns:1fr;
+    }
+
+    .contact h1{
+        font-size:32px;
+    }
+
+    #home h1{
+        font-size:30px;
+    }
+
+}
 
 
       
