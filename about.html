@@ -32,10 +32,156 @@
     <div class="resume-container">
     <header>
         <h1>Ankaching Marma</h1>
+       <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 50px 20px;
+            color: #2b2b2b;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+        }
+        .resume-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 50px 60px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 26px;
+            font-weight: 600;
+            color: #111111;
+            letter-spacing: -0.5px;
+        }
+        .contact-info {
+            font-size: 13px;
+            color: #666666;
+            font-weight: 400;
+        }
+        .contact-info a {
+            color: #111111;
+            text-decoration: none;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 1px;
+            transition: border-color 0.2s ease;
+        }
+        .contact-info a:hover {
+            border-color: #111111;
+        }
+        h2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+        .job {
+            margin-bottom: 20px;
+        }
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 14.5px;
+            color: #111111;
+            margin-bottom: 3px;
+        }
+        .job-company {
+            color: #555555;
+            font-size: 13.5px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        li {
+            margin-bottom: 6px;
+            font-size: 13.5px;
+            color: #333333;
+            line-height: 1.5;
+        }
+        .skills-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .skills-category {
+            font-size: 13.5px;
+            color: #333333;
+        }
+        .skills-category strong {
+            color: #111111;
+            font-weight: 600;
+            display: inline-block;
+            width: 160px;
+        }
+        .edu-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 14.5px;
+            color: #111111;
+        }
+        .edu-degree {
+            font-size: 13.5px;
+            color: #555555;
+            margin-top: 3px;
+        }
+        .certs-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+        .certs-list li {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 0;
+        }
+        .certs-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #666666;
+        }
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            .resume-container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="resume-container">
+    <header>
+        <h1>Ankaching Marma</h1>
         <div class="contact-info">
-            Phone: 929-261-9261 &nbsp;|&nbsp; 
-            Email: <a href="mailto:ankachingm@gmail.com">ankachingm@gmail.com</a> &nbsp;|&nbsp; 
-            Portfolio: <a href="https://ankamarma.github.io/myweb" target="_blank">ankamarma.github.io/myweb</a>
+            Phone: 929-261-9261 &nbsp;•&nbsp; 
+            Email: <a href="mailto:ankachingm@gmail.com">ankachingm@gmail.com</a> &nbsp;•&nbsp; 
+            Portfolio: <a href="https://github.io" target="_blank">ankamarma.github.io/myweb</a>
         </div>
     </header>
 
@@ -91,7 +237,7 @@
 
     <section>
         <h2>Technical Skills</h2>
-        <div class="skills-grid">
+        <div class="skills-container">
             <div class="skills-category"><strong>Operating Systems:</strong> Linux, Windows, MacOS, Linux Server, Windows Server</div>
             <div class="skills-category"><strong>Virtualization & Cloud:</strong> VMware ESXi, Proxmox, Hyper-V, Docker, AWS</div>
             <div class="skills-category"><strong>Networking:</strong> DNS, DHCP, TCP/IP, VLANs, OSPF, EIGRP, VPN, STP, VRRP, GLBP</div>
@@ -103,15 +249,15 @@
     <section>
         <h2>Education</h2>
         <div class="edu-header">
-            <span>Western Governors University, USA</span>
+            <span>Western Governors University</span>
             <span>2024</span>
         </div>
-        <div style="font-size: 14.5px; color: #555; margin-bottom: 15px;">Bachelor of Information Technology</div>
+        <div class="edu-degree">Bachelor of Information Technology</div>
     </section>
 
     <section>
         <h2>Certifications</h2>
-        <ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 5px; list-style-type: square;">
+        <ul class="certs-list">
             <li>CCNA - Cisco Certified Network Associate</li>
             <li>CCT - Cisco Certified Data Center Technician</li>
             <li>CompTIA A+</li>
@@ -122,6 +268,7 @@
     </section>
 </div>
 
+</body>
     
 
   <!-- Footer -->
