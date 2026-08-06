@@ -616,7 +616,9 @@ router ospf 1
     <span class="close-hint-text">👆 Click anywhere inside this box to hide it</span>
     <h3 style="margin-top: 0; color: #0366d6;">Cisco Nexus Switch NEX-SW1 Configuration</h3>
     <pre><code>feature vrrp
-cfs eth distribute
+conf t
+!
+hostname nex-sw1
 feature ospf
 feature interface-vlan
 feature hsrp
@@ -725,13 +727,13 @@ interface Ethernet1/3
  no shutdown
 !
 interface Ethernet1/4
- description MEMBER-OF-VPC-2
+ description MEMBER-OF-VPC-2-to-sw1
  switchport mode trunk
  switchport trunk allowed vlan 20,50,60,70,80
  channel-group 2 mode active
 !
 interface Ethernet1/5
- description MEMBER-OF-VPC-3
+ description MEMBER-OF-VPC-3-t0-sw2
  switchport mode trunk
  switchport trunk allowed vlan 20,50,60,70,80
  channel-group 3 mode active
@@ -855,13 +857,13 @@ interface Ethernet1/3
  no shutdown
 !
 interface Ethernet1/4
- description MEMBER-OF-VPC-2
+ description MEMBER-OF-VPC-2-to-sw1
  switchport mode trunk
  switchport trunk allowed vlan 20,50,60,70,80
  channel-group 2 mode active
 !
 interface Ethernet1/5
- description MEMBER-OF-VPC-3
+ description MEMBER-OF-VPC-3-to-sw2
  switchport mode trunk
  switchport trunk allowed vlan 20,50,60,70,80
  channel-group 3 mode active
