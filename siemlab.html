@@ -1,60 +1,822 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<section>
-  <h2>Network Topology</h2>
+  <title>SIEM Home Lab | Splunk, Suricata & Network Security</title>
 
-  <img
-    src="siem-images/splunknetwork.png"
-    alt="SIEM Network Topology"
-    class="lab-image"
-  >
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #070b14;
+      color: #e5e7eb;
+      line-height: 1.7;
+    }
+
+    header {
+      background:
+        linear-gradient(135deg, rgba(15,23,42,.96), rgba(23,37,84,.96));
+      padding: 75px 20px;
+      text-align: center;
+      border-bottom: 1px solid #2563eb;
+    }
+
+    header h1 {
+      color: #38bdf8;
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    section {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    h2 {
+      color: #38bdf8;
+      font-size: 1.8rem;
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      color: #f8fafc;
+      margin: 18px 0 10px;
+    }
+
+    p {
+      color: #cbd5e1;
+    }
+
+    .intro {
+      font-size: 1.05rem;
+    }
+
+    .badges {
+      margin-top: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #172554;
+      color: #93c5fd;
+      padding: 6px 12px;
+      margin: 4px;
+      border-radius: 20px;
+      font-size: .85rem;
+    }
+
+    /* TOPOLOGY */
+
+    .topology {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+
+    .node {
+      background: #111c31;
+      border: 1px solid #2563eb;
+      border-radius: 12px;
+      padding: 22px;
+      min-width: 190px;
+      text-align: center;
+    }
+
+    .node-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .node strong {
+      display: block;
+      color: #38bdf8;
+      font-size: 1.05rem;
+    }
+
+    .node small {
+      display: block;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    .arrow {
+      color: #22c55e;
+      font-size: 2rem;
+    }
+
+    /* IMAGES */
+
+    .evidence {
+      margin-top: 25px;
+      padding: 18px;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+    }
+
+    .evidence img {
+      width: 100%;
+      max-width: 1100px;
+      height: auto;
+      display: block;
+      margin: auto;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+
+    .caption {
+      text-align: center;
+      color: #94a3b8;
+      margin-top: 12px;
+      font-size: .9rem;
+    }
+
+    /* CARDS */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: #111827;
+      border-left: 4px solid #38bdf8;
+      border-radius: 10px;
+      padding: 22px;
+    }
+
+    .card h3 {
+      color: #38bdf8;
+      margin-top: 0;
+    }
+
+    /* COMMAND */
+
+    .command {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      color: #86efac;
+      font-family: Consolas, monospace;
+      overflow-x: auto;
+    }
+
+    /* ALERT */
+
+    .alert {
+      margin-top: 25px;
+      padding: 22px;
+      background: #2a0c0c;
+      border: 1px solid #dc2626;
+      border-radius: 10px;
+    }
+
+    .alert h3 {
+      color: #f87171;
+      margin-top: 0;
+    }
+
+    .alert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 15px;
+      margin-top: 18px;
+    }
+
+    .alert-item {
+      background: #180f0f;
+      padding: 12px;
+      border-radius: 7px;
+    }
+
+    .alert-item span {
+      display: block;
+      color: #94a3b8;
+      font-size: .8rem;
+    }
+
+    .alert-item strong {
+      color: #f8fafc;
+    }
+
+    .danger {
+      color: #f87171 !important;
+    }
+
+    .success {
+      color: #4ade80 !important;
+    }
+
+    .warning {
+      color: #facc15 !important;
+    }
+
+    /* TIMELINE */
+
+    .timeline {
+      border-left: 3px solid #2563eb;
+      margin: 25px 0 0 10px;
+      padding-left: 25px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #38bdf8;
+      border-radius: 50%;
+      left: -32px;
+      top: 8px;
+    }
+
+    /* TABLE */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    th {
+      color: #38bdf8;
+      background: #111827;
+    }
+
+    td {
+      color: #cbd5e1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      color: #64748b;
+      border-top: 1px solid #1e293b;
+    }
+
+    @media (max-width: 700px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      section {
+        padding: 22px;
+      }
+
+      .arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>SIEM Home Lab</h1>
+  <p>
+    Splunk • Suricata • Network Security Monitoring • Detection Engineering
+  </p>
+</header>
+
+<main class="container">
+
+  <!-- OVERVIEW -->
+  <section>
+    <h2>Lab Overview</h2>
+
+    <p class="intro">
+      This project demonstrates a security monitoring and detection
+      environment built in a home lab. Network traffic and security
+      events are collected, forwarded to Splunk, analyzed, and used
+      to identify suspicious activity.
+    </p>
+
+    <div class="badges">
+      <span class="badge">Splunk</span>
+      <span class="badge">Suricata</span>
+      <span class="badge">Network Security</span>
+      <span class="badge">SIEM</span>
+      <span class="badge">Log Analysis</span>
+      <span class="badge">Threat Detection</span>
+      <span class="badge">Incident Response</span>
+    </div>
+  </section>
+
+
+  <!-- NETWORK TOPOLOGY -->
+  <section>
+    <h2>1. Network Topology</h2>
+
+    <p>
+      The lab consists of network devices, security monitoring sensors,
+      and a Splunk SIEM. Security telemetry is forwarded to Splunk for
+      centralized monitoring and investigation.
+    </p>
+
+    <div class="topology">
+
+      <div class="node">
+        <div class="node-icon">🌐</div>
+        <strong>Network</strong>
+        <small>Lab Traffic</small>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="node">
+        <div class="node-icon">🛡️</div>
+        <strong>Suricata</strong>
+        <small>IDS / Network Detection</small>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="node">
+        <div class="node-icon">📊</div>
+        <strong>Splunk</strong>
+        <small>SIEM / Log Analysis</small>
+      </div>
+
+    </div>
+
+    <div class="evidence">
+      <img
+        src="siem-images/splunknetwork.png"
+        alt="SIEM Network Topology"
+      >
+
+      <p class="caption">
+        Network topology and SIEM monitoring architecture.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- SPLUNK INPUTS -->
+  <section>
+    <h2>2. Splunk Data Inputs</h2>
+
+    <p>
+      Splunk is configured to receive security telemetry from multiple
+      sources. Centralizing these logs allows events to be searched and
+      correlated from a single SIEM platform.
+    </p>
+
+    <div class="evidence">
+      <img
+        src="siem-images/splunk-imputs.PNG"
+        alt="Splunk data inputs configuration"
+      >
+
+      <p class="caption">
+        Splunk data input configuration.
+      </p>
+    </div>
+
+    <div class="evidence">
+      <img
+        src="siem-images/splunkindex..PNG"
+        alt="Splunk index configuration"
+      >
+
+      <p class="caption">
+        Splunk index configuration used for security telemetry.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- SWITCH LOGGING -->
+  <section>
+    <h2>3. Network Device Logging</h2>
+
+    <p>
+      Network device logging provides visibility into infrastructure
+      activity. These logs can be forwarded to the SIEM for centralized
+      analysis and troubleshooting.
+    </p>
+
+    <div class="evidence">
+      <img
+        src="siem-images/access-sw-logging.PNG"
+        alt="Access switch logging configuration"
+      >
+
+      <p class="caption">
+        Access switch logging configuration.
+      </p>
+    </div>
+
+    <div class="evidence">
+      <img
+        src="siem-images/nex-logging.PNG"
+        alt="Network device logging configuration"
+      >
+
+      <p class="caption">
+        Network device logging configuration.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ASA LOGGING -->
+  <section>
+    <h2>4. Firewall / ASA Logging</h2>
+
+    <p>
+      Firewall logging provides additional visibility into network
+      connections, traffic decisions, and security events.
+    </p>
+
+    <div class="evidence">
+      <img
+        src="siem-images/asalogging.PNG"
+        alt="ASA logging configuration"
+      >
+
+      <p class="caption">
+        ASA logging configuration.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- SURICATA -->
+  <section>
+    <h2>5. Suricata IDS Configuration</h2>
+
+    <p>
+      Suricata is used as a network intrusion detection sensor. It
+      analyzes traffic and generates security events that can be
+      forwarded to Splunk.
+    </p>
+
+    <div class="evidence">
+      <img
+        src="siem-images/suricata-yaml.PNG"
+        alt="Suricata YAML configuration"
+      >
+
+      <p class="caption">
+        Suricata configuration.
+      </p>
+    </div>
+
+    <div class="evidence">
+      <img
+        src="siem-images/suricatarules.PNG"
+        alt="Suricata detection rules"
+      >
+
+      <p class="caption">
+        Suricata detection rules.
+      </p>
+    </div>
+
+    <div class="evidence">
+      <img
+        src="siem-images/suricatasplunkforwarderoutput.PNG"
+        alt="Suricata Splunk forwarder output"
+      >
+
+      <p class="caption">
+        Suricata telemetry being forwarded toward Splunk.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- NMAP -->
+  <section>
+    <h2>6. Nmap Network Scan Test</h2>
+
+    <p>
+      A controlled Nmap scan was performed against an authorized lab
+      system to generate reconnaissance activity and validate network
+      monitoring visibility.
+    </p>
+
+    <div class="command">
+      nmap -sV &lt;AUTHORIZED-LAB-IP&gt;
+    </div>
+
+    <div class="evidence">
+      <img
+        src="siem-images/nmapscan.PNG"
+        alt="Nmap network scan"
+      >
+
+      <p class="caption">
+        Controlled Nmap reconnaissance performed within the lab.
+      </p>
+    </div>
+
+    <div class="alert">
+      <h3>⚠ Network Reconnaissance</h3>
+
+      <div class="alert-grid">
+
+        <div class="alert-item">
+          <span>Activity</span>
+          <strong>Network Scanning</strong>
+        </div>
+
+        <div class="alert-item">
+          <span>Detection</span>
+          <strong>Suricata / SIEM</strong>
+        </div>
+
+        <div class="alert-item">
+          <span>MITRE ATT&CK</span>
+          <strong>T1046</strong>
+        </div>
+
+        <div class="alert-item">
+          <span>Environment</span>
+          <strong class="success">Authorized Lab</strong>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- BRUTE FORCE -->
+  <section>
+    <h2>7. Brute-Force Detection Test</h2>
+
+    <p>
+      A controlled authentication test was performed against a dedicated
+      lab environment to generate repeated authentication failures and
+      validate SIEM detection capabilities.
+    </p>
+
+    <div class="evidence">
+      <img
+        src="siem-images/hydrabruteforce.PNG"
+        alt="Controlled brute force test"
+      >
+
+      <p class="caption">
+        Controlled authentication testing in the authorized lab.
+      </p>
+    </div>
+
+    <div class="alert">
+      <h3>🚨 Authentication Attack Detected</h3>
+
+      <div class="alert-grid">
+
+        <div class="alert-item">
+          <span>Activity</span>
+          <strong>Repeated Login Failures</strong>
+        </div>
+
+        <div class="alert-item">
+          <span>Detection</span>
+          <strong>SIEM Correlation</strong>
+        </div>
+
+        <div class="alert-item">
+          <span>MITRE ATT&CK</span>
+          <strong>T1110</strong>
+        </div>
+
+        <div class="alert-item">
+          <span>Environment</span>
+          <strong class="success">Authorized Lab</strong>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SPLUNK LIVE -->
+  <section>
+    <h2>8. Splunk SIEM Monitoring</h2>
+
+    <p>
+      Splunk provides centralized visibility into the telemetry generated
+      throughout the lab. Events can be searched, filtered, correlated,
+      and investigated from the SIEM.
+    </p>
+
+    <div class="evidence">
+      <img
+        src="siem-images/slpunklive.PNG"
+        alt="Splunk SIEM dashboard"
+      >
+
+      <p class="caption">
+        Splunk SIEM monitoring and log analysis.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- INVESTIGATION -->
+  <section>
+    <h2>9. SOC Investigation Workflow</h2>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <h3>Alert</h3>
+        <p>
+          Suspicious network or authentication activity generates
+          telemetry in the SIEM.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <h3>Validate</h3>
+        <p>
+          Determine whether the activity is expected, authorized,
+          or potentially malicious.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <h3>Correlate</h3>
+        <p>
+          Search related network, firewall, IDS, and authentication
+          events to build a timeline.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <h3>Investigate</h3>
+        <p>
+          Examine source, destination, timestamps, ports, accounts,
+          and associated security events.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <h3>Respond</h3>
+        <p>
+          Document the finding and identify appropriate containment
+          and remediation actions.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- SKILLS -->
+  <section>
+    <h2>10. Skills Demonstrated</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>Splunk SIEM</h3>
+        <p>
+          Log ingestion, indexing, searching, monitoring,
+          and security event analysis.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Suricata IDS</h3>
+        <p>
+          Network traffic inspection and intrusion detection
+          rule configuration.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Network Security</h3>
+        <p>
+          Switch, firewall, and network telemetry collection.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Threat Detection</h3>
+        <p>
+          Identification of reconnaissance and authentication
+          attack behavior.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Incident Response</h3>
+        <p>
+          Alert validation, investigation, correlation,
+          and documentation.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>MITRE ATT&CK</h3>
+        <p>
+          Mapping observed behaviors to relevant ATT&CK techniques.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- RESULTS -->
+  <section>
+    <h2>Lab Results</h2>
+
+    <table>
+
+      <tr>
+        <th>Test</th>
+        <th>Technology</th>
+        <th>Result</th>
+      </tr>
+
+      <tr>
+        <td>Network Scanning</td>
+        <td>Nmap / Suricata / Splunk</td>
+        <td class="success">Detected</td>
+      </tr>
+
+      <tr>
+        <td>Authentication Testing</td>
+        <td>Hydra / SIEM</td>
+        <td class="success">Detected</td>
+      </tr>
+
+      <tr>
+        <td>Network Logging</td>
+        <td>Switch / Firewall</td>
+        <td class="success">Collected</td>
+      </tr>
+
+      <tr>
+        <td>IDS Monitoring</td>
+        <td>Suricata</td>
+        <td class="success">Configured</td>
+      </tr>
+
+      <tr>
+        <td>Centralized Analysis</td>
+        <td>Splunk</td>
+        <td class="success">Operational</td>
+      </tr>
+
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    SIEM Home Lab • Splunk • Suricata • Network Security Monitoring
+  </p>
 
   <p>
-    Network topology showing the attacker machine,
-    monitored endpoint, and SIEM infrastructure.
-  </p>
-</section>
-
-<section>
-  <h2>Nmap Scan Test</h2>
-
-  <img
-    src="siem-images/nmapscan.PNG"
-    alt="Nmap Network Scan"
-    class="lab-image"
-  >
-
-  <p>
-    Controlled Nmap reconnaissance performed against
-    the authorized lab endpoint.
-  </p>
-</section>
-
-<section>
-  <h2>Brute Force Test</h2>
-
-  <img
-    src="siem-images/hydrabruteforce.PNG"
-    alt="Brute Force Test"
-    class="lab-image"
-  >
-
-  <p>
-    Controlled authentication testing used to generate
-    security events for SIEM detection.
-  </p>
-</section>
-
-<section>
-  <h2>Splunk SIEM</h2>
-
-  <img
-    src="siem-images/slpunklive.PNG"
-    alt="Splunk SIEM Dashboard"
-    class="lab-image"
-  >
-
-  <p>
-    Splunk dashboard showing collected security telemetry
-    and investigation activity.
-  </p>
-</section>
+    All security testing shown on this page was performed in an
+  
