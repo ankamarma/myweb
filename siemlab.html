@@ -5,308 +5,637 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SIEM Home Lab | Splunk, Suricata & Network Security</title>
+  <title>SIEM Network Monitoring & Detection Lab</title>
 
   <style>
+    :root {
+      --bg: #07111f;
+      --card: #0d1b2a;
+      --card2: #102438;
+      --border: #203a52;
+      --text: #e8f1f8;
+      --muted: #9bb0c2;
+      --blue: #38bdf8;
+      --cyan: #22d3ee;
+      --green: #34d399;
+      --orange: #fb923c;
+      --red: #f87171;
+      --purple: #a78bfa;
+      --shadow: 0 12px 35px rgba(0,0,0,.25);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #070b14;
-      color: #e5e7eb;
-      line-height: 1.7;
-    }
-
-    header {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                   BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        linear-gradient(135deg, rgba(15,23,42,.96), rgba(23,37,84,.96));
-      padding: 75px 20px;
-      text-align: center;
-      border-bottom: 1px solid #2563eb;
+        radial-gradient(circle at top right, rgba(56,189,248,.10), transparent 30%),
+        radial-gradient(circle at top left, rgba(167,139,250,.08), transparent 25%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
     }
 
-    header h1 {
-      color: #38bdf8;
-      font-size: 3rem;
-      margin-bottom: 12px;
+    a {
+      color: var(--blue);
+      text-decoration: none;
     }
 
-    header p {
-      color: #94a3b8;
-      font-size: 1.1rem;
+    a:hover {
+      text-decoration: underline;
     }
 
     .container {
-      max-width: 1200px;
+      width: min(1180px, 92%);
       margin: auto;
-      padding: 40px 20px;
     }
 
-    section {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 32px;
-      margin-bottom: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    /* HERO */
+
+    .hero {
+      padding: 90px 0 70px;
+      border-bottom: 1px solid var(--border);
     }
 
-    h2 {
-      color: #38bdf8;
-      font-size: 1.8rem;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 45px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border: 1px solid rgba(56,189,248,.3);
+      background: rgba(56,189,248,.08);
+      border-radius: 999px;
+      color: var(--blue);
+      font-size: .85rem;
+      font-weight: 700;
       margin-bottom: 18px;
     }
 
-    h3 {
-      color: #f8fafc;
-      margin: 18px 0 10px;
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.8rem);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
     }
 
-    p {
-      color: #cbd5e1;
+    .gradient {
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    .intro {
-      font-size: 1.05rem;
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 700px;
     }
 
-    .badges {
-      margin-top: 20px;
+    .hero-card {
+      background: linear-gradient(145deg, rgba(16,36,56,.95), rgba(8,23,38,.95));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 25px;
+      box-shadow: var(--shadow);
     }
 
-    .badge {
-      display: inline-block;
-      background: #172554;
-      color: #93c5fd;
-      padding: 6px 12px;
-      margin: 4px;
-      border-radius: 20px;
+    .hero-card h3 {
+      margin-bottom: 15px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--blue);
+      font-size: 1.6rem;
+    }
+
+    .stat span {
+      color: var(--muted);
       font-size: .85rem;
     }
 
-    /* TOPOLOGY */
+    /* NAV */
 
-    .topology {
+    .toc {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(7,17,31,.82);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toc-inner {
       display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 13px 0;
+    }
+
+    .toc a {
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    .toc a:hover {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    /* SECTIONS */
+
+    section {
+      padding: 80px 0;
+    }
+
+    .section-header {
+      margin-bottom: 35px;
+    }
+
+    .section-number {
+      color: var(--blue);
+      font-weight: 800;
+      font-size: .85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      max-width: 780px;
+      color: var(--muted);
+    }
+
+    /* ARCHITECTURE DIAGRAM */
+
+    .diagram-wrapper {
+      padding: 35px;
+      background: rgba(13,27,42,.7);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+
+    .architecture {
+      min-width: 900px;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 35px;
       align-items: center;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin: 30px 0;
+      justify-items: center;
+      padding: 30px;
     }
 
     .node {
-      background: #111c31;
-      border: 1px solid #2563eb;
-      border-radius: 12px;
-      padding: 22px;
       min-width: 190px;
       text-align: center;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #102438, #0a1726);
+      box-shadow: 0 8px 25px rgba(0,0,0,.2);
+      position: relative;
+      z-index: 2;
     }
 
-    .node-icon {
+    .node .icon {
       font-size: 2.2rem;
       margin-bottom: 8px;
     }
 
     .node strong {
       display: block;
-      color: #38bdf8;
       font-size: 1.05rem;
     }
 
     .node small {
+      color: var(--muted);
       display: block;
-      color: #94a3b8;
-      margin-top: 4px;
+      margin-top: 5px;
+    }
+
+    .node.pc {
+      border-color: rgba(56,189,248,.5);
+    }
+
+    .node.network {
+      border-color: rgba(167,139,250,.5);
+    }
+
+    .node.sensor {
+      border-color: rgba(251,146,60,.6);
+    }
+
+    .node.splunk {
+      border-color: rgba(52,211,153,.6);
+      background: linear-gradient(145deg, #10382e, #0b241e);
     }
 
     .arrow {
-      color: #22c55e;
-      font-size: 2rem;
+      position: absolute;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      transform-origin: left center;
+      z-index: 1;
     }
 
-    /* IMAGES */
-
-    .evidence {
-      margin-top: 25px;
-      padding: 18px;
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-    }
-
-    .evidence img {
-      width: 100%;
-      max-width: 1100px;
-      height: auto;
-      display: block;
-      margin: auto;
-      border-radius: 8px;
-      border: 1px solid #334155;
-    }
-
-    .caption {
-      text-align: center;
-      color: #94a3b8;
-      margin-top: 12px;
-      font-size: .9rem;
-    }
-
-    /* CARDS */
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .card {
-      background: #111827;
-      border-left: 4px solid #38bdf8;
-      border-radius: 10px;
-      padding: 22px;
-    }
-
-    .card h3 {
-      color: #38bdf8;
-      margin-top: 0;
-    }
-
-    /* COMMAND */
-
-    .command {
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 15px 0;
-      color: #86efac;
-      font-family: Consolas, monospace;
-      overflow-x: auto;
-    }
-
-    /* ALERT */
-
-    .alert {
-      margin-top: 25px;
-      padding: 22px;
-      background: #2a0c0c;
-      border: 1px solid #dc2626;
-      border-radius: 10px;
-    }
-
-    .alert h3 {
-      color: #f87171;
-      margin-top: 0;
-    }
-
-    .alert-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 15px;
-      margin-top: 18px;
-    }
-
-    .alert-item {
-      background: #180f0f;
-      padding: 12px;
-      border-radius: 7px;
-    }
-
-    .alert-item span {
-      display: block;
-      color: #94a3b8;
-      font-size: .8rem;
-    }
-
-    .alert-item strong {
-      color: #f8fafc;
-    }
-
-    .danger {
-      color: #f87171 !important;
-    }
-
-    .success {
-      color: #4ade80 !important;
-    }
-
-    .warning {
-      color: #facc15 !important;
-    }
-
-    /* TIMELINE */
-
-    .timeline {
-      border-left: 3px solid #2563eb;
-      margin: 25px 0 0 10px;
-      padding-left: 25px;
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 25px;
-    }
-
-    .timeline-item::before {
+    .arrow::after {
       content: "";
       position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #38bdf8;
-      border-radius: 50%;
-      left: -32px;
-      top: 8px;
+      right: -2px;
+      top: -6px;
+      border-left: 12px solid var(--cyan);
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
     }
 
-    /* TABLE */
+    .arrow.pc-splunk {
+      width: 270px;
+      top: 145px;
+      left: 310px;
+      transform: rotate(0deg);
+    }
 
-    table {
+    .arrow.network-sensor {
+      width: 220px;
+      top: 265px;
+      left: 245px;
+      transform: rotate(0deg);
+      background: linear-gradient(90deg, var(--purple), var(--orange));
+    }
+
+    .arrow.sensor-splunk {
+      width: 220px;
+      top: 265px;
+      left: 600px;
+      transform: rotate(0deg);
+      background: linear-gradient(90deg, var(--orange), var(--green));
+    }
+
+    .arrow-label {
+      position: absolute;
+      color: var(--muted);
+      font-size: .75rem;
+      background: var(--bg);
+      padding: 2px 7px;
+      border-radius: 5px;
+      z-index: 3;
+    }
+
+    .label-pc {
+      top: 120px;
+      left: 420px;
+    }
+
+    .label-network {
+      top: 238px;
+      left: 305px;
+    }
+
+    .label-sensor {
+      top: 238px;
+      left: 665px;
+    }
+
+    /* FLOW */
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      align-items: center;
+    }
+
+    .flow-item {
+      text-align: center;
+      position: relative;
+    }
+
+    .flow-box {
+      margin: auto;
+      width: 160px;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card);
+    }
+
+    .flow-box .icon {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .flow-arrow {
+      position: absolute;
+      top: 52px;
+      right: -20px;
+      color: var(--cyan);
+      font-size: 1.5rem;
+    }
+
+    .flow-item:last-child .flow-arrow {
+      display: none;
+    }
+
+    .flow-description {
+      margin-top: 30px;
+      padding: 20px;
+      border-left: 3px solid var(--blue);
+      background: rgba(56,189,248,.05);
+      color: var(--muted);
+      border-radius: 0 10px 10px 0;
+    }
+
+    /* TEST CARDS */
+
+    .test-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+      padding: 28px;
+      background: linear-gradient(145deg, rgba(13,27,42,.95), rgba(10,23,38,.95));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .test-content h3 {
+      font-size: 1.7rem;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .badge-blue {
+      background: rgba(56,189,248,.12);
+      color: var(--blue);
+    }
+
+    .badge-red {
+      background: rgba(248,113,113,.12);
+      color: var(--red);
+    }
+
+    .test-content p {
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+
+    .test-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .test-image img {
       width: 100%;
-      border-collapse: collapse;
+      max-height: 430px;
+      object-fit: contain;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #020812;
+    }
+
+    .detection-box {
       margin-top: 20px;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(52,211,153,.06);
+      border: 1px solid rgba(52,211,153,.25);
     }
 
-    th,
-    td {
-      padding: 14px;
-      text-align: left;
-      border-bottom: 1px solid #1e293b;
+    .detection-box h4 {
+      color: var(--green);
+      margin-bottom: 8px;
     }
 
-    th {
-      color: #38bdf8;
-      background: #111827;
+    .detection-steps {
+      list-style: none;
+      margin-top: 12px;
     }
 
-    td {
-      color: #cbd5e1;
+    .detection-steps li {
+      padding: 8px 0 8px 28px;
+      position: relative;
+      color: var(--muted);
+    }
+
+    .detection-steps li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    /* SPLUNK */
+
+    .splunk-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+      padding: 30px;
+      background: linear-gradient(145deg, #102a25, #0a1d19);
+      border: 1px solid rgba(52,211,153,.25);
+      border-radius: 22px;
+    }
+
+    .splunk-card img {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .check-list {
+      list-style: none;
+    }
+
+    .check-list li {
+      margin: 12px 0;
+      padding-left: 28px;
+      position: relative;
+      color: var(--muted);
+    }
+
+    .check-list li::before {
+      content: "●";
+      position: absolute;
+      left: 5px;
+      color: var(--green);
+    }
+
+    /* CONFIGURATION GALLERY */
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .gallery-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56,189,248,.5);
+    }
+
+    .gallery-card img {
+      display: block;
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      background: #020812;
+      padding: 8px;
+    }
+
+    .gallery-caption {
+      padding: 16px;
+    }
+
+    .gallery-caption strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .gallery-caption span {
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    /* SUMMARY */
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .summary-card {
+      padding: 25px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .summary-card .icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .summary-card p {
+      color: var(--muted);
+      font-size: .92rem;
     }
 
     footer {
+      border-top: 1px solid var(--border);
+      padding: 35px 0;
+      color: var(--muted);
       text-align: center;
-      padding: 35px 20px;
-      color: #64748b;
-      border-top: 1px solid #1e293b;
+      font-size: .85rem;
     }
 
-    @media (max-width: 700px) {
-      header h1 {
-        font-size: 2.2rem;
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+      .hero-grid,
+      .test-card,
+      .splunk-card {
+        grid-template-columns: 1fr;
       }
 
+      .flow {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .flow-arrow {
+        display: none;
+      }
+
+      .flow-box {
+        width: 100%;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
       section {
-        padding: 22px;
+        padding: 55px 0;
       }
 
-      .arrow {
-        transform: rotate(90deg);
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-wrapper {
+        padding: 15px;
       }
     }
   </style>
@@ -314,509 +643,664 @@
 
 <body>
 
-<header>
-  <h1>SIEM Home Lab</h1>
-  <p>
-    Splunk • Suricata • Network Security Monitoring • Detection Engineering
-  </p>
-</header>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
 
-<main class="container">
+      <div>
+        <div class="eyebrow">🛡️ SIEM / NETWORK SECURITY LAB</div>
 
-  <!-- OVERVIEW -->
-  <section>
-    <h2>Lab Overview</h2>
+        <h1>
+          Network Monitoring &
+          <span class="gradient">Threat Detection</span>
+        </h1>
 
-    <p class="intro">
-      This project demonstrates a security monitoring and detection
-      environment built in a home lab. Network traffic and security
-      events are collected, forwarded to Splunk, analyzed, and used
-      to identify suspicious activity.
-    </p>
-
-    <div class="badges">
-      <span class="badge">Splunk</span>
-      <span class="badge">Suricata</span>
-      <span class="badge">Network Security</span>
-      <span class="badge">SIEM</span>
-      <span class="badge">Log Analysis</span>
-      <span class="badge">Threat Detection</span>
-      <span class="badge">Incident Response</span>
-    </div>
-  </section>
-
-
-  <!-- NETWORK TOPOLOGY -->
-  <section>
-    <h2>1. Network Topology</h2>
-
-    <p>
-      The lab consists of network devices, security monitoring sensors,
-      and a Splunk SIEM. Security telemetry is forwarded to Splunk for
-      centralized monitoring and investigation.
-    </p>
-
-    <div class="topology">
-
-      <div class="node">
-        <div class="node-icon">🌐</div>
-        <strong>Network</strong>
-        <small>Lab Traffic</small>
+        <p>
+          A hands-on SIEM implementation demonstrating centralized logging,
+          network monitoring, Suricata-based intrusion detection, Splunk
+          log analysis, and validation through controlled Nmap and Hydra
+          security tests.
+        </p>
       </div>
 
-      <div class="arrow">→</div>
+      <div class="hero-card">
+        <h3>Lab Overview</h3>
 
-      <div class="node">
-        <div class="node-icon">🛡️</div>
-        <strong>Suricata</strong>
-        <small>IDS / Network Detection</small>
-      </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>2</strong>
+            <span>Attack Tests</span>
+          </div>
 
-      <div class="arrow">→</div>
+          <div class="stat">
+            <strong>3+</strong>
+            <span>Network Sources</span>
+          </div>
 
-      <div class="node">
-        <div class="node-icon">📊</div>
-        <strong>Splunk</strong>
-        <small>SIEM / Log Analysis</small>
+          <div class="stat">
+            <strong>IDS</strong>
+            <span>Suricata</span>
+          </div>
+
+          <div class="stat">
+            <strong>SIEM</strong>
+            <span>Splunk</span>
+          </div>
+        </div>
       </div>
 
     </div>
+  </header>
 
-    <div class="evidence">
-      <img
-        src="siem-images/splunknetwork.png"
-        alt="SIEM Network Topology"
-      >
-
-      <p class="caption">
-        Network topology and SIEM monitoring architecture.
-      </p>
+  <!-- NAVIGATION -->
+  <nav class="toc">
+    <div class="container toc-inner">
+      <a href="#architecture">Architecture</a>
+      <a href="#logflow">Log Flow</a>
+      <a href="#nmap">Nmap Test</a>
+      <a href="#bruteforce">Brute Force</a>
+      <a href="#splunk">Splunk Detection</a>
+      <a href="#configuration">Configuration</a>
     </div>
-  </section>
+  </nav>
 
+  <main>
 
-  <!-- SPLUNK INPUTS -->
-  <section>
-    <h2>2. Splunk Data Inputs</h2>
+    <!-- 01 ARCHITECTURE -->
+    <section id="architecture">
+      <div class="container">
 
-    <p>
-      Splunk is configured to receive security telemetry from multiple
-      sources. Centralizing these logs allows events to be searched and
-      correlated from a single SIEM platform.
-    </p>
+        <div class="section-header">
+          <div class="section-number">01 / Architecture</div>
 
-    <div class="evidence">
-      <img
-        src="siem-images/splunk-imputs.PNG"
-        alt="Splunk data inputs configuration"
-      >
+          <h2>Network Security Architecture</h2>
 
-      <p class="caption">
-        Splunk data input configuration.
-      </p>
-    </div>
-
-    <div class="evidence">
-      <img
-        src="siem-images/splunkindex..PNG"
-        alt="Splunk index configuration"
-      >
-
-      <p class="caption">
-        Splunk index configuration used for security telemetry.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- SWITCH LOGGING -->
-  <section>
-    <h2>3. Network Device Logging</h2>
-
-    <p>
-      Network device logging provides visibility into infrastructure
-      activity. These logs can be forwarded to the SIEM for centralized
-      analysis and troubleshooting.
-    </p>
-
-    <div class="evidence">
-      <img
-        src="siem-images/access-sw-logging.PNG"
-        alt="Access switch logging configuration"
-      >
-
-      <p class="caption">
-        Access switch logging configuration.
-      </p>
-    </div>
-
-    <div class="evidence">
-      <img
-        src="siem-images/nex-logging.PNG"
-        alt="Network device logging configuration"
-      >
-
-      <p class="caption">
-        Network device logging configuration.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- ASA LOGGING -->
-  <section>
-    <h2>4. Firewall / ASA Logging</h2>
-
-    <p>
-      Firewall logging provides additional visibility into network
-      connections, traffic decisions, and security events.
-    </p>
-
-    <div class="evidence">
-      <img
-        src="siem-images/asalogging.PNG"
-        alt="ASA logging configuration"
-      >
-
-      <p class="caption">
-        ASA logging configuration.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- SURICATA -->
-  <section>
-    <h2>5. Suricata IDS Configuration</h2>
-
-    <p>
-      Suricata is used as a network intrusion detection sensor. It
-      analyzes traffic and generates security events that can be
-      forwarded to Splunk.
-    </p>
-
-    <div class="evidence">
-      <img
-        src="siem-images/suricata-yaml.PNG"
-        alt="Suricata YAML configuration"
-      >
-
-      <p class="caption">
-        Suricata configuration.
-      </p>
-    </div>
-
-    <div class="evidence">
-      <img
-        src="siem-images/suricatarules.PNG"
-        alt="Suricata detection rules"
-      >
-
-      <p class="caption">
-        Suricata detection rules.
-      </p>
-    </div>
-
-    <div class="evidence">
-      <img
-        src="siem-images/suricatasplunkforwarderoutput.PNG"
-        alt="Suricata Splunk forwarder output"
-      >
-
-      <p class="caption">
-        Suricata telemetry being forwarded toward Splunk.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- NMAP -->
-  <section>
-    <h2>6. Nmap Network Scan Test</h2>
-
-    <p>
-      A controlled Nmap scan was performed against an authorized lab
-      system to generate reconnaissance activity and validate network
-      monitoring visibility.
-    </p>
-
-    <div class="command">
-      nmap -sV &lt;AUTHORIZED-LAB-IP&gt;
-    </div>
-
-    <div class="evidence">
-      <img
-        src="siem-images/nmapscan.PNG"
-        alt="Nmap network scan"
-      >
-
-      <p class="caption">
-        Controlled Nmap reconnaissance performed within the lab.
-      </p>
-    </div>
-
-    <div class="alert">
-      <h3>⚠ Network Reconnaissance</h3>
-
-      <div class="alert-grid">
-
-        <div class="alert-item">
-          <span>Activity</span>
-          <strong>Network Scanning</strong>
+          <p>
+            The architecture separates endpoint logging from network-security
+            monitoring. PC activity is sent directly to Splunk, while traffic
+            observed from network infrastructure is inspected by Suricata
+            before the resulting security events are forwarded to Splunk.
+          </p>
         </div>
 
-        <div class="alert-item">
-          <span>Detection</span>
-          <strong>Suricata / SIEM</strong>
+        <div class="diagram-wrapper">
+
+          <div class="architecture">
+
+            <!-- PCs -->
+            <div class="node pc" style="grid-column:1; grid-row:1;">
+              <div class="icon">💻</div>
+              <strong>PCs / Endpoints</strong>
+              <small>Endpoint activity & logs</small>
+            </div>
+
+            <!-- Network -->
+            <div class="node network" style="grid-column:1; grid-row:2;">
+              <div class="icon">🌐</div>
+              <strong>Network Devices</strong>
+              <small>ASA • Nexus • Access Switch</small>
+            </div>
+
+            <!-- Suricata -->
+            <div class="node sensor" style="grid-column:2; grid-row:2;">
+              <div class="icon">🛡️</div>
+              <strong>Suricata IDS</strong>
+              <small>Traffic inspection & rules</small>
+            </div>
+
+            <!-- Splunk -->
+            <div class="node splunk" style="grid-column:3; grid-row:2;">
+              <div class="icon">📊</div>
+              <strong>Splunk SIEM</strong>
+              <small>Collection, search & detection</small>
+            </div>
+
+            <span class="arrow-label label-pc">Endpoint logs</span>
+            <span class="arrow-label label-network">Network traffic / logs</span>
+            <span class="arrow-label label-sensor">Security events</span>
+
+            <div class="arrow pc-splunk"></div>
+            <div class="arrow network-sensor"></div>
+            <div class="arrow sensor-splunk"></div>
+
+          </div>
+
         </div>
 
-        <div class="alert-item">
-          <span>MITRE ATT&CK</span>
-          <strong>T1046</strong>
-        </div>
+        <div class="summary" style="margin-top:30px;">
 
-        <div class="alert-item">
-          <span>Environment</span>
-          <strong class="success">Authorized Lab</strong>
+          <div class="summary-card">
+            <div class="icon">💻</div>
+            <h3>Endpoint Visibility</h3>
+            <p>
+              PC-generated logs are collected and made searchable in Splunk
+              for centralized monitoring and investigation.
+            </p>
+          </div>
+
+          <div class="summary-card">
+            <div class="icon">🛡️</div>
+            <h3>Network Detection</h3>
+            <p>
+              Suricata inspects network traffic and applies IDS rules to
+              identify suspicious activity such as scans and brute-force
+              behavior.
+            </p>
+          </div>
+
+          <div class="summary-card">
+            <div class="icon">📊</div>
+            <h3>Central SIEM</h3>
+            <p>
+              Splunk provides the central location for searching, correlating,
+              visualizing, and investigating security events.
+            </p>
+          </div>
+
         </div>
 
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <!-- BRUTE FORCE -->
-  <section>
-    <h2>7. Brute-Force Detection Test</h2>
+    <!-- 02 LOG FLOW -->
+    <section id="logflow">
+      <div class="container">
 
-    <p>
-      A controlled authentication test was performed against a dedicated
-      lab environment to generate repeated authentication failures and
-      validate SIEM detection capabilities.
-    </p>
+        <div class="section-header">
+          <div class="section-number">02 / Data Flow</div>
 
-    <div class="evidence">
-      <img
-        src="siem-images/hydrabruteforce.PNG"
-        alt="Controlled brute force test"
-      >
+          <h2>Log Collection & Detection Flow</h2>
 
-      <p class="caption">
-        Controlled authentication testing in the authorized lab.
-      </p>
-    </div>
-
-    <div class="alert">
-      <h3>🚨 Authentication Attack Detected</h3>
-
-      <div class="alert-grid">
-
-        <div class="alert-item">
-          <span>Activity</span>
-          <strong>Repeated Login Failures</strong>
+          <p>
+            The SIEM workflow has two primary collection paths. Endpoint
+            systems send logs toward Splunk, while network-device traffic is
+            inspected by Suricata before security events are forwarded to
+            Splunk.
+          </p>
         </div>
 
-        <div class="alert-item">
-          <span>Detection</span>
-          <strong>SIEM Correlation</strong>
+        <div class="diagram-wrapper">
+
+          <div class="flow">
+
+            <div class="flow-item">
+              <div class="flow-box">
+                <div class="icon">💻</div>
+                <strong>PCs</strong>
+                <small>Endpoint logs</small>
+              </div>
+              <div class="flow-arrow">→</div>
+            </div>
+
+            <div class="flow-item">
+              <div class="flow-box">
+                <div class="icon">📥</div>
+                <strong>Splunk Input</strong>
+                <small>Log ingestion</small>
+              </div>
+              <div class="flow-arrow">→</div>
+            </div>
+
+            <div class="flow-item">
+              <div class="flow-box">
+                <div class="icon">🔎</div>
+                <strong>Splunk</strong>
+                <small>Search & analysis</small>
+              </div>
+              <div class="flow-arrow">→</div>
+            </div>
+
+            <div class="flow-item">
+              <div class="flow-box">
+                <div class="icon">🚨</div>
+                <strong>Detection</strong>
+                <small>Alerts / events</small>
+              </div>
+              <div class="flow-arrow">→</div>
+            </div>
+
+            <div class="flow-item">
+              <div class="flow-box">
+                <div class="icon">👨‍💻</div>
+                <strong>Analyst</strong>
+                <small>Investigation</small>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flow-description">
+            <strong>Network-device path:</strong>
+            Network devices such as the ASA, Nexus switch, and access switch
+            provide network telemetry. Relevant traffic is observed by
+            Suricata, where IDS signatures inspect the traffic. Suricata
+            generates security events that are then forwarded to Splunk for
+            centralized analysis.
+          </div>
+
         </div>
 
-        <div class="alert-item">
-          <span>MITRE ATT&CK</span>
-          <strong>T1110</strong>
+      </div>
+    </section>
+
+
+    <!-- 03 NMAP -->
+    <section id="nmap">
+      <div class="container">
+
+        <div class="section-header">
+          <div class="section-number">03 / Validation Test</div>
+
+          <h2>Nmap Scan Detection</h2>
+
+          <p>
+            The first validation test uses an Nmap network scan to generate
+            reconnaissance traffic. The objective is to confirm that the
+            monitoring stack can observe the scan and surface the resulting
+            security event in the SIEM.
+          </p>
         </div>
 
-        <div class="alert-item">
-          <span>Environment</span>
-          <strong class="success">Authorized Lab</strong>
+        <div class="test-card">
+
+          <div class="test-content">
+
+            <span class="badge badge-blue">RECONNAISSANCE TEST</span>
+
+            <h3>🔎 Nmap Network Scan</h3>
+
+            <p>
+              An Nmap scan generates multiple connection attempts against
+              ports on the target system. This creates a recognizable
+              network pattern that can be inspected by Suricata.
+            </p>
+
+            <div class="detection-box">
+
+              <h4>How the detection works</h4>
+
+              <ul class="detection-steps">
+                <li>Nmap generates reconnaissance traffic.</li>
+                <li>Network traffic is observed by Suricata.</li>
+                <li>Suricata evaluates the traffic against configured IDS rules.</li>
+                <li>A matching event is written to the Suricata event log.</li>
+                <li>The Suricata event is forwarded to Splunk.</li>
+                <li>Splunk makes the event searchable for investigation.</li>
+              </ul>
+
+            </div>
+
+            <div style="margin-top:20px;">
+              <strong>Evidence:</strong>
+              <span style="color:var(--muted);">
+                Nmap scan screenshot captured during the validation test.
+              </span>
+            </div>
+
+          </div>
+
+          <div class="test-image">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/nmapscan.PNG"
+              alt="Nmap scan test evidence"
+              loading="lazy"
+            >
+          </div>
+
         </div>
 
       </div>
+    </section>
+
+
+    <!-- 04 BRUTE FORCE -->
+    <section id="bruteforce">
+      <div class="container">
+
+        <div class="section-header">
+          <div class="section-number">04 / Validation Test</div>
+
+          <h2>Brute-Force Attack Detection</h2>
+
+          <p>
+            The second validation test uses Hydra to generate repeated
+            authentication attempts. The goal is to demonstrate how repeated
+            login activity can be observed by the monitoring stack and
+            identified as suspicious behavior.
+          </p>
+        </div>
+
+        <div class="test-card">
+
+          <div class="test-content">
+
+            <span class="badge badge-red">BRUTE-FORCE TEST</span>
+
+            <h3>🔐 Hydra Brute-Force Test</h3>
+
+            <p>
+              Hydra generates repeated authentication attempts against the
+              selected service. The resulting traffic provides a realistic
+              test case for validating brute-force detection and SIEM
+              visibility.
+            </p>
+
+            <div class="detection-box">
+
+              <h4>How the detection works</h4>
+
+              <ul class="detection-steps">
+                <li>Hydra generates repeated authentication attempts.</li>
+                <li>The network traffic is observed by the IDS sensor.</li>
+                <li>Suricata evaluates the traffic against configured rules.</li>
+                <li>Matching security events are recorded.</li>
+                <li>Suricata events are forwarded to Splunk.</li>
+                <li>Splunk provides centralized visibility for investigation.</li>
+              </ul>
+
+            </div>
+
+            <div style="margin-top:20px;">
+              <strong>Evidence:</strong>
+              <span style="color:var(--muted);">
+                Hydra brute-force screenshot captured during testing.
+              </span>
+            </div>
+
+          </div>
+
+          <div class="test-image">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/hydrabruteforce.PNG"
+              alt="Hydra brute force test evidence"
+              loading="lazy"
+            >
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- 05 SPLUNK -->
+    <section id="splunk">
+      <div class="container">
+
+        <div class="section-header">
+          <div class="section-number">05 / SIEM Visibility</div>
+
+          <h2>Splunk Security Monitoring</h2>
+
+          <p>
+            Splunk acts as the central analysis platform. Once logs and
+            Suricata security events are ingested, analysts can search the
+            data, review events, identify suspicious activity, and correlate
+            activity across multiple sources.
+          </p>
+        </div>
+
+        <div class="splunk-card">
+
+          <div>
+            <h3>📊 Centralized Security Visibility</h3>
+
+            <p style="color:var(--muted); margin:15px 0;">
+              The Splunk interface provides visibility into incoming network
+              and security telemetry. The SIEM can be used to validate that
+              the events generated during the Nmap and brute-force tests are
+              reaching the monitoring platform.
+            </p>
+
+            <ul class="check-list">
+              <li>Centralized log ingestion</li>
+              <li>Network event searching</li>
+              <li>Suricata security-event visibility</li>
+              <li>Detection and investigation workflow</li>
+              <li>Historical event analysis</li>
+            </ul>
+          </div>
+
+          <div>
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/slpunklive.PNG"
+              alt="Splunk live monitoring"
+              loading="lazy"
+            >
+          </div>
+
+        </div>
+
+        <div class="splunk-card" style="margin-top:25px;">
+
+          <div>
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/splunknetwork.png"
+              alt="Splunk network monitoring"
+              loading="lazy"
+            >
+          </div>
+
+          <div>
+            <h3>🌐 Network Event Monitoring</h3>
+
+            <p style="color:var(--muted); margin-top:15px;">
+              Network events collected from the monitoring infrastructure can
+              be searched and reviewed inside Splunk. This gives the analyst
+              a central location for investigating reconnaissance,
+              authentication attacks, and other suspicious network activity.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- 06 CONFIGURATION -->
+    <section id="configuration">
+      <div class="container">
+
+        <div class="section-header">
+          <div class="section-number">06 / Configuration Evidence</div>
+
+          <h2>Device & SIEM Configuration</h2>
+
+          <p>
+            The following screenshots document the configuration used to
+            establish logging, Suricata inspection, forwarding, and Splunk
+            ingestion. The gallery is intentionally arranged three images
+            per row for easier review.
+          </p>
+        </div>
+
+
+        <div class="gallery">
+
+          <!-- Row 1 -->
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/access-sw-logging.PNG"
+              alt="Access switch logging configuration"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Access Switch Logging</strong>
+              <span>Switch logging configuration.</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/asalogging.PNG"
+              alt="ASA logging configuration"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>ASA Logging</strong>
+              <span>Firewall/network-device logging configuration.</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/nex-logging.PNG"
+              alt="Nexus logging configuration"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Nexus Logging</strong>
+              <span>Nexus network-device logging configuration.</span>
+            </div>
+          </div>
+
+
+          <!-- Row 2 -->
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/suricata-yaml.PNG"
+              alt="Suricata YAML configuration"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Suricata YAML</strong>
+              <span>Suricata service and sensor configuration.</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/suricatarules.PNG"
+              alt="Suricata rules"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Suricata Rules</strong>
+              <span>IDS detection rules used by the sensor.</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/suricatasplunkforwarderoutput.PNG"
+              alt="Suricata Splunk forwarder output"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Suricata → Splunk Forwarding</strong>
+              <span>Forwarding configuration for security events.</span>
+            </div>
+          </div>
+
+
+          <!-- Row 3 -->
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/splunk-imputs.PNG"
+              alt="Splunk inputs configuration"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Splunk Inputs</strong>
+              <span>Configured Splunk data inputs.</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/splunkindex..PNG"
+              alt="Splunk index configuration"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Splunk Index</strong>
+              <span>Index configuration for collected events.</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img
+              src="https://raw.githubusercontent.com/ankamarma/myweb/main/siem-images/slpunklive.PNG"
+              alt="Splunk live monitoring"
+              loading="lazy"
+            >
+            <div class="gallery-caption">
+              <strong>Splunk Live Events</strong>
+              <span>Live visibility of incoming security events.</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- FINAL SUMMARY -->
+    <section>
+      <div class="container">
+
+        <div class="section-header">
+          <div class="section-number">07 / Conclusion</div>
+
+          <h2>End-to-End Detection Validation</h2>
+
+          <p>
+            The lab demonstrates an end-to-end security-monitoring pipeline
+            from network activity and endpoint logs through IDS inspection
+            and centralized SIEM analysis.
+          </p>
+        </div>
+
+        <div class="summary">
+
+          <div class="summary-card">
+            <div class="icon">1️⃣</div>
+            <h3>Generate Activity</h3>
+            <p>
+              Controlled Nmap and Hydra tests generate recognizable
+              reconnaissance and authentication activity.
+            </p>
+          </div>
+
+          <div class="summary-card">
+            <div class="icon">2️⃣</div>
+            <h3>Detect Activity</h3>
+            <p>
+              Suricata inspects network traffic and evaluates it against
+              configured IDS rules.
+            </p>
+          </div>
+
+          <div class="summary-card">
+            <div class="icon">3️⃣</div>
+            <h3>Investigate in Splunk</h3>
+            <p>
+              Security events are forwarded into Splunk, providing centralized
+              visibility for analysis and investigation.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer>
+    <div class="container">
+      SIEM Network Monitoring & Detection Lab ·
+      Suricata + Splunk · Security Validation
     </div>
-  </section>
+  </footer>
 
-
-  <!-- SPLUNK LIVE -->
-  <section>
-    <h2>8. Splunk SIEM Monitoring</h2>
-
-    <p>
-      Splunk provides centralized visibility into the telemetry generated
-      throughout the lab. Events can be searched, filtered, correlated,
-      and investigated from the SIEM.
-    </p>
-
-    <div class="evidence">
-      <img
-        src="siem-images/slpunklive.PNG"
-        alt="Splunk SIEM dashboard"
-      >
-
-      <p class="caption">
-        Splunk SIEM monitoring and log analysis.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- INVESTIGATION -->
-  <section>
-    <h2>9. SOC Investigation Workflow</h2>
-
-    <div class="timeline">
-
-      <div class="timeline-item">
-        <h3>Alert</h3>
-        <p>
-          Suspicious network or authentication activity generates
-          telemetry in the SIEM.
-        </p>
-      </div>
-
-      <div class="timeline-item">
-        <h3>Validate</h3>
-        <p>
-          Determine whether the activity is expected, authorized,
-          or potentially malicious.
-        </p>
-      </div>
-
-      <div class="timeline-item">
-        <h3>Correlate</h3>
-        <p>
-          Search related network, firewall, IDS, and authentication
-          events to build a timeline.
-        </p>
-      </div>
-
-      <div class="timeline-item">
-        <h3>Investigate</h3>
-        <p>
-          Examine source, destination, timestamps, ports, accounts,
-          and associated security events.
-        </p>
-      </div>
-
-      <div class="timeline-item">
-        <h3>Respond</h3>
-        <p>
-          Document the finding and identify appropriate containment
-          and remediation actions.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- SKILLS -->
-  <section>
-    <h2>10. Skills Demonstrated</h2>
-
-    <div class="cards">
-
-      <div class="card">
-        <h3>Splunk SIEM</h3>
-        <p>
-          Log ingestion, indexing, searching, monitoring,
-          and security event analysis.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Suricata IDS</h3>
-        <p>
-          Network traffic inspection and intrusion detection
-          rule configuration.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Network Security</h3>
-        <p>
-          Switch, firewall, and network telemetry collection.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Threat Detection</h3>
-        <p>
-          Identification of reconnaissance and authentication
-          attack behavior.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Incident Response</h3>
-        <p>
-          Alert validation, investigation, correlation,
-          and documentation.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>MITRE ATT&CK</h3>
-        <p>
-          Mapping observed behaviors to relevant ATT&CK techniques.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- RESULTS -->
-  <section>
-    <h2>Lab Results</h2>
-
-    <table>
-
-      <tr>
-        <th>Test</th>
-        <th>Technology</th>
-        <th>Result</th>
-      </tr>
-
-      <tr>
-        <td>Network Scanning</td>
-        <td>Nmap / Suricata / Splunk</td>
-        <td class="success">Detected</td>
-      </tr>
-
-      <tr>
-        <td>Authentication Testing</td>
-        <td>Hydra / SIEM</td>
-        <td class="success">Detected</td>
-      </tr>
-
-      <tr>
-        <td>Network Logging</td>
-        <td>Switch / Firewall</td>
-        <td class="success">Collected</td>
-      </tr>
-
-      <tr>
-        <td>IDS Monitoring</td>
-        <td>Suricata</td>
-        <td class="success">Configured</td>
-      </tr>
-
-      <tr>
-        <td>Centralized Analysis</td>
-        <td>Splunk</td>
-        <td class="success">Operational</td>
-      </tr>
-
-    </table>
-  </section>
-
-</main>
-
-<footer>
-  <p>
-    SIEM Home Lab • Splunk • Suricata • Network Security Monitoring
-  </p>
-
-  <p>
-    All security testing shown on this page was performed in an
-  
+</body>
+</html>
+```
