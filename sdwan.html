@@ -554,7 +554,9 @@ sdwan
 
 
     <h3>6.2 Install the Root CA</h3>
-
+     <h4>copy or transfer the key .pem from vmanage to edge(using this command tclsh eg puts [open "flash:ROOT-CA.pem" w+] {
+[paste the certificate here]
+}) then the next step </h4>
     <pre><code>request platform software sdwan root-cert-chain install bootflash:&lt;root-ca&gt;.pem</code></pre>
 
 
