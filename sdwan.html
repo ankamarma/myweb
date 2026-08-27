@@ -4,669 +4,457 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SD-WAN Lab Documentation</title>
+<title>SD-WAN Lab</title>
 
 <style>
-    :root {
-        --bg: #0b1120;
-        --card: #111827;
-        --card2: #172033;
-        --text: #e5e7eb;
-        --muted: #94a3b8;
-        --blue: #38bdf8;
-        --blue-dark: #0369a1;
-        --green: #34d399;
-        --orange: #fb923c;
-        --red: #f87171;
-        --border: #263449;
-        --code: #020617;
-    }
 
     * {
         box-sizing: border-box;
     }
 
-    html {
-        scroll-behavior: smooth;
-    }
-
     body {
         margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background:
-            radial-gradient(circle at top right, #12355b 0, transparent 35%),
-            var(--bg);
-        color: var(--text);
-        line-height: 1.65;
+        font-family: Arial, sans-serif;
+        background: #ffffff;
+        color: #222;
+        line-height: 1.6;
     }
 
-    /* =========================
-       HEADER
-       ========================= */
+    /* Header */
 
     header {
-        padding: 70px 20px 55px;
+        background: #0b3d62;
+        color: white;
+        padding: 35px 20px;
         text-align: center;
-        border-bottom: 1px solid var(--border);
-        background: linear-gradient(
-            135deg,
-            rgba(3, 105, 161, 0.25),
-            rgba(15, 23, 42, 0.95)
-        );
     }
 
     header h1 {
         margin: 0;
-        font-size: clamp(2.3rem, 6vw, 4.5rem);
-        color: white;
-        letter-spacing: -2px;
-    }
-
-    header h1 span {
-        color: var(--blue);
+        font-size: 32px;
     }
 
     header p {
-        max-width: 850px;
-        margin: 20px auto 0;
-        color: var(--muted);
-        font-size: 1.1rem;
+        margin: 8px 0 0;
+        color: #dceaf3;
     }
 
-    .badge-container {
-        margin-top: 25px;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 7px 13px;
-        margin: 4px;
-        border-radius: 999px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        border: 1px solid var(--border);
-        background: rgba(15, 23, 42, 0.8);
-        color: var(--blue);
-    }
-
-    /* =========================
-       NAVIGATION
-       ========================= */
+    /* Navigation */
 
     nav {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        background: rgba(11, 17, 32, 0.92);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-    }
-
-    nav .nav-inner {
-        max-width: 1200px;
-        margin: auto;
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        padding: 10px 15px;
+        background: #f2f2f2;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
     }
 
     nav a {
-        flex: 0 0 auto;
-        color: var(--muted);
+        color: #0b3d62;
         text-decoration: none;
-        padding: 8px 13px;
-        border-radius: 8px;
-        font-size: 0.88rem;
+        margin: 0 10px;
+        font-size: 14px;
     }
 
     nav a:hover {
-        color: white;
-        background: var(--card2);
+        text-decoration: underline;
     }
 
-    /* =========================
-       MAIN
-       ========================= */
+    /* Main */
 
     main {
-        max-width: 1200px;
+        max-width: 1100px;
         margin: auto;
-        padding: 40px 20px 80px;
+        padding: 30px 20px;
     }
 
     section {
-        margin-bottom: 65px;
-        scroll-margin-top: 75px;
+        margin-bottom: 45px;
     }
 
     h2 {
-        color: white;
-        font-size: 2rem;
-        margin-bottom: 12px;
-        border-left: 5px solid var(--blue);
-        padding-left: 14px;
+        color: #0b3d62;
+        border-bottom: 2px solid #0b3d62;
+        padding-bottom: 6px;
+        margin-top: 40px;
     }
 
     h3 {
-        color: var(--blue);
-        margin-top: 30px;
+        color: #333;
+        margin-top: 25px;
     }
 
     p {
-        color: var(--text);
+        margin: 10px 0;
     }
 
-    .muted {
-        color: var(--muted);
-    }
+    /* Topology */
 
-    /* =========================
-       CARDS
-       ========================= */
-
-    .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin-top: 25px;
-    }
-
-    .card {
-        background: linear-gradient(145deg, var(--card), #0e1627);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 22px;
-        box-shadow: 0 10px 35px rgba(0,0,0,.2);
-    }
-
-    .card h3 {
-        margin-top: 0;
-    }
-
-    .controller {
-        border-top: 4px solid var(--blue);
-    }
-
-    .edge {
-        border-top: 4px solid var(--green);
-    }
-
-    .ca {
-        border-top: 4px solid var(--orange);
-    }
-
-    /* =========================
-       TOPOLOGY
-       ========================= */
-
-    .topology-wrapper {
-        background: #020617;
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 15px;
-        margin-top: 25px;
-        overflow: hidden;
-    }
-
-    .topology-image {
-        display: block;
-        width: 100%;
-        max-height: 750px;
-        object-fit: contain;
-        cursor: zoom-in;
-        border-radius: 10px;
-        transition: transform .25s ease;
-    }
-
-    .topology-image:hover {
-        transform: scale(1.01);
-    }
-
-    .image-hint {
+    .topology {
         text-align: center;
-        color: var(--muted);
-        font-size: .85rem;
-        margin: 12px 0 2px;
+        margin: 25px 0;
     }
 
-    /* =========================
-       CODE
-       ========================= */
+    .topology img {
+        max-width: 100%;
+        max-height: 700px;
+        cursor: zoom-in;
+        border: 1px solid #ddd;
+    }
+
+    .hint {
+        color: #777;
+        font-size: 13px;
+        margin-top: 8px;
+    }
+
+    /* Code */
 
     pre {
-        position: relative;
-        background: var(--code);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 20px;
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
         overflow-x: auto;
-        color: #dbeafe;
-        font-size: .9rem;
-        line-height: 1.55;
-        margin: 18px 0;
+        font-family: Consolas, monospace;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
     code {
-        font-family:
-            "Cascadia Code",
-            "Fira Code",
-            Consolas,
-            monospace;
+        font-family: Consolas, monospace;
     }
 
-    .command {
-        border-left: 4px solid var(--green);
-    }
+    /* Notes */
 
-    .warning {
-        background: rgba(251, 146, 60, .08);
-        border: 1px solid rgba(251, 146, 60, .35);
-        border-left: 5px solid var(--orange);
-        padding: 18px;
-        border-radius: 10px;
+    .note {
+        background: #fff8e1;
+        border-left: 4px solid #e0a800;
+        padding: 12px 15px;
         margin: 20px 0;
     }
 
     .info {
-        background: rgba(56, 189, 248, .08);
-        border: 1px solid rgba(56, 189, 248, .3);
-        border-left: 5px solid var(--blue);
-        padding: 18px;
-        border-radius: 10px;
+        background: #eef7fc;
+        border-left: 4px solid #0b75b5;
+        padding: 12px 15px;
         margin: 20px 0;
     }
 
-    /* =========================
-       STEPS
-       ========================= */
-
-    .step {
-        display: grid;
-        grid-template-columns: 55px 1fr;
-        gap: 15px;
-        margin: 25px 0;
-        align-items: start;
-    }
-
-    .step-number {
-        width: 45px;
-        height: 45px;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        background: var(--blue-dark);
-        color: white;
-        font-weight: bold;
-        font-size: 1.1rem;
-    }
-
-    .step-content {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 15px 20px;
-    }
-
-    .step-content h3 {
-        margin-top: 0;
-    }
-
-    /* =========================
-       TABLE
-       ========================= */
+    /* Tables */
 
     table {
         width: 100%;
         border-collapse: collapse;
-        margin: 25px 0;
-        background: var(--card);
-        border-radius: 12px;
-        overflow: hidden;
+        margin: 20px 0;
     }
 
     th,
     td {
-        padding: 13px;
-        border-bottom: 1px solid var(--border);
+        border: 1px solid #ddd;
+        padding: 10px;
         text-align: left;
     }
 
     th {
-        background: #172033;
-        color: var(--blue);
+        background: #f2f2f2;
+        color: #0b3d62;
     }
 
-    td {
-        color: var(--text);
+    /* Steps */
+
+    .step {
+        margin: 25px 0;
     }
 
-    tr:last-child td {
-        border-bottom: none;
+    .step strong {
+        color: #0b3d62;
     }
 
-    /* =========================
-       IMAGE GALLERY
-       ========================= */
+    /* Gallery */
 
     .gallery {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 20px;
-        margin-top: 30px;
+        margin-top: 25px;
     }
 
-    .gallery-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        overflow: hidden;
-        transition: transform .2s ease, border-color .2s ease;
+    .gallery-item {
+        border: 1px solid #ddd;
+        background: #fafafa;
     }
 
-    .gallery-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--blue);
-    }
-
-    .gallery-card img {
-        display: block;
+    .gallery-item img {
         width: 100%;
         height: 220px;
         object-fit: contain;
-        background: #020617;
+        background: white;
         cursor: zoom-in;
     }
 
-    .gallery-title {
-        padding: 15px;
+    .gallery-item p {
+        margin: 0;
+        padding: 10px;
         font-weight: bold;
+        border-top: 1px solid #ddd;
     }
 
-    .gallery-title span {
-        display: block;
-        color: var(--muted);
-        font-size: .8rem;
-        font-weight: normal;
-        margin-top: 4px;
-    }
-
-    /* =========================
-       LIGHTBOX
-       ========================= */
+    /* Lightbox */
 
     .lightbox {
         display: none;
         position: fixed;
-        inset: 0;
         z-index: 1000;
-        background: rgba(0,0,0,.94);
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
         align-items: center;
         justify-content: center;
-        padding: 25px;
+        padding: 20px;
     }
 
-    .lightbox.active {
+    .lightbox.show {
         display: flex;
     }
 
     .lightbox img {
-        max-width: 95vw;
-        max-height: 90vh;
+        max-width: 95%;
+        max-height: 90%;
         object-fit: contain;
-        cursor: zoom-in;
-        user-select: none;
-        transition: transform .25s ease;
-    }
-
-    .lightbox img.zoomed {
-        transform: scale(1.7);
-        cursor: zoom-out;
     }
 
     .close {
-        position: fixed;
-        top: 18px;
+        position: absolute;
+        top: 15px;
         right: 25px;
         color: white;
-        font-size: 38px;
+        font-size: 35px;
         cursor: pointer;
-        z-index: 1001;
-        line-height: 1;
     }
 
-    .lightbox-caption {
-        position: fixed;
-        bottom: 18px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        color: #cbd5e1;
-        font-size: .9rem;
-    }
-
-    /* =========================
-       FOOTER
-       ========================= */
+    /* Footer */
 
     footer {
         text-align: center;
-        padding: 40px 20px;
-        border-top: 1px solid var(--border);
-        color: var(--muted);
+        padding: 25px;
+        background: #f2f2f2;
+        color: #666;
+        border-top: 1px solid #ddd;
     }
 
-    /* =========================
-       MOBILE
-       ========================= */
+    /* Mobile */
 
-    @media (max-width: 650px) {
+    @media (max-width: 600px) {
 
-        header {
-            padding: 45px 15px;
+        header h1 {
+            font-size: 26px;
         }
 
         main {
-            padding: 30px 14px 60px;
+            padding: 20px 15px;
         }
 
-        h2 {
-            font-size: 1.55rem;
+        nav a {
+            display: inline-block;
+            margin: 3px 5px;
         }
 
         pre {
-            font-size: .78rem;
+            font-size: 12px;
         }
 
-        .step {
-            grid-template-columns: 40px 1fr;
+        .gallery-item img {
+            height: 180px;
         }
 
-        .step-number {
-            width: 36px;
-            height: 36px;
-            font-size: .9rem;
-        }
-
-        table {
-            font-size: .8rem;
-        }
     }
+
 </style>
 </head>
 
 <body>
 
 <header>
-
-    <h1>Cisco <span>SD-WAN</span> Lab</h1>
-
-    <p>
-        Complete SD-WAN lab documentation covering the topology,
-        controllers, enterprise CA, certificates, CSR generation,
-        Cisco Catalyst 8000V edge onboarding, and configuration.
-    </p>
-
-    <div class="badge-container">
-        <span class="badge">vManage</span>
-        <span class="badge">vSmart</span>
-        <span class="badge">vBond</span>
-        <span class="badge">Cisco SD-WAN</span>
-        <span class="badge">Enterprise CA</span>
-        <span class="badge">C8000V</span>
-    </div>
-
+    <h1>Cisco SD-WAN Lab</h1>
+    <p>SD-WAN Controllers, Certificates, Edge Configuration and Deployment</p>
 </header>
 
 <nav>
-    <div class="nav-inner">
-        <a href="#topology">Topology</a>
-        <a href="#components">Components</a>
-        <a href="#ca">Enterprise CA</a>
-        <a href="#controllers">Controllers</a>
-        <a href="#edge">Edge</a>
-        <a href="#configuration">Configuration</a>
-        <a href="#gallery">Screenshots</a>
-    </div>
+    <a href="#topology">Topology</a>
+    <a href="#ca">CA</a>
+    <a href="#controllers">Controllers</a>
+    <a href="#edge">Edge</a>
+    <a href="#config">Configuration</a>
+    <a href="#screenshots">Screenshots</a>
 </nav>
 
 <main>
 
-    <!-- =====================================================
-         TOPOLOGY - FIRST IMAGE
-         ===================================================== -->
+<!-- ======================================================
+     1. TOPOLOGY
+     ====================================================== -->
 
-    <section id="topology">
+<section id="topology">
 
-        <h2>1. SD-WAN Network Topology</h2>
+    <h2>1. SD-WAN Network Topology</h2>
 
-        <p>
-            The following diagram is the primary topology for this lab.
-            It shows the SD-WAN controllers, edge devices, switching,
-            and WAN connectivity.
-        </p>
+    <p>
+        This is the topology used for the SD-WAN lab.
+        Click the image to view it larger.
+    </p>
 
-        <div class="topology-wrapper">
+    <div class="topology">
 
-            <img
-                src="sdwan/sdwan-networktopology.png"
-                alt="SD-WAN Network Topology"
-                class="topology-image zoomable"
-                data-title="SD-WAN Network Topology"
-            >
+        <img
+            src="sdwan/sdwan-networktopology.png"
+            alt="SD-WAN Network Topology"
+            onclick="openImage(this.src)"
+        >
 
-            <div class="image-hint">
-                Click the topology to open the zoomable view.
-            </div>
-
+        <div class="hint">
+            Click the topology to zoom.
         </div>
 
-    </section>
+    </div>
+
+</section>
 
 
-    <!-- =====================================================
-         COMPONENTS
-         ===================================================== -->
+<!-- ======================================================
+     2. COMPONENTS
+     ====================================================== -->
+
+<section>
+
+    <h2>2. SD-WAN Components</h2>
+
+    <table>
+
+        <tr>
+            <th>Device</th>
+            <th>Function</th>
+        </tr>
+
+        <tr>
+            <td>vManage</td>
+            <td>
+                Management platform used to configure,
+                monitor and manage the SD-WAN environment.
+            </td>
+        </tr>
+
+        <tr>
+            <td>vSmart</td>
+            <td>
+                Control-plane component responsible for
+                routing and policy distribution.
+            </td>
+        </tr>
+
+        <tr>
+            <td>vBond</td>
+            <td>
+                Orchestrator responsible for device authentication,
+                discovery and NAT traversal.
+            </td>
+        </tr>
+
+        <tr>
+            <td>SD-WAN Edge</td>
+            <td>
+                Branch router that provides WAN and LAN connectivity
+                and participates in the SD-WAN fabric.
+            </td>
+        </tr>
+
+    </table>
+
+</section>
 
 
+<!-- ======================================================
+     3. CA
+     ====================================================== -->
 
-    <!-- =====================================================
-         ENTERPRISE CA
-         ===================================================== -->
+<section id="ca">
 
-    <section id="ca">
+    <h2>3. Enterprise CA on vManage</h2>
 
-        <h2>3. Assuming the CA on vManage</h2>
+    <p>
+        In this lab, the enterprise CA is created on vManage.
+        The CA is used to sign certificates for vManage,
+        vBond, vSmart and the SD-WAN edge devices.
+    </p>
 
-        <p>
-            In this lab, vManage is used as the location where the
-            enterprise root CA private key and public certificate are
-            generated. The CA signs the certificates used by the
-            SD-WAN controllers and edge devices.
-        </p>
+    <div class="note">
+        <strong>Important:</strong>
+        Keep the CA private key secure. The
+        <code>lab-root-ca.key</code> file should never be
+        shared with the SD-WAN devices.
+    </div>
 
-        <div class="warning">
-            <strong>Security warning:</strong>
-            The CA private key is highly sensitive. In a production
-            environment, protect the private key carefully and consider
-            using a dedicated PKI/CA infrastructure.
-        </div>
+    <h3>3.1 Generate the CA Private Key</h3>
 
-        <h3>3.1 Generate the Root CA Private Key</h3>
+    <pre><code>openssl genrsa -out lab-root-ca.key 4096</code></pre>
 
-        <pre><code>openssl genrsa -out lab-root-ca.key 4096</code></pre>
+    <p>
+        This creates the private key:
+        <code>lab-root-ca.key</code>
+    </p>
 
-        <p>
-            The file <code>lab-root-ca.key</code> is the private key
-            for the lab root CA.
-        </p>
 
-        <h3>3.2 Generate the Root CA Certificate</h3>
+    <h3>3.2 Generate the Root CA Certificate</h3>
 
-        <pre><code>openssl req -x509 -new -nodes \
+    <pre><code>openssl req -x509 -new -nodes \
   -key lab-root-ca.key \
   -sha256 \
   -days 3650 \
   -out lab-root-ca.pem \
   -subj "/C=US/ST=NC/O=test-sdwan/CN=test-sdwan-ROOT-CA"</code></pre>
 
-        <p>
-            The resulting <code>lab-root-ca.pem</code> is the public
-            root certificate.
-        </p>
-
-        <h3>3.3 Install the Root CA in vManage</h3>
-
-        <p>
-            Copy the contents of <code>lab-root-ca.pem</code> and add
-            the certificate under the vManage enterprise certificate
-            authority settings.
-        </p>
-
-        <div class="info">
-            <strong>Concept:</strong>
-            The root CA certificate is public and can be distributed
-            to devices. The private key
-            <code>lab-root-ca.key</code> must remain protected.
-        </div>
-
-    </section>
+    <p>
+        This creates the public root certificate:
+        <code>lab-root-ca.pem</code>
+    </p>
 
 
-    <!-- =====================================================
-         CONTROLLER CERTIFICATES
-         ===================================================== -->
+    <h3>3.3 Add the Root CA to vManage</h3>
 
-    <section id="controllers">
+    <p>
+        Copy the contents of <code>lab-root-ca.pem</code>
+        and add it under the vManage Enterprise Certificate
+        Authority settings.
+    </p>
 
-        <h2>4. vManage Certificate</h2>
+</section>
 
-        <div class="step">
 
-            <div class="step-number">1</div>
+<!-- ======================================================
+     4. VMANAGE CERTIFICATE
+     ====================================================== -->
 
-            <div class="step-content">
+<section id="controllers">
 
-                <h3>Generate the vManage CSR</h3>
+    <h2>4. vManage Certificate</h2>
 
-                <p>
-                    Generate the certificate signing request for
-                    vManage using the vManage certificate workflow.
-                </p>
+    <div class="step">
+        <strong>Step 1:</strong>
+        Generate the CSR for vManage.
+    </div>
 
-            </div>
+    <div class="step">
+        <strong>Step 2:</strong>
+        Transfer or access the CSR on vManage.
+    </div>
 
-        </div>
+    <div class="step">
+        <strong>Step 3:</strong>
+        Sign the CSR using the enterprise CA.
+    </div>
 
-        <div class="step">
-
-            <div class="step-number">2</div>
-
-            <div class="step-content">
-
-                <h3>Sign the CSR</h3>
-
-                <pre><code>openssl x509 -req \
+    <pre><code>openssl x509 -req \
   -in vmanage_csr \
   -CA lab-root-ca.pem \
   -CAkey lab-root-ca.key \
@@ -675,74 +463,38 @@
   -days 3650 \
   -sha256</code></pre>
 
-            </div>
+    <div class="step">
+        <strong>Step 4:</strong>
+        Install the signed certificate on vManage.
+    </div>
 
-        </div>
-
-        <div class="step">
-
-            <div class="step-number">3</div>
-
-            <div class="step-content">
-
-                <h3>Install the Signed Certificate</h3>
-
-                <p>
-                    Transfer the generated certificate to the
-                    appropriate controller workflow and complete
-                    the vManage certificate installation.
-                </p>
-
-            </div>
-
-        </div>
+</section>
 
 
-        <h2>5. vBond / vSmart Certificates</h2>
+<!-- ======================================================
+     5. VBOND / VSMART
+     ====================================================== -->
 
-        <div class="step">
+<section>
 
-            <div class="step-number">1</div>
+    <h2>5. vBond / vSmart Certificates</h2>
 
-            <div class="step-content">
+    <div class="step">
+        <strong>Step 1:</strong>
+        Add the vBond or vSmart device and generate the CSR.
+    </div>
 
-                <h3>Add the Controller</h3>
+    <div class="step">
+        <strong>Step 2:</strong>
+        Transfer the CSR to vManage.
+    </div>
 
-                <p>
-                    Add the vBond or vSmart device in vManage and
-                    generate its CSR.
-                </p>
+    <div class="step">
+        <strong>Step 3:</strong>
+        Sign the CSR on vManage.
+    </div>
 
-            </div>
-
-        </div>
-
-        <div class="step">
-
-            <div class="step-number">2</div>
-
-            <div class="step-content">
-
-                <h3>Transfer the CSR to vManage</h3>
-
-                <p>
-                    Transfer the CSR file from the controller to
-                    vManage.
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="step">
-
-            <div class="step-number">3</div>
-
-            <div class="step-content">
-
-                <h3>Sign the vBond CSR</h3>
-
-                <pre><code>openssl x509 -req \
+    <pre><code>openssl x509 -req \
   -in /home/admin/vbond_csr \
   -CA lab-root-ca.pem \
   -CAkey lab-root-ca.key \
@@ -751,78 +503,42 @@
   -days 3650 \
   -sha256</code></pre>
 
-            </div>
+    <div class="step">
+        <strong>Step 4:</strong>
+        Transfer the CRT file back to vBond or vSmart.
+    </div>
 
-        </div>
+    <div class="step">
+        <strong>Step 5:</strong>
+        Install the root certificate chain.
+    </div>
 
-        <div class="step">
+    <pre><code>request root-cert-chain install /home/admin/lab-root-ca.pem</code></pre>
 
-            <div class="step-number">4</div>
+    <div class="step">
+        <strong>Step 6:</strong>
+        Install the signed CRT certificate.
+    </div>
 
-            <div class="step-content">
-
-                <h3>Transfer the Certificate</h3>
-
-                <p>
-                    Transfer the resulting CRT certificate back to
-                    the vBond or vSmart device.
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="step">
-
-            <div class="step-number">5</div>
-
-            <div class="step-content">
-
-                <h3>Install the Root Certificate Chain</h3>
-
-                <pre><code>request root-cert-chain install /home/admin/lab-root-ca.pem</code></pre>
-
-            </div>
-
-        </div>
-
-        <div class="step">
-
-            <div class="step-number">6</div>
-
-            <div class="step-content">
-
-                <h3>Install the Signed CRT</h3>
-
-                <p>
-                    Copy the signed certificate into the controller
-                    certificate installation workflow.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
+</section>
 
 
-    <!-- =====================================================
-         EDGE CONVERSION
-         ===================================================== -->
+<!-- ======================================================
+     6. EDGE
+     ====================================================== -->
 
-    <section id="edge">
+<section id="edge">
 
-        <h2>6. Convert C8000V / 8000V to SD-WAN Mode</h2>
+    <h2>6. C8000V / 8000V Edge</h2>
 
-        <p>
-            Cisco Catalyst 8000V / 8000V devices may need to be
-            converted from autonomous mode to SD-WAN control mode
-            before they can participate in the SD-WAN fabric.
-        </p>
+    <p>
+        The C8000V must be converted from autonomous mode
+        to SD-WAN mode before onboarding it into the SD-WAN fabric.
+    </p>
 
-        <h3>6.1 Basic SD-WAN System Configuration</h3>
+    <h3>6.1 Basic SD-WAN Configuration</h3>
 
-        <pre><code>config terminal
+    <pre><code>config terminal
 
 system
   host-name &lt;unique-hostname&gt;
@@ -844,23 +560,27 @@ sdwan
    allow-service all</code></pre>
 
 
-        <h3>6.2 Install the Root CA on the Edge</h3>
+    <h3>6.2 Install the Root CA</h3>
 
-        <pre><code>request platform software sdwan root-cert-chain install bootflash:&lt;root-ca&gt;.pem</code></pre>
-
-        <h3>6.3 Generate the Edge CSR</h3>
-
-        <pre><code>request platform software sdwan csr upload bootflash:&lt;csr-file&gt;</code></pre>
-
-        <p>
-            Transfer the CSR generated by the edge device to
-            vManage for signing.
-        </p>
+    <pre><code>request platform software sdwan root-cert-chain install bootflash:&lt;root-ca&gt;.pem</code></pre>
 
 
-        <h3>6.4 Sign the Edge CSR on vManage</h3>
+    <h3>6.3 Generate the CSR</h3>
 
-        <pre><code>openssl x509 -req \
+    <pre><code>request platform software sdwan csr upload bootflash:&lt;csr-file&gt;</code></pre>
+
+
+    <h3>6.4 Transfer the CSR to vManage</h3>
+
+    <p>
+        Transfer the generated CSR from the edge device
+        to vManage.
+    </p>
+
+
+    <h3>6.5 Sign the Edge CSR</h3>
+
+    <pre><code>openssl x509 -req \
   -in /home/admin/edge-r1_csr \
   -CA lab-root-ca.pem \
   -CAkey lab-root-ca.key \
@@ -870,48 +590,39 @@ sdwan
   -sha256</code></pre>
 
 
-        <h3>6.5 Transfer and Install the Certificate</h3>
+    <h3>6.6 Install the Certificate on the Edge</h3>
 
-        <pre><code>request platform software sdwan certificate install bootflash:edge-r1.crt</code></pre>
-
-
-        <h3>6.6 Add the Edge to the SD-WAN Fabric</h3>
-
-        <p>
-            Use the edge chassis ID and certificate serial number
-            when adding the device to vManage/vBond.
-        </p>
-
-        <pre><code>request vedge add chassis-num C8K-3539796c-b995-4c41-b6a1-1d7cf7f9a9a2 serial-num 0861ACC2EE28C7D3045CB9CE465149BA72624F49</code></pre>
-
-        <div class="info">
-            <strong>Important:</strong>
-            The chassis number and certificate serial number shown
-            above are lab-specific values. Replace them with the
-            values from your own edge device.
-        </div>
-
-    </section>
+    <pre><code>request platform software sdwan certificate install bootflash:edge-r1.crt</code></pre>
 
 
-    <!-- =====================================================
-         EDGE CONFIGURATION
-         ===================================================== -->
+    <h3>6.7 Add the Edge</h3>
 
-    <section id="configuration">
+    <pre><code>request vedge add chassis-num C8K-3539796c-b995-4c41-b6a1-1d7cf7f9a9a2 serial-num 0861ACC2EE28C7D3045CB9CE465149BA72624F49</code></pre>
 
-        <h2>7. SD-WAN Edge Configuration Template</h2>
+    <div class="info">
+        Replace the chassis number and certificate serial number
+        with the values from your own device.
+    </div>
 
-        <p>
-            The following is a reusable configuration template for
-            the edge device. Replace all values enclosed in
-            <code>{{ }}</code> with the values from your lab.
-        </p>
+</section>
 
-        <pre><code>!
-! ================================
+
+<!-- ======================================================
+     7. EDGE CONFIGURATION
+     ====================================================== -->
+
+<section id="config">
+
+    <h2>7. SD-WAN Edge Configuration</h2>
+
+    <p>
+        Replace the values inside <code>{{ }}</code>
+        with your actual lab values.
+    </p>
+
+    <pre><code>!
 ! SYSTEM
-! ================================
+!
 system
  hostname               {{HOSTNAME}}
  system-ip              {{SYSTEM_IP}}
@@ -920,14 +631,13 @@ system
  vbond                  {{VBOND_IP_OR_DNS}}
 !
 
-! ================================
+!
 ! TRANSPORT VPN - VPN 0
-! ================================
+!
 vpn 0
  name TRANSPORT_VPN
  dns 8.8.8.8 8.8.4.4
- !
- ! --- WAN Interface ---
+
  interface GigabitEthernet1
   ip address {{WAN_IP_ADDRESS}} {{WAN_SUBNET_MASK}}
   no shutdown
@@ -938,27 +648,26 @@ vpn 0
    allow-service all
 
   exit
- !
- ! --- Default Gateway ---
+
  ip route 0.0.0.0 0.0.0.0 {{WAN_NEXT_HOP_GATEWAY}}
 !
 
-! ================================
+!
 ! MANAGEMENT VPN - VPN 512
-! ================================
+!
 vpn 512
  name MGMT_VPN
 
  interface GigabitEthernet2
   ip address {{MGMT_IP_ADDRESS}} {{MGMT_SUBNET_MASK}}
   no shutdown
- !
+
  ip route 0.0.0.0 0.0.0.0 {{MGMT_NEXT_HOP_GATEWAY}}
 !
 
-! ================================
+!
 ! SERVICE VPN - VPN 10
-! ================================
+!
 vpn 10
  name LAN_SERVICE_VPN
 
@@ -968,414 +677,253 @@ vpn 10
 !</code></pre>
 
 
-        <h3>Configuration Variables</h3>
+    <h3>Configuration Variables</h3>
 
-        <table>
+    <table>
 
-            <thead>
-                <tr>
-                    <th>Variable</th>
-                    <th>Purpose</th>
-                </tr>
-            </thead>
+        <tr>
+            <th>Variable</th>
+            <th>Description</th>
+        </tr>
 
-            <tbody>
+        <tr>
+            <td>{{HOSTNAME}}</td>
+            <td>Edge hostname</td>
+        </tr>
 
-                <tr>
-                    <td>{{HOSTNAME}}</td>
-                    <td>Unique hostname for the SD-WAN edge</td>
-                </tr>
+        <tr>
+            <td>{{SYSTEM_IP}}</td>
+            <td>SD-WAN system IP</td>
+        </tr>
 
-                <tr>
-                    <td>{{SYSTEM_IP}}</td>
-                    <td>Unique SD-WAN system IP</td>
-                </tr>
+        <tr>
+            <td>{{SITE_ID}}</td>
+            <td>SD-WAN site ID</td>
+        </tr>
 
-                <tr>
-                    <td>{{SITE_ID}}</td>
-                    <td>SD-WAN site identifier</td>
-                </tr>
+        <tr>
+            <td>{{ORGANIZATION_NAME}}</td>
+            <td>SD-WAN organization name</td>
+        </tr>
 
-                <tr>
-                    <td>{{ORGANIZATION_NAME}}</td>
-                    <td>Organization name used by the SD-WAN fabric</td>
-                </tr>
+        <tr>
+            <td>{{VBOND_IP_OR_DNS}}</td>
+            <td>vBond IP address or DNS name</td>
+        </tr>
 
-                <tr>
-                    <td>{{VBOND_IP_OR_DNS}}</td>
-                    <td>vBond IP address or DNS name</td>
-                </tr>
+        <tr>
+            <td>{{WAN_IP_ADDRESS}}</td>
+            <td>WAN interface IP</td>
+        </tr>
 
-                <tr>
-                    <td>{{WAN_IP_ADDRESS}}</td>
-                    <td>WAN/transport interface IP address</td>
-                </tr>
+        <tr>
+            <td>{{WAN_NEXT_HOP_GATEWAY}}</td>
+            <td>WAN gateway</td>
+        </tr>
 
-                <tr>
-                    <td>{{WAN_NEXT_HOP_GATEWAY}}</td>
-                    <td>WAN provider next-hop gateway</td>
-                </tr>
+        <tr>
+            <td>{{MGMT_IP_ADDRESS}}</td>
+            <td>Management IP</td>
+        </tr>
 
-                <tr>
-                    <td>{{MGMT_IP_ADDRESS}}</td>
-                    <td>Management interface address</td>
-                </tr>
+        <tr>
+            <td>{{LAN_IP_ADDRESS}}</td>
+            <td>LAN/service VPN IP</td>
+        </tr>
 
-                <tr>
-                    <td>{{LAN_IP_ADDRESS}}</td>
-                    <td>Internal LAN/service VPN address</td>
-                </tr>
+    </table>
 
-            </tbody>
-
-        </table>
-
-    </section>
+</section>
 
 
-    <!-- =====================================================
-         CERTIFICATE FLOW
-         ===================================================== -->
+<!-- ======================================================
+     8. CERTIFICATE FLOW
+     ====================================================== -->
 
-    <section>
+<section>
 
-        <h2>8. Certificate Workflow Summary</h2>
+    <h2>8. Certificate Process</h2>
 
-        <div class="card-grid">
+    <p>
+        The overall certificate process is:
+    </p>
 
-            <div class="card ca">
-                <h3>1. Root CA</h3>
-                <p>
-                    Generate the private key and root CA certificate
-                    on vManage.
-                </p>
-            </div>
+    <ol>
+        <li>Create the root CA on vManage.</li>
+        <li>Install the root CA certificate.</li>
+        <li>Generate a CSR on the SD-WAN device.</li>
+        <li>Transfer the CSR to vManage.</li>
+        <li>Sign the CSR using the CA private key.</li>
+        <li>Transfer the signed certificate back.</li>
+        <li>Install the certificate on the device.</li>
+        <li>Add the device to the SD-WAN fabric.</li>
+    </ol>
 
-            <div class="card">
-                <h3>2. CSR</h3>
-                <p>
-                    Generate a CSR on each controller or edge device.
-                </p>
-            </div>
+</section>
 
-            <div class="card">
-                <h3>3. Sign</h3>
-                <p>
-                    Use the lab root CA certificate and private key
-                    to sign the CSR.
-                </p>
-            </div>
 
-            <div class="card">
-                <h3>4. Install</h3>
-                <p>
-                    Transfer and install the signed certificate on
-                    the corresponding device.
-                </p>
-            </div>
+<!-- ======================================================
+     9. SCREENSHOTS
+     ====================================================== -->
 
-            <div class="card">
-                <h3>5. Authenticate</h3>
-                <p>
-                    Add the device using its chassis/certificate
-                    information and establish SD-WAN control
-                    connections.
-                </p>
-            </div>
+<section id="screenshots">
 
+    <h2>9. Lab Screenshots</h2>
+
+    <p>
+        Click any image to view it in full size.
+    </p>
+
+    <div class="gallery">
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/edge-r1.PNG"
+                alt="Edge R1"
+                onclick="openImage(this.src)"
+            >
+            <p>Edge R1</p>
         </div>
 
-        <div class="info">
-            <strong>Certificate chain:</strong>
-            Root CA → Controller/Edge CSR → Signed CRT → Device
-            certificate installation → SD-WAN authentication.
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/edge-sdwan-connetion.PNG"
+                alt="Edge SD-WAN Connection"
+                onclick="openImage(this.src)"
+            >
+            <p>Edge SD-WAN Connection</p>
         </div>
 
-    </section>
 
-
-    <!-- =====================================================
-         OTHER IMAGES - AT THE END
-         ===================================================== -->
-
-    <section id="gallery">
-
-        <h2>9. SD-WAN Lab Screenshots</h2>
-
-        <p class="muted">
-            The remaining lab images are displayed here at the end
-            of the documentation. Click any image to open a larger
-            zoomable view.
-        </p>
-
-        <div class="gallery">
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/edge-r1.PNG"
-                    alt="Edge R1"
-                    class="zoomable"
-                    data-title="Edge R1"
-                >
-
-                <div class="gallery-title">
-                    Edge R1
-                    <span>edge-r1.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/edge-sdwan-connetion.PNG"
-                    alt="Edge SD-WAN Connection"
-                    class="zoomable"
-                    data-title="Edge SD-WAN Connection"
-                >
-
-                <div class="gallery-title">
-                    Edge SD-WAN Connection
-                    <span>edge-sdwan-connetion.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/sw.PNG"
-                    alt="Switch"
-                    class="zoomable"
-                    data-title="Switch"
-                >
-
-                <div class="gallery-title">
-                    Switch
-                    <span>sw.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/vbond.PNG"
-                    alt="vBond"
-                    class="zoomable"
-                    data-title="vBond"
-                >
-
-                <div class="gallery-title">
-                    vBond
-                    <span>vbond.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/vsmart.PNG"
-                    alt="vSmart"
-                    class="zoomable"
-                    data-title="vSmart"
-                >
-
-                <div class="gallery-title">
-                    vSmart
-                    <span>vsmart.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/vmanage.PNG"
-                    alt="vManage"
-                    class="zoomable"
-                    data-title="vManage"
-                >
-
-                <div class="gallery-title">
-                    vManage
-                    <span>vmanage.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/vmanage-gui-dashboard.PNG"
-                    alt="vManage GUI Dashboard"
-                    class="zoomable"
-                    data-title="vManage GUI Dashboard"
-                >
-
-                <div class="gallery-title">
-                    vManage GUI Dashboard
-                    <span>vmanage-gui-dashboard.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/vmanage-gui-templates-added.PNG"
-                    alt="vManage GUI Templates"
-                    class="zoomable"
-                    data-title="vManage GUI Templates Added"
-                >
-
-                <div class="gallery-title">
-                    vManage GUI Templates Added
-                    <span>vmanage-gui-templates-added.PNG</span>
-                </div>
-
-            </div>
-
-
-            <div class="gallery-card">
-
-                <img
-                    src="sdwan/vmange-gui-devicelist.PNG"
-                    alt="vManage GUI Device List"
-                    class="zoomable"
-                    data-title="vManage GUI Device List"
-                >
-
-                <div class="gallery-title">
-                    vManage GUI Device List
-                    <span>vmange-gui-devicelist.PNG</span>
-                </div>
-
-            </div>
-
+        <div class="gallery-item">
+            <img
+                src="sdwan/sw.PNG"
+                alt="Switch"
+                onclick="openImage(this.src)"
+            >
+            <p>Switch</p>
         </div>
 
-    </section>
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/vbond.PNG"
+                alt="vBond"
+                onclick="openImage(this.src)"
+            >
+            <p>vBond</p>
+        </div>
+
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/vsmart.PNG"
+                alt="vSmart"
+                onclick="openImage(this.src)"
+            >
+            <p>vSmart</p>
+        </div>
+
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/vmanage.PNG"
+                alt="vManage"
+                onclick="openImage(this.src)"
+            >
+            <p>vManage</p>
+        </div>
+
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/vmanage-gui-dashboard.PNG"
+                alt="vManage Dashboard"
+                onclick="openImage(this.src)"
+            >
+            <p>vManage GUI Dashboard</p>
+        </div>
+
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/vmanage-gui-templates-added.PNG"
+                alt="vManage Templates"
+                onclick="openImage(this.src)"
+            >
+            <p>vManage Templates</p>
+        </div>
+
+
+        <div class="gallery-item">
+            <img
+                src="sdwan/vmange-gui-devicelist.PNG"
+                alt="vManage Device List"
+                onclick="openImage(this.src)"
+            >
+            <p>vManage Device List</p>
+        </div>
+
+    </div>
+
+</section>
 
 </main>
 
 
-<!-- =====================================================
-     IMAGE LIGHTBOX
-     ===================================================== -->
+<!-- ======================================================
+     IMAGE VIEWER
+     ====================================================== -->
 
-<div class="lightbox" id="lightbox">
+<div
+    class="lightbox"
+    id="lightbox"
+    onclick="closeImage()"
+>
 
-    <div class="close" id="closeLightbox">
-        &times;
-    </div>
+    <span class="close">&times;</span>
 
-    <img id="lightboxImage" src="" alt="Zoomed SD-WAN image">
-
-    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <img
+        id="largeImage"
+        src=""
+        alt="Zoomed image"
+        onclick="event.stopPropagation()"
+    >
 
 </div>
 
 
 <footer>
-
-    SD-WAN Lab Documentation<br>
-    <span>vManage • vSmart • vBond • SD-WAN Edge</span>
-
+    SD-WAN Lab Documentation
 </footer>
 
 
 <script>
 
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImage = document.getElementById("lightboxImage");
-    const lightboxCaption = document.getElementById("lightboxCaption");
-    const closeLightbox = document.getElementById("closeLightbox");
+function openImage(src) {
 
-    const zoomableImages = document.querySelectorAll(".zoomable");
+    document.getElementById("largeImage").src = src;
 
+    document.getElementById("lightbox").classList.add("show");
 
-    /* Open image */
-
-    zoomableImages.forEach(image => {
-
-        image.addEventListener("click", () => {
-
-            lightbox.classList.add("active");
-
-            lightboxImage.src = image.src;
-
-            lightboxImage.alt = image.alt;
-
-            lightboxCaption.textContent =
-                image.dataset.title || image.alt;
-
-            lightboxImage.classList.remove("zoomed");
-
-        });
-
-    });
+}
 
 
-    /* Zoom inside lightbox */
+function closeImage() {
 
-    lightboxImage.addEventListener("click", event => {
+    document.getElementById("lightbox").classList.remove("show");
 
-        event.stopPropagation();
-
-        lightboxImage.classList.toggle("zoomed");
-
-    });
+}
 
 
-    /* Close button */
+document.addEventListener("keydown", function(event) {
 
-    closeLightbox.addEventListener("click", () => {
+    if (event.key === "Escape") {
+        closeImage();
+    }
 
-        lightbox.classList.remove("active");
-
-        lightboxImage.classList.remove("zoomed");
-
-    });
-
-
-    /* Click outside image */
-
-    lightbox.addEventListener("click", event => {
-
-        if (event.target === lightbox) {
-
-            lightbox.classList.remove("active");
-
-            lightboxImage.classList.remove("zoomed");
-
-        }
-
-    });
-
-
-    /* Escape key */
-
-    document.addEventListener("keydown", event => {
-
-        if (event.key === "Escape") {
-
-            lightbox.classList.remove("active");
-
-            lightboxImage.classList.remove("zoomed");
-
-        }
-
-    });
+});
 
 </script>
 
