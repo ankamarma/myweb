@@ -4,273 +4,221 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SD-WAN Lab</title>
+<title>Cisco SD-WAN Lab</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
 
-    * {
-        box-sizing: border-box;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    line-height: 1.6;
+}
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #ffffff;
-        color: #222;
-        line-height: 1.6;
-    }
+header {
+    background: #0b3d62;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
 
-    /* Header */
+header h1 {
+    margin: 0;
+    font-size: 30px;
+}
 
-    header {
-        background: #0b3d62;
-        color: white;
-        padding: 35px 20px;
-        text-align: center;
-    }
+header p {
+    margin: 8px 0 0;
+    color: #dceaf3;
+}
+
+nav {
+    background: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: #0b3d62;
+    text-decoration: none;
+    margin: 0 8px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 20px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    color: #0b3d62;
+    border-bottom: 2px solid #0b3d62;
+    padding-bottom: 5px;
+    margin-top: 35px;
+}
+
+h3 {
+    color: #333;
+    margin-top: 25px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.topology {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.topology img {
+    max-width: 100%;
+    max-height: 700px;
+    border: 1px solid #ddd;
+    cursor: zoom-in;
+}
+
+.hint {
+    color: #777;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+pre {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    overflow-x: auto;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+code {
+    font-family: Consolas, monospace;
+}
+
+.step {
+    margin: 20px 0;
+}
+
+.step strong {
+    color: #0b3d62;
+}
+
+.info {
+    background: #eef7fc;
+    border-left: 4px solid #0b75b5;
+    padding: 12px 15px;
+    margin: 20px 0;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.gallery-item {
+    border: 1px solid #ddd;
+    background: #fafafa;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    background: white;
+    cursor: zoom-in;
+}
+
+.gallery-item p {
+    margin: 0;
+    padding: 10px;
+    font-weight: bold;
+    border-top: 1px solid #ddd;
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.lightbox.show {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 95%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #f2f2f2;
+    color: #666;
+    border-top: 1px solid #ddd;
+}
+
+@media (max-width: 600px) {
 
     header h1 {
-        margin: 0;
-        font-size: 32px;
+        font-size: 26px;
     }
 
-    header p {
-        margin: 8px 0 0;
-        color: #dceaf3;
-    }
-
-    /* Navigation */
-
-    nav {
-        background: #f2f2f2;
-        border-bottom: 1px solid #ddd;
-        padding: 10px;
-        text-align: center;
+    main {
+        padding: 20px 15px;
     }
 
     nav a {
-        color: #0b3d62;
-        text-decoration: none;
-        margin: 0 10px;
-        font-size: 14px;
+        display: inline-block;
+        margin: 3px 5px;
     }
-
-    nav a:hover {
-        text-decoration: underline;
-    }
-
-    /* Main */
-
-    main {
-        max-width: 1100px;
-        margin: auto;
-        padding: 30px 20px;
-    }
-
-    section {
-        margin-bottom: 45px;
-    }
-
-    h2 {
-        color: #0b3d62;
-        border-bottom: 2px solid #0b3d62;
-        padding-bottom: 6px;
-        margin-top: 40px;
-    }
-
-    h3 {
-        color: #333;
-        margin-top: 25px;
-    }
-
-    p {
-        margin: 10px 0;
-    }
-
-    /* Topology */
-
-    .topology {
-        text-align: center;
-        margin: 25px 0;
-    }
-
-    .topology img {
-        max-width: 100%;
-        max-height: 700px;
-        cursor: zoom-in;
-        border: 1px solid #ddd;
-    }
-
-    .hint {
-        color: #777;
-        font-size: 13px;
-        margin-top: 8px;
-    }
-
-    /* Code */
 
     pre {
-        background: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 15px;
-        overflow-x: auto;
-        font-family: Consolas, monospace;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-    code {
-        font-family: Consolas, monospace;
-    }
-
-    /* Notes */
-
-    .note {
-        background: #fff8e1;
-        border-left: 4px solid #e0a800;
-        padding: 12px 15px;
-        margin: 20px 0;
-    }
-
-    .info {
-        background: #eef7fc;
-        border-left: 4px solid #0b75b5;
-        padding: 12px 15px;
-        margin: 20px 0;
-    }
-
-    /* Tables */
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th {
-        background: #f2f2f2;
-        color: #0b3d62;
-    }
-
-    /* Steps */
-
-    .step {
-        margin: 25px 0;
-    }
-
-    .step strong {
-        color: #0b3d62;
-    }
-
-    /* Gallery */
-
-    .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        margin-top: 25px;
-    }
-
-    .gallery-item {
-        border: 1px solid #ddd;
-        background: #fafafa;
+        font-size: 12px;
     }
 
     .gallery-item img {
-        width: 100%;
-        height: 220px;
-        object-fit: contain;
-        background: white;
-        cursor: zoom-in;
+        height: 180px;
     }
-
-    .gallery-item p {
-        margin: 0;
-        padding: 10px;
-        font-weight: bold;
-        border-top: 1px solid #ddd;
-    }
-
-    /* Lightbox */
-
-    .lightbox {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .lightbox.show {
-        display: flex;
-    }
-
-    .lightbox img {
-        max-width: 95%;
-        max-height: 90%;
-        object-fit: contain;
-    }
-
-    .close {
-        position: absolute;
-        top: 15px;
-        right: 25px;
-        color: white;
-        font-size: 35px;
-        cursor: pointer;
-    }
-
-    /* Footer */
-
-    footer {
-        text-align: center;
-        padding: 25px;
-        background: #f2f2f2;
-        color: #666;
-        border-top: 1px solid #ddd;
-    }
-
-    /* Mobile */
-
-    @media (max-width: 600px) {
-
-        header h1 {
-            font-size: 26px;
-        }
-
-        main {
-            padding: 20px 15px;
-        }
-
-        nav a {
-            display: inline-block;
-            margin: 3px 5px;
-        }
-
-        pre {
-            font-size: 12px;
-        }
-
-        .gallery-item img {
-            height: 180px;
-        }
-
-    }
-
+}
 </style>
 </head>
 
@@ -278,27 +226,27 @@
 
 <header>
     <h1>Cisco SD-WAN Lab</h1>
-    <p>SD-WAN Controllers, Certificates, Edge Configuration and Deployment</p>
+    <p>Certificate Setup, Controller Onboarding and Edge Configuration</p>
 </header>
 
 <nav>
     <a href="#topology">Topology</a>
     <a href="#ca">CA</a>
-    <a href="#controllers">Controllers</a>
+    <a href="#controllers">vManage</a>
+    <a href="#controllers2">Controllers</a>
     <a href="#edge">Edge</a>
     <a href="#config">Configuration</a>
+    <a href="#steps">Steps</a>
     <a href="#screenshots">Screenshots</a>
 </nav>
 
 <main>
 
-<!-- ======================================================
-     1. TOPOLOGY
-     ====================================================== -->
+<!-- TOPOLOGY -->
 
 <section id="topology">
 
-    <h2>1. SD-WAN Network Topology</h2>
+    <h2>1. Network Topology</h2>
 
     <p>
         This is the topology used for the SD-WAN lab.
@@ -314,7 +262,7 @@
         >
 
         <div class="hint">
-            Click the topology to zoom.
+            Click the image to zoom.
         </div>
 
     </div>
@@ -322,83 +270,22 @@
 </section>
 
 
-<!-- ======================================================
-     2. COMPONENTS
-     ====================================================== -->
-
-<section>
-
-    <h2>2. SD-WAN Components</h2>
-
-    <table>
-
-        <tr>
-            <th>Device</th>
-            <th>Function</th>
-        </tr>
-
-        <tr>
-            <td>vManage</td>
-            <td>
-                Management platform used to configure,
-                monitor and manage the SD-WAN environment.
-            </td>
-        </tr>
-
-        <tr>
-            <td>vSmart</td>
-            <td>
-                Control-plane component responsible for
-                routing and policy distribution.
-            </td>
-        </tr>
-
-        <tr>
-            <td>vBond</td>
-            <td>
-                Orchestrator responsible for device authentication,
-                discovery and NAT traversal.
-            </td>
-        </tr>
-
-        <tr>
-            <td>SD-WAN Edge</td>
-            <td>
-                Branch router that provides WAN and LAN connectivity
-                and participates in the SD-WAN fabric.
-            </td>
-        </tr>
-
-    </table>
-
-</section>
-
-
-<!-- ======================================================
-     3. CA
-     ====================================================== -->
+<!-- CA -->
 
 <section id="ca">
 
-    <h2>3. Enterprise CA on vManage</h2>
+    <h2>2. Enterprise CA on vManage</h2>
 
     <p>
-        In this lab, the enterprise CA is created on vManage.
-        The CA is used to sign certificates for vManage,
-        vBond, vSmart and the SD-WAN edge devices.
+        The enterprise CA is created on vManage.
+        It is used to sign certificates for the SD-WAN devices.
     </p>
 
-    <h3>3.1 Generate the CA Private Key</h3>
+    <h3>Generate the CA Private Key</h3>
 
     <pre><code>openssl genrsa -out lab-root-ca.key 4096</code></pre>
 
-    <p>
-        This creates the private key:
-        <code>lab-root-ca.key</code>
-    </p>
-
-
-    <h3>3.2 Generate the Root CA Certificate</h3>
+    <h3>Generate the Root CA Certificate</h3>
 
     <pre><code>openssl req -x509 -new -nodes \
   -key lab-root-ca.key \
@@ -408,12 +295,11 @@
   -subj "/C=US/ST=NC/O=test-sdwan/CN=test-sdwan-ROOT-CA"</code></pre>
 
     <p>
-        This creates the public root certificate:
+        This creates the root certificate:
         <code>lab-root-ca.pem</code>
     </p>
 
-
-    <h3>3.3 Add the Root CA to vManage</h3>
+    <h3>Add the Root CA to vManage</h3>
 
     <p>
         Copy the contents of <code>lab-root-ca.pem</code>
@@ -424,22 +310,20 @@
 </section>
 
 
-<!-- ======================================================
-     4. VMANAGE CERTIFICATE
-     ====================================================== -->
+<!-- VMANAGE -->
 
 <section id="controllers">
 
-    <h2>4. vManage Certificate</h2>
+    <h2>3. vManage Certificate</h2>
 
     <div class="step">
         <strong>Step 1:</strong>
-        Generate the CSR for vManage.
+        Generate the vManage CSR.
     </div>
 
     <div class="step">
         <strong>Step 2:</strong>
-        Transfer or access the CSR on vManage.
+        Access the CSR from vManage.
     </div>
 
     <div class="step">
@@ -464,27 +348,25 @@
 </section>
 
 
-<!-- ======================================================
-     5. VBOND / VSMART
-     ====================================================== -->
+<!-- VBOND / VSMART -->
 
-<section>
+<section id="controllers2">
 
-    <h2>5. vBond / vSmart Certificates</h2>
+    <h2>4. vBond and vSmart Certificates</h2>
 
     <div class="step">
         <strong>Step 1:</strong>
-        Add the vBond or vSmart device and generate the CSR.
+        Add vBond and vSmart and generate their CSRs.
     </div>
 
     <div class="step">
         <strong>Step 2:</strong>
-        Transfer the CSR to vManage.
+        Transfer the CSRs to vManage.
     </div>
 
     <div class="step">
         <strong>Step 3:</strong>
-        Sign the CSR on vManage.
+        Sign the certificates using the enterprise CA.
     </div>
 
     <pre><code>openssl x509 -req \
@@ -498,7 +380,7 @@
 
     <div class="step">
         <strong>Step 4:</strong>
-        Transfer the CRT file back to vBond or vSmart.
+        Transfer the certificate back to vBond or vSmart.
     </div>
 
     <div class="step">
@@ -510,34 +392,32 @@
 
     <div class="step">
         <strong>Step 6:</strong>
-        Install the signed CRT certificate.
+        Install the signed certificate.
     </div>
 
 </section>
 
 
-<!-- ======================================================
-     6. EDGE
-     ====================================================== -->
+<!-- EDGE -->
 
 <section id="edge">
 
-    <h2>6. C8000V / 8000V Edge</h2>
+    <h2>5. C8000V SD-WAN Edge</h2>
 
     <p>
-        The C8000V must be converted from autonomous mode
-        to SD-WAN mode before onboarding it into the SD-WAN fabric.
+        Convert the C8000V to SD-WAN mode before onboarding it
+        into the SD-WAN fabric.
     </p>
 
-    <h3>6.1 Basic SD-WAN Configuration</h3>
+    <h3>Basic Configuration</h3>
 
     <pre><code>config terminal
 
 system
-  host-name &lt;unique-hostname&gt;
-  system-ip &lt;ip-address&gt;
+  host-name &lt;hostname&gt;
+  system-ip &lt;system-ip&gt;
   site-id &lt;site-id&gt;
-  organization-name &lt;org-name&gt;
+  organization-name &lt;organization-name&gt;
   vbond &lt;vbond-address&gt;
 
 interface Tunnel0
@@ -553,27 +433,25 @@ sdwan
    allow-service all</code></pre>
 
 
-    <h3>6.2 Install the Root CA</h3>
-     <h4>copy or transfer the key .pem from vmanage to edge(using this command tclsh eg puts [open "flash:ROOT-CA.pem" w+] {
-[paste the certificate here]
-}) then the next step </h4>
+    <h3>Install the Root CA</h3>
+
+    <p>
+        Copy the root CA certificate from vManage to the edge device.
+    </p>
+
     <pre><code>request platform software sdwan root-cert-chain install bootflash:&lt;root-ca&gt;.pem</code></pre>
 
 
-    <h3>6.3 Generate the CSR</h3>
+    <h3>Generate the CSR</h3>
 
     <pre><code>request platform software sdwan csr upload bootflash:&lt;csr-file&gt;</code></pre>
 
 
-    <h3>6.4 Transfer the CSR to vManage</h3>
+    <h3>Sign the Edge CSR</h3>
 
     <p>
-        Transfer the generated CSR from the edge device
-        to vManage.
+        Transfer the CSR to vManage and sign it using the enterprise CA.
     </p>
-
-
-    <h3>6.5 Sign the Edge CSR</h3>
 
     <pre><code>openssl x509 -req \
   -in /home/admin/edge-r1_csr \
@@ -585,45 +463,42 @@ sdwan
   -sha256</code></pre>
 
 
-    <h3>6.6 Install the Certificate on the Edge</h3>
+    <h3>Install the Edge Certificate</h3>
 
     <pre><code>request platform software sdwan certificate install bootflash:edge-r1.crt</code></pre>
 
 
-    <h3>6.7 Add the Edge</h3>
+    <h3>Add the Edge</h3>
 
     <pre><code>request vedge add chassis-num C8K-3539796c-b995-4c41-b6a1-1d7cf7f9a9a2 serial-num 0861ACC2EE28C7D3045CB9CE465149BA72624F49</code></pre>
 
     <div class="info">
-        Replace the chassis number and certificate serial number
-        with the values from your own device.
+        Use the chassis number and certificate serial number
+        from your own device.
     </div>
 
 </section>
 
 
-<!-- ======================================================
-     7. EDGE CONFIGURATION
-     ====================================================== -->
+<!-- EDGE CONFIGURATION -->
 
 <section id="config">
 
-    <h2>7. SD-WAN Edge Configuration</h2>
+    <h2>6. SD-WAN Edge Configuration</h2>
 
     <p>
-        Replace the values inside <code>{{ }}</code>
-        with your actual lab values.
+        Replace the example values with the values from your lab.
     </p>
 
     <pre><code>!
 ! SYSTEM
 !
 system
- hostname               {{HOSTNAME}}
- system-ip              {{SYSTEM_IP}}
- site-id                {{SITE_ID}}
- organization-name      "{{ORGANIZATION_NAME}}"
- vbond                  {{VBOND_IP_OR_DNS}}
+ hostname               &lt;HOSTNAME&gt;
+ system-ip              &lt;SYSTEM-IP&gt;
+ site-id                &lt;SITE-ID&gt;
+ organization-name      "&lt;ORGANIZATION-NAME&gt;"
+ vbond                  &lt;VBOND-IP&gt;
 !
 
 !
@@ -634,7 +509,7 @@ vpn 0
  dns 8.8.8.8 8.8.4.4
 
  interface GigabitEthernet1
-  ip address {{WAN_IP_ADDRESS}} {{WAN_SUBNET_MASK}}
+  ip address &lt;WAN-IP&gt; &lt;WAN-SUBNET-MASK&gt;
   no shutdown
 
   tunnel-interface
@@ -642,9 +517,7 @@ vpn 0
    color public-internet
    allow-service all
 
-  exit
-
- ip route 0.0.0.0 0.0.0.0 {{WAN_NEXT_HOP_GATEWAY}}
+ ip route 0.0.0.0 0.0.0.0 &lt;WAN-GATEWAY&gt;
 !
 
 !
@@ -654,10 +527,10 @@ vpn 512
  name MGMT_VPN
 
  interface GigabitEthernet2
-  ip address {{MGMT_IP_ADDRESS}} {{MGMT_SUBNET_MASK}}
+  ip address &lt;MGMT-IP&gt; &lt;MGMT-SUBNET-MASK&gt;
   no shutdown
 
- ip route 0.0.0.0 0.0.0.0 {{MGMT_NEXT_HOP_GATEWAY}}
+ ip route 0.0.0.0 0.0.0.0 &lt;MGMT-GATEWAY&gt;
 !
 
 !
@@ -667,125 +540,59 @@ vpn 10
  name LAN_SERVICE_VPN
 
  interface GigabitEthernet3
-  ip address {{LAN_IP_ADDRESS}} {{LAN_SUBNET_MASK}}
+  ip address &lt;LAN-IP&gt; &lt;LAN-SUBNET-MASK&gt;
   no shutdown
 !</code></pre>
 
+</section>
 
-    <h3>Configuration Variables</h3>
 
-    <table>
+<!-- OVERALL STEPS -->
 
-        <tr>
-            <th>Variable</th>
-            <th>Description</th>
-        </tr>
+<section id="steps">
 
-        <tr>
-            <td>{{HOSTNAME}}</td>
-            <td>Edge hostname</td>
-        </tr>
+    <h2>7. Overall Steps</h2>
 
-        <tr>
-            <td>{{SYSTEM_IP}}</td>
-            <td>SD-WAN system IP</td>
-        </tr>
+    <h3>Phase 1: vManage</h3>
 
-        <tr>
-            <td>{{SITE_ID}}</td>
-            <td>SD-WAN site ID</td>
-        </tr>
+    <ol>
+        <li>Generate the root CA key and certificate on vManage.</li>
+        <li>Add the root CA certificate in the vManage GUI.</li>
+        <li>Generate the vManage CSR.</li>
+        <li>Sign the vManage CSR.</li>
+        <li>Install the vManage certificate.</li>
+    </ol>
 
-        <tr>
-            <td>{{ORGANIZATION_NAME}}</td>
-            <td>SD-WAN organization name</td>
-        </tr>
 
-        <tr>
-            <td>{{VBOND_IP_OR_DNS}}</td>
-            <td>vBond IP address or DNS name</td>
-        </tr>
+    <h3>Phase 2: vBond and vSmart</h3>
 
-        <tr>
-            <td>{{WAN_IP_ADDRESS}}</td>
-            <td>WAN interface IP</td>
-        </tr>
+    <ol>
+        <li>Add vBond and vSmart in vManage.</li>
+        <li>Generate their CSRs.</li>
+        <li>Sign the CSRs using the root CA.</li>
+        <li>Install the certificates.</li>
+    </ol>
 
-        <tr>
-            <td>{{WAN_NEXT_HOP_GATEWAY}}</td>
-            <td>WAN gateway</td>
-        </tr>
 
-        <tr>
-            <td>{{MGMT_IP_ADDRESS}}</td>
-            <td>Management IP</td>
-        </tr>
+    <h3>Phase 3: SD-WAN Edge</h3>
 
-        <tr>
-            <td>{{LAN_IP_ADDRESS}}</td>
-            <td>LAN/service VPN IP</td>
-        </tr>
-
-    </table>
+    <ol>
+        <li>Configure the basic SD-WAN settings on the edge.</li>
+        <li>Install the root CA certificate.</li>
+        <li>Generate the edge CSR.</li>
+        <li>Sign the CSR on vManage.</li>
+        <li>Install the signed certificate.</li>
+        <li>Activate and onboard the edge device.</li>
+    </ol>
 
 </section>
 
 
-<!-- ======================================================
-     8. CERTIFICATE FLOW
-     ====================================================== -->
-
-<section>
-<h2>Overall steps</h2>
-
-
-<ul>
-   <li>1. Generate Root CA Keys: Log into the vManage CLI (vshell) and create the lab-root-ca.key and lab-root-ca.pem files using OpenSSL.</li>
-   <li>2. Set CA Type in UI: Copy the text of lab-root-ca.pem. In the vManage Web UI, go to Administration > Settings > Controller Certificate Authorization, select Enterprise CA, paste the text, and save.</li>
-   <li>3. Generate vManage CSR: In the UI (Configuration > Certificates > Controllers), click Generate CSR for vManage and copy the text.</li>
-   <li>4. Sign vManage CSR: Save the text as a file on the vManage CLI and run the OpenSSL signing command to output vmanage.crt.</li>
-   <li>5. Install vManage Certificate: Return to the vManage UI, click Install Certificate, and paste the contents of vmanage.crt.</li>
-</ul>
-
-## Phase 2: Onboard vBond & vSmart Controllers
-
-<ul>
-   <li>1. Add Controllers: In the UI (Configuration > Devices), add your vSmart and vBond controllers using their IP addresses and CLI credentials.</li>
-   <li>2. Generate Controller CSRs: In the UI (Configuration > Certificates > Controllers), select the vSmart and vBond entries and click Generate CSR. (vManage fetches these automatically via NETCONF).</li>
-   <li>3. Sign Controller CSRs: Copy or download the CSR texts, save them to files on the vManage CLI, and sign them with your OpenSSL root keys to output vbond.crt and vsmart.crt.</li>
-   <li>4. Install Controller Certificates: Return to the UI, click Install Certificate, and paste the respective .crt text for each controller. vManage will automatically push them out.</li>
-</ul>
-
-## Phase 3: Prepare the WAN Edge (CSR1000v/C8000v)
-
-<ul>
-   <li>1. Apply Bootstrap Config: On the router CLI, configure the basic controller parameters (system-ip, site-id, org-name, vbond) and the Tunnel0 interface.</li>
-</ul>
-
-## Phase 4: Sign & Install the WAN Edge Certificate
-
-<ul>
-   <li>1. Install Root CA on Edge: Copy lab-root-ca.pem from vManage to the router's bootflash: and run:
-   request platform software sdwan root-cert-chain install bootflash:lab-root-ca.pem</li>
-   <li>2. Generate Edge CSR: Run the following on the router to create a CSR file:
-   request platform software sdwan csr upload bootflash:edge.csr</li>
-   <li>3. Sign Edge CSR: Copy edge.csr to the vManage CLI and run the OpenSSL signing command to create edge.crt.</li>
-   <li>4. Install Edge Certificate: Copy edge.crt back to the router's bootflash: and run:
-   request platform software sdwan certificate install bootflash:edge.crt</li>
-   <li>5. Activate the Fabric Association: Run the final onboarding command on the router to link the certificate:
-   request platform software sdwan vedge_activate chassis-number <ID> token <TOKEN></li>
-</ul>
-   
-</section>
-
-
-<!-- ======================================================
-     9. SCREENSHOTS
-     ====================================================== -->
+<!-- SCREENSHOTS -->
 
 <section id="screenshots">
 
-    <h2>9. Lab Screenshots</h2>
+    <h2>8. Lab Screenshots</h2>
 
     <p>
         Click any image to view it in full size.
@@ -802,7 +609,6 @@ vpn 10
             <p>Edge R1</p>
         </div>
 
-
         <div class="gallery-item">
             <img
                 src="sdwan/edge-sdwan-connetion.PNG"
@@ -811,7 +617,6 @@ vpn 10
             >
             <p>Edge SD-WAN Connection</p>
         </div>
-
 
         <div class="gallery-item">
             <img
@@ -822,7 +627,6 @@ vpn 10
             <p>Switch</p>
         </div>
 
-
         <div class="gallery-item">
             <img
                 src="sdwan/vbond.PNG"
@@ -831,7 +635,6 @@ vpn 10
             >
             <p>vBond</p>
         </div>
-
 
         <div class="gallery-item">
             <img
@@ -842,7 +645,6 @@ vpn 10
             <p>vSmart</p>
         </div>
 
-
         <div class="gallery-item">
             <img
                 src="sdwan/vmanage.PNG"
@@ -851,7 +653,6 @@ vpn 10
             >
             <p>vManage</p>
         </div>
-
 
         <div class="gallery-item">
             <img
@@ -862,7 +663,6 @@ vpn 10
             <p>vManage GUI Dashboard</p>
         </div>
 
-
         <div class="gallery-item">
             <img
                 src="sdwan/vmanage-gui-templates-added.PNG"
@@ -871,7 +671,6 @@ vpn 10
             >
             <p>vManage Templates</p>
         </div>
-
 
         <div class="gallery-item">
             <img
@@ -889,9 +688,7 @@ vpn 10
 </main>
 
 
-<!-- ======================================================
-     IMAGE VIEWER
-     ====================================================== -->
+<!-- IMAGE VIEWER -->
 
 <div
     class="lightbox"
@@ -912,34 +709,25 @@ vpn 10
 
 
 <footer>
-    SD-WAN Lab Documentation
+    Cisco SD-WAN Lab Documentation
 </footer>
 
 
 <script>
 
 function openImage(src) {
-
     document.getElementById("largeImage").src = src;
-
     document.getElementById("lightbox").classList.add("show");
-
 }
-
 
 function closeImage() {
-
     document.getElementById("lightbox").classList.remove("show");
-
 }
 
-
 document.addEventListener("keydown", function(event) {
-
     if (event.key === "Escape") {
         closeImage();
     }
-
 });
 
 </script>
