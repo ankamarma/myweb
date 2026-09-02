@@ -3,188 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoIP Deployment Guide: FreePBX & CUCM</title>
+    <title>VoIP Deployment Guide</title>
     <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --primary-color: #2c3e50;
-            --accent-color: #3498db;
-            --card-bg: #fff;
-            --tech-bg: #ebeeef;
-        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
+            color: #333;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
         }
         h1 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 25px;
+            color: #1a73e8;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
         }
         h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 8px;
-            margin-top: 40px;
+            color: #2c3e50;
+            margin-top: 30px;
+            padding-left: 10px;
+            border-left: 4px solid #34495e;
         }
-        .component-list {
-            background-color: var(--card-bg);
-            border-left: 4px solid var(--accent-color);
-            padding: 15px 20px;
+        .tools-box {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
             margin-bottom: 30px;
-            border-radius: 0 8px 8px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .component-list h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        .component-list ul {
+        .tools-box ul {
+            list-style-type: none;
+            padding-left: 0;
             margin: 0;
-            padding-left: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
         }
-        .component-list li {
-            margin-bottom: 6px;
-            font-weight: 500;
+        .tools-box li {
+            padding: 8px 12px;
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            font-weight: bold;
+            border-radius: 4px;
+            text-align: center;
         }
         ol {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 12px;
-            font-size: 1.05rem;
-        }
-        .step-detail {
-            color: #555;
-            display: block;
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
-        
-        /* New Zoomable Image and Lightbox Styles */
-        .topology {
-            text-align: center;
-            margin: 25px 0;
-        }
-        .topology img {
-            max-width: 100%;
-            max-height: 500px;
-            cursor: zoom-in;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            background: #fff;
+            padding: 20px 20px 20px 40px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .hint {
-            color: #777;
-            font-size: 13px;
-            margin-top: 8px;
+        li {
+            margin-bottom: 15px;
+            padding-left: 5px;
         }
-        .lightbox {
+        li::marker {
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .img-container {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid #eee;
+            padding: 8px;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+        .img-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .thumbnail {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: #ddd;
+        }
+        .img-label {
+            font-size: 12px;
+            margin-top: 8px;
+            color: #555;
+            word-break: break-all;
+            font-weight: 500;
+        }
+        /* Zoomable Modal Setup */
+        .modal {
             display: none;
             position: fixed;
             z-index: 1000;
-            inset: 0;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
         }
-        .lightbox.show {
-            display: flex;
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
-        .lightbox img {
-            max-width: 95%;
-            max-height: 90%;
-            object-fit: contain;
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 15px 0;
+            font-size: 16px;
         }
         .close {
             position: absolute;
-            top: 15px;
-            right: 25px;
-            color: white;
-            font-size: 35px;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
             cursor: pointer;
-            user-select: none;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>VoIP Deployment Guide: FreePBX & CUCM</h1>
-
-    <!-- Topology Section with Lightbox Interaction -->
-    <h2>1. Network Topology Diagram</h2>
-    <div class="topology">
-        <img src="images/voip-topology.png" alt="VoIP Integration Topology" onclick="openImage(this.src)">
-        <div class="hint">Click the topology to zoom.</div>
-    </div>
-
-    <h2>2. System Components</h2>
-    <div class="component-list">
-        <h3>Deployment Requirements</h3>
+    <h1>VoIP Infrastructure Configuration Guide</h1>
+    
+    <div class="tools-box">
+        <h3>Tools & Infrastructure Used</h3>
         <ul>
-            <li>FreePBX Server (Asterisk 16+ / Chan_PJSIP driver)</li>
-            <li>Cisco Unified Communications Manager (CUCM v11.5+)</li>
-            <li>Configured network routing with open SIP (5060/5061) and RTP (10000-20000) ports</li>
+            <li>🛠️ Catalyst 2960 Switch</li>
+            <li>💻 VMware 7.0 Hypervisor</li>
+            <li>📞 Cisco CUCM 14.0.1.11900-132</li>
+            <li>🍃 FreePBX 17.0.32 Server</li>
         </ul>
     </div>
 
-    <h2>3. Configuration Steps</h2>
+    <h2>FreePBX Setup Procedure</h2>
     <ol>
-        <li>
-            <strong>Configure FreePBX SIP Trunk:</strong>
-            <span class="step-detail">Create a new Chan_PJSIP trunk targeting the primary CUCM node IP address. Set the context to 'from-internal'.</span>
-        </li>
-        <li>
-            <strong>Configure CUCM SIP Trunk Security Profile:</strong>
-            <span class="step-detail">Navigate to System &gt; Security &gt; SIP Trunk Security Profile. Create a non-secure or secure profile matching your transport layer choice.</span>
-        </li>
-        <li>
-            <strong>Define Inbound and Outbound Dial Plans:</strong>
-            <span class="step-detail">Build patterns to seamlessly steer traffic across matching destination numbers. Route 4-digit strings respectively between architectures.</span>
-        </li>
+        <li><strong>Install FreePBX Server:</strong> Spin up and install the FreePBX 17.0.32 software package on your virtual machine within VMware 7.0.</li>
+        <li><strong>Multiplatform Firmware:</strong> Verify the endpoint phone is configured with multiplatform firmware capabilities.</li>
+        <li><strong>Create Extension:</strong> Navigate to the main menu page path <code>Connectivity &gt; Extensions</code> to construct a new line extension.</li>
+        <li><strong>Network Assignment:</strong> Input the required network topology settings directly onto the device panel layout parameters.</li>
+        <li><strong>Access Phone GUI:</strong> Open a local web browser session and navigate to the IP address of the active phone node.</li>
+        <li><strong>SIP Mapping Details:</strong> Log inside the device profile console, click <code>Advanced &gt; Voice &gt; Extension</code>, and populate the appropriate Port number, Extension Secret string, and the target SIP/FreePBX IP destination.</li>
+        <li><strong>Verify Active Registry:</strong> Review the active session statuses via the management dashboard under <code>Reports &gt; Asterisk Info</code> to confirm successful binding.</li>
     </ol>
-</div>
 
-<!-- Reusable Lightbox Component -->
-<div id="lightbox" class="lightbox" onclick="closeImage()">
-    <span class="close" onclick="event.stopPropagation(); closeImage();">&times;</span>
-    <img id="lightbox-img" src="" alt="Zoomed View">
-</div>
+    <h2>Cisco CUCM Setup Procedure</h2>
+    <ol>
+        <li><strong>Install CUCM node:</strong> Run the setup installer for the Cisco CUCM 14.0.1.11900-132 target image deployment inside VMware 7.0.</li>
+        <li><strong>TFTP Network Settings:</strong> Build out your local telephone system routing network and provision the designated CUCM IP value to point to your target TFTP destination.</li>
+        <li><strong>Activate Local TFTP Daemon:</strong> Because the internal TFTP engine is deactivated by default, browse to the <strong>Cisco Unified Serviceability</strong> drop-down menu, go to <code>Tools &gt; Service Activation</code>, locate the primary Feature Services group, and click start.</li>
+        <li><strong>Provision Phone Hardware:</strong> Manually append the new target terminal inside the node database (e.g., Cisco 8864 appliance) alongside its matching hardware MAC Address string.</li>
+        <li><strong>Bind DN Extension:</strong> Set up and define the specific telephone extensions parameters directly underneath the Directory Number (DN) menu page.</li>
+        <li><strong>DNS-less Hostname Override:</strong> If performing your deployment without an active functional DNS cluster environment, access the <strong>Enterprise Parameters</strong> configuration layout view and substitute the alphanumeric server descriptors with the clear IPv4 address of the running CUCM core node.</li>
+    </ol>
 
-<script>
-    function openImage(src) {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        lightboxImg.src = src;
-        lightbox.classList.add('show');
-    }
+    <h2>Configuration Graphics &amp; Verification Panel</h2>
+    <p><em>Select any visualization tile below to open the native image zoom view layout modal interface.</em></p>
+    
+    <div class="gallery">
+        <div class="img-container" onclick="openModal('myweb/phone/switch-configuration.PNG', 'Catalyst 2960 Switch Local Configuration Layout Profile')">
+            <img class="thumbnail" src="myweb/phone/switch-configuration.PNG" alt="Switch Configuration Settings Interface Screen">
+            <div class="img-label">switch-configuration.PNG</div>
+        </div>
+        
+        <div class="img-container" onclick="openModal('myweb/phone/configure-onphone-sip.PNG', 'SIP Parameter Context Bindings on Phone Advanced Web GUI Panel')">
+            <img class="thumbnail" src="myweb/phone/configure-onphone-sip.PNG" alt="Phone Local SIP Endpoint GUI Mapping Parameters">
+            <div class="img-label">configure-onphone-sip.PNG</div>
+        </div>
+        
+        <div class="img-container" onclick="openModal('myweb/phone/cucm-registered-phone.PNG', 'Cisco Unified Communications Manager Node Endpoint Registration Panel')">
+            <img class="thumbnail" src="myweb/phone/cucm-registered-phone.PNG" alt="CUCM Node Active Device Inventory Validation Panel">
+            <div class="img-label">cucm-registered-phone.PNG</div>
+        </div>
+        
+        <div class="img-container" onclick="openModal('myweb/phone/phone-registered.confirmed.PNG', 'Active VoIP Registry Terminal Operational Validation State')">
+            <img class="thumbnail" src="myweb/phone/phone-registered.confirmed.PNG" alt="VoIP Operational Registry Terminal Session State Success">
+            <div class="img-label">phone-registered.confirmed.PNG</div>
+        </div>
+    </div>
 
-    function closeImage() {
-        const lightbox = document.getElementById('lightbox');
-        lightbox.classList.remove('show');
-    }
+    <!-- Zoom Modal Framework Elements -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalTargetImg" alt="VoIP Deployment Step Diagram Expansion Modal Graphic View">
+        <div id="caption"></div>
+    </div>
 
-    // Escape key handling to exit lightbox view cleanly
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeImage();
+    <script>
+        function openModal(imgSrc, captionText) {
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("modalTargetImg");
+            var caption = document.getElementById("caption");
+            
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+            caption.innerHTML = captionText;
         }
-    });
-</script>
 
-</body>
-</html>
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        // Close layout element target boundaries on external panel wrapper space click event instances
