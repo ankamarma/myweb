@@ -70,214 +70,121 @@
             font-size: 0.95rem;
             margin-top: 4px;
         }
-        .gallery-title {
+        
+        /* New Zoomable Image and Lightbox Styles */
+        .topology {
             text-align: center;
-            margin-top: 50px;
-            color: var(--primary-color);
+            margin: 25px 0;
         }
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-            margin-bottom: 50px;
-        }
-        .gallery-item {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            cursor: pointer;
-            border-radius: 4px;
+        .topology img {
+            max-width: 100%;
+            max-height: 500px;
+            cursor: zoom-in;
             border: 1px solid #ddd;
-            transition: opacity 0.2s ease;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .gallery-item img:hover {
-            opacity: 0.85;
+        .hint {
+            color: #777;
+            font-size: 13px;
+            margin-top: 8px;
         }
-        .gallery-item p {
-            margin: 10px 0 0 0;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        /* LIGHTBOX SYSTEM */
         .lightbox {
+            display: none;
             position: fixed;
-            top: 0;
-            left: 0;
+            z-index: 1000;
+            inset: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            padding: 20px;
         }
         .lightbox.show {
-            opacity: 1;
-            pointer-events: auto;
+            display: flex;
         }
         .lightbox img {
-            max-width: 90%;
+            max-width: 95%;
             max-height: 90%;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-            border-radius: 4px;
-            cursor: zoom-out;
+            object-fit: contain;
         }
         .close {
             position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #fff;
-            font-size: 40px;
-            font-weight: bold;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
             cursor: pointer;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            color: #666;
-            border-top: 1px solid #ddd;
-            font-size: 0.9rem;
+            user-select: none;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>VoIP Deployment Guide</h1>
-    
-    <!-- Environment Tools Component List -->
+    <h1>VoIP Deployment Guide: FreePBX & CUCM</h1>
+
+    <!-- Topology Section with Lightbox Interaction -->
+    <h2>1. Network Topology Diagram</h2>
+    <div class="topology">
+        <img src="images/voip-topology.png" alt="VoIP Integration Topology" onclick="openImage(this.src)">
+        <div class="hint">Click the topology to zoom.</div>
+    </div>
+
+    <h2>2. System Components</h2>
     <div class="component-list">
-        <h3>Tools Used</h3>
+        <h3>Deployment Requirements</h3>
         <ul>
-            <li>Hardware Switch: Catalyst 2960</li>
-            <li>Hypervisor Platform: VMware 7.0</li>
-            <li>PBX Server 1: FreePBX 17.0.32</li>
-            <li>PBX Server 2: CUCM 14.0.1.11900-132 (Single Instance Node)</li>
-            <li>Endpoint Device: Cisco IP Phone 8864</li>
+            <li>FreePBX Server (Asterisk 16+ / Chan_PJSIP driver)</li>
+            <li>Cisco Unified Communications Manager (CUCM v11.5+)</li>
+            <li>Configured network routing with open SIP (5060/5061) and RTP (10000-20000) ports</li>
         </ul>
     </div>
 
-    <!-- FreePBX Section -->
-    <h2>1. FreePBX Deployment Steps</h2>
+    <h2>3. Configuration Steps</h2>
     <ol>
-        <li><strong>Install the FreePBX 17.0.32 server.</strong>
-            <span class="step-detail">Set up the platform environment on your VMware 7.0 hypervisor host.</span>
+        <li>
+            <strong>Configure FreePBX SIP Trunk:</strong>
+            <span class="step-detail">Create a new Chan_PJSIP trunk targeting the primary CUCM node IP address. Set the context to 'from-internal'.</span>
         </li>
-        <li><strong>Ensure the phone is multiplatform.</strong>
-            <span class="step-detail">Verify that your device firmware supports standard open SIP configurations.</span>
+        <li>
+            <strong>Configure CUCM SIP Trunk Security Profile:</strong>
+            <span class="step-detail">Navigate to System &gt; Security &gt; SIP Trunk Security Profile. Create a non-secure or secure profile matching your transport layer choice.</span>
         </li>
-        <li><strong>Create a new extension profile.</strong>
-            <span class="step-detail">Navigate to <em>Connectivity &gt; Extensions</em> within the FreePBX administration panel.</span>
-        </li>
-        <li><strong>Configure network information manually on the phone.</strong>
-            <span class="step-detail">Assign local IP, subnet, gateway, and VLAN routing settings via the Catalyst 2960 infrastructure without using DHCP.</span>
-        </li>
-        <li><strong>Access the phone's web GUI.</strong>
-            <span class="step-detail">Input the manually configured local IP address of your endpoint device into a secure web browser.</span>
-        </li>
-        <li><strong>Apply SIP credentials on the phone GUI.</strong>
-            <span class="step-detail">Navigate to <em>Advanced &gt; Voice &gt; Extension</em>. Input your port details, target FreePBX server IP, and the custom secret key created with the extension.</span>
-        </li>
-        <li><strong>Verify registration status.</strong>
-            <span class="step-detail">Go to <em>Reports &gt; Asterisk Info</em> in FreePBX to confirm the endpoint has successfully connected.</span>
+        <li>
+            <strong>Define Inbound and Outbound Dial Plans:</strong>
+            <span class="step-detail">Build patterns to seamlessly steer traffic across matching destination numbers. Route 4-digit strings respectively between architectures.</span>
         </li>
     </ol>
-
-    <!-- CUCM Section -->
-    <h2>2. Cisco Unified Communications Manager (CUCM) Deployment Steps</h2>
-    <ol>
-        <li><strong>Install the single-node CUCM 14.0.1.11900-132 server.</strong>
-            <span class="step-detail">Provision and build the standalone machine instance using your VMware 7.0 virtualization environment.</span>
-        </li>
-        <li><strong>Set up the voice network and manually point to TFTP.</strong>
-            <span class="step-detail">Provision network routing on the Catalyst 2960 switch and manually configure the CUCM IP address as the TFTP server address directly on the Cisco 8864 phone layout.</span>
-        </li>
-        <li><strong>Activate the TFTP feature service.</strong>
-            <span class="step-detail">By default, the TFTP service is deactivated. Enable it by navigating to <em>Cisco Unified Serviceability &gt; Tools &gt; Service Activation</em>, locating the feature services, and starting the Cisco TFTP service.</span>
-        </li>
-        <li><strong>Add the target endpoint hardware.</strong>
-            <span class="step-detail">Select your phone model hardware tier (Cisco 8864) and manually link the unit's unique physical MAC address.</span>
-        </li>
-        <li><strong>Assign a Directory Number (DN).</strong>
-            <span class="step-detail">Bind your target numeric extension pattern directly under the active DN structural line parameters.</span>
-        </li>
-        <li><strong>Configure fallback IP mapping (Non-DNS setups).</strong>
-            <span class="step-detail">Go to <em>Enterprise Parameters</em> and overwrite alphanumeric system hostnames with literal CUCM node IP details.</span>
-        </li>
-    </ol>
-
-    <!-- Reference Gallery at the bottom -->
-    <h2 class="gallery-title">Deployment Diagrams & Configuration References</h2>
-    
-    <div class="image-gallery">
-        
-        <!-- Image 1 -->
-        <div class="gallery-item">
-            <img 
-                src="phone/switch-configuration.PNG" 
-                alt="Switch Configuration"
-                onclick="openImage(this.src)"
-            >
-            <p>Switch Configuration</p>
-        </div>
-
-        <!-- Image 2 -->
-        <div class="gallery-item">
-            <img 
-                src="phone/configure-onphone-sip.PNG" 
-                alt="Phone SIP Configuration"
-                onclick="openImage(this.src)"
-            >
-            <p>Phone SIP Configuration</p>
-        </div>
-
-        <!-- Image 3 -->
-        <div class="gallery-item">
-            <img 
-                src="phone/phone-registered.confirmed.PNG" 
-                alt="FreePBX Phone Registered"
-                onclick="openImage(this.src)"
-            >
-            <p>FreePBX Phone Registered</p>
-        </div>
-
-        <!-- Image 4 -->
-        <div class="gallery-item">
-            <img 
-                src="phone/cucm-registered-phone.PNG" 
-                alt="CUCM Registered Phone"
-                onclick="openImage(this.src)"
-            >
-            <p>CUCM Registered Phone</p>
-        </div>
-
-    </div>
 </div>
 
-<!-- IMAGE VIEWER LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeImage()">
-    <span class="close">&times;</span>
-    <img id="largeImage" src="" alt="Zoomed image" onclick="event.stopPropagation()">
+<!-- Reusable Lightbox Component -->
+<div id="lightbox" class="lightbox" onclick="closeImage()">
+    <span class="close" onclick="event.stopPropagation(); closeImage();">&times;</span>
+    <img id="lightbox-img" src="" alt="Zoomed View">
 </div>
-
-<footer>
-    VoIP Lab Documentation
-</footer>
 
 <script>
-function openImage(src) {
-    document.getElementById("largeImage").src = src;
+    function openImage(src) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        lightboxImg.src = src;
+        lightbox.classList.add('show');
+    }
+
+    function closeImage() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.remove('show');
+    }
+
+    // Escape key handling to exit lightbox view cleanly
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImage();
+        }
+    });
+</script>
+
+</body>
+</html>
