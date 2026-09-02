@@ -11,10 +11,10 @@
             --primary-color: #2c3e50;
             --accent-color: #3498db;
             --card-bg: #fff;
-            --tech-tag-bg: #ebeeef;
+            --tech-bg: #ebeeef;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
@@ -28,29 +28,34 @@
         h1 {
             text-align: center;
             color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 40px;
-        }
-        .tech-tag {
-            background-color: var(--tech-tag-bg);
-            color: var(--primary-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid #ddd;
+            margin-bottom: 25px;
         }
         h2 {
             color: var(--primary-color);
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 8px;
             margin-top: 40px;
+        }
+        .component-list {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .component-list h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .component-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .component-list li {
+            margin-bottom: 6px;
+            font-weight: 500;
         }
         ol {
             padding-left: 20px;
@@ -77,14 +82,14 @@
             margin-top: 20px;
             margin-bottom: 50px;
         }
-        .image-card {
+        .gallery-item {
             background: var(--card-bg);
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
         }
-        .image-card h3 {
+        .gallery-item h3 {
             margin: 0 0 10px 0;
             font-size: 1rem;
             color: var(--primary-color);
@@ -115,12 +120,15 @@
 <div class="container">
     <h1>VoIP Deployment Guide</h1>
     
-    <!-- Environment Tools Stack -->
-    <div class="tech-stack">
-        <span class="tech-tag">Hardware Switch: Catalyst 2960</span>
-        <span class="tech-tag">Hypervisor: VMware 7.0</span>
-        <span class="tech-tag">PBX Platform 1: FreePBX 17.0.32</span>
-        <span class="tech-tag">PBX Platform 2: CUCM 14.0.1.11900-132</span>
+    <!-- Environment Tools Component List -->
+    <div class="component-list">
+        <h3>Tools Used</h3>
+        <ul>
+            <li>Hardware Switch: Catalyst 2960</li>
+            <li>Hypervisor Platform: VMware 7.0</li>
+            <li>PBX Server 1: FreePBX 17.0.32</li>
+            <li>PBX Server 2: CUCM 14.0.1.11900-132</li>
+        </ul>
     </div>
 
     <!-- FreePBX Section -->
@@ -177,34 +185,34 @@
     <div class="image-gallery">
         
         <!-- Image 1 -->
-        <div class="image-card">
+        <div class="gallery-item">
             <h3>Switch Configuration</h3>
             <div class="zoom-box">
-                <img src="/phone/switch-configuration.PNG" alt="Catalyst 2960 Switch Configuration">
+                <img src="phone/switch-configuration.PNG" alt="Catalyst 2960 Switch Configuration">
             </div>
         </div>
 
         <!-- Image 2 -->
-        <div class="image-card">
+        <div class="gallery-item">
             <h3>Phone SIP Configuration</h3>
             <div class="zoom-box">
-                <img src="/phone/configure-onphone-sip.PNG" alt="Phone SIP Settings GUI">
+                <img src="phone/configure-onphone-sip.PNG" alt="Phone SIP Settings GUI">
             </div>
         </div>
 
         <!-- Image 3 -->
-        <div class="image-card">
+        <div class="gallery-item">
             <h3>FreePBX Phone Registered</h3>
             <div class="zoom-box">
-                <img src="/phone/phone-registered.confirmed.PNG" alt="FreePBX Asterisk Registration Confirmation">
+                <img src="phone/phone-registered.confirmed.PNG" alt="FreePBX Asterisk Registration Confirmation">
             </div>
         </div>
 
         <!-- Image 4 -->
-        <div class="image-card">
+        <div class="gallery-item">
             <h3>CUCM Registered Phone</h3>
             <div class="zoom-box">
-                <img src="/phone/cucm-registered-phone.PNG" alt="CUCM Device Registration Status">
+                <img src="phone/cucm-registered-phone.PNG" alt="CUCM Device Registration Status">
             </div>
         </div>
 
