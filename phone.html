@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +11,7 @@
             --primary-color: #2c3e50;
             --accent-color: #3498db;
             --card-bg: #fff;
+            --tech-tag-bg: #ebeeef;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -28,7 +28,23 @@
         h1 {
             text-align: center;
             color: var(--primary-color);
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+        .tech-tag {
+            background-color: var(--tech-tag-bg);
+            color: var(--primary-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #ddd;
         }
         h2 {
             color: var(--primary-color);
@@ -49,16 +65,28 @@
             font-size: 0.95rem;
             margin-top: 4px;
         }
-        .image-container {
+        .gallery-title {
             text-align: center;
-            margin: 40px 0;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 50px;
+            color: var(--primary-color);
         }
-        .image-container h3 {
-            margin-top: 0;
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+        .image-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .image-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
             color: var(--primary-color);
         }
         .zoom-box {
@@ -68,9 +96,11 @@
             cursor: zoom-in;
             border-radius: 4px;
             border: 1px solid #ddd;
+            width: 100%;
+            background: #fafafa;
         }
         .zoom-box img {
-            max-width: 100%;
+            width: 100%;
             height: auto;
             transition: transform 0.3s ease;
             display: block;
@@ -84,64 +114,100 @@
 
 <div class="container">
     <h1>VoIP Deployment Guide</h1>
+    
+    <!-- Environment Tools Stack -->
+    <div class="tech-stack">
+        <span class="tech-tag">Hardware Switch: Catalyst 2960</span>
+        <span class="tech-tag">Hypervisor: VMware 7.0</span>
+        <span class="tech-tag">PBX Platform 1: FreePBX 17.0.32</span>
+        <span class="tech-tag">PBX Platform 2: CUCM 14.0.1.11900-132</span>
+    </div>
 
     <!-- FreePBX Section -->
     <h2>1. FreePBX Deployment Steps</h2>
     <ol>
-        <li><strong>Install the FreePBX server.</strong>
-            <span class="step-detail">Set up the base operating system and FreePBX platform on your dedicated hardware or virtual machine.</span>
+        <li><strong>Install the FreePBX 17.0.32 server.</strong>
+            <span class="step-detail">Set up the platform environment on your VMware 7.0 hypervisor host.</span>
         </li>
         <li><strong>Ensure the phone is multiplatform.</strong>
-            <span class="step-detail">Verify that your hardware supports open SIP standards to communicate with FreePBX.</span>
+            <span class="step-detail">Verify that your device firmware supports standard open SIP configurations.</span>
         </li>
-        <li><strong>Create a new extension.</strong>
-            <span class="step-detail">Navigate to <em>Connectivity &gt; Extensions</em> in the FreePBX web interface to add a new device profile.</span>
+        <li><strong>Create a new extension profile.</strong>
+            <span class="step-detail">Navigate to <em>Connectivity &gt; Extensions</em> within the FreePBX administration panel.</span>
         </li>
         <li><strong>Configure network information on the phone.</strong>
-            <span class="step-detail">Assign a valid IP address, subnet mask, and gateway directly to your physical or software phone.</span>
+            <span class="step-detail">Assign local IP, subnet, gateway, and VLAN routing settings via the Catalyst 2960 infrastructure.</span>
         </li>
         <li><strong>Access the phone's web GUI.</strong>
-            <span class="step-detail">Open a web browser and enter the IP address of the phone to access its configuration portal.</span>
+            <span class="step-detail">Input the local IP address of your endpoint device into a secure web browser.</span>
         </li>
-        <li><strong>Configure SIP settings on the phone.</strong>
-            <span class="step-detail">Navigate to <em>Advanced &gt; Voice &gt; Extension</em>. Enter the port number, the secret (password) generated during extension creation, and the FreePBX server IP.</span>
+        <li><strong>Apply SIP credentials on the phone GUI.</strong>
+            <span class="step-detail">Navigate to <em>Advanced &gt; Voice &gt; Extension</em>. Input your port details, target FreePBX server IP, and the custom secret key created with the extension.</span>
         </li>
         <li><strong>Verify registration status.</strong>
-            <span class="step-detail">Go to <em>Reports &gt; Asterisk Info</em> in FreePBX to confirm the phone has successfully registered.</span>
+            <span class="step-detail">Go to <em>Reports &gt; Asterisk Info</em> in FreePBX to confirm the endpoint has successfully connected.</span>
         </li>
     </ol>
 
     <!-- CUCM Section -->
     <h2>2. Cisco Unified Communications Manager (CUCM) Deployment Steps</h2>
     <ol>
-        <li><strong>Install the CUCM server.</strong>
-            <span class="step-detail">Complete the base installation of the Cisco Unified Communications Manager cluster.</span>
+        <li><strong>Install the CUCM 14.0.1.11900-132 server.</strong>
+            <span class="step-detail">Provision and build the node cluster machine using your VMware 7.0 virtualization environment.</span>
         </li>
-        <li><strong>Configure the network and TFTP settings.</strong>
-            <span class="step-detail">Set up the phone network parameters and ensure the CUCM IP address is provisioned as the TFTP server option (Option 150) in your DHCP scope.</span>
+        <li><strong>Set up the voice network and map TFTP.</strong>
+            <span class="step-detail">Provision network routing and pass the CUCM IP address via DHCP Option 150 to endpoint hardware.</span>
         </li>
-        <li><strong>Activate the TFTP service.</strong>
-            <span class="step-detail">By default, the TFTP service is deactivated. Enable it by navigating to <em>Cisco Unified Serviceability &gt; Tools &gt; Service Activation</em>, locating the feature services, and starting the Cisco TFTP service.</span>
+        <li><strong>Activate the TFTP feature service.</strong>
+            <span class="step-detail">Navigate to <em>Cisco Unified Serviceability &gt; Tools &gt; Service Activation</em>. Locate the system features and turn on the Cisco TFTP option.</span>
         </li>
-        <li><strong>Add the physical device.</strong>
-            <span class="step-detail">Select your phone model (e.g., Cisco 8864) and enter its unique MAC address into the system.</span>
+        <li><strong>Add the target endpoint hardware.</strong>
+            <span class="step-detail">Select your phone model hardware tier (e.g., Cisco 8864) and manually link the unit's unique physical MAC address.</span>
         </li>
         <li><strong>Assign a Directory Number (DN).</strong>
-            <span class="step-detail">Add the desired extension number under the DN configuration line for the device.</span>
+            <span class="step-detail">Bind your target numeric extension pattern directly under the active DN structural line parameters.</span>
         </li>
-        <li><strong>Configure IP-based routing (Non-DNS environments).</strong>
-            <span class="step-detail">If you are operating without a DNS server, navigate to <em>Enterprise Parameters</em> and replace any alphanumeric hostnames with the literal IP address of your CUCM server.</span>
+        <li><strong>Configure fallback IP mapping (Non-DNS setups).</strong>
+            <span class="step-detail">Go to <em>Enterprise Parameters</em> and overwrite alphanumeric system hostnames with literal CUCM node IP details.</span>
         </li>
     </ol>
 
-    <!-- Reference Diagrams (Placeholder) -->
-    <div class="image-container">
-        <h3>Deployment Diagrams & Reference Images</h3>
-        <p>Hover over the image to zoom in on configuration details.</p>
-        <div class="zoom-box">
-            <!-- Replace 'placeholder.jpg' with your actual image path or URL -->
-            <img src="placeholder.jpg" alt="Network deployment and configuration diagram">
+    <!-- Reference Gallery at the bottom -->
+    <h2 class="gallery-title">Deployment Diagrams & Configuration References</h2>
+    <div class="image-gallery">
+        
+        <!-- Image 1 -->
+        <div class="image-card">
+            <h3>Switch Configuration</h3>
+            <div class="zoom-box">
+                <img src="/phone/switch-configuration.PNG" alt="Catalyst 2960 Switch Configuration">
+            </div>
         </div>
+
+        <!-- Image 2 -->
+        <div class="image-card">
+            <h3>Phone SIP Configuration</h3>
+            <div class="zoom-box">
+                <img src="/phone/configure-onphone-sip.PNG" alt="Phone SIP Settings GUI">
+            </div>
+        </div>
+
+        <!-- Image 3 -->
+        <div class="image-card">
+            <h3>FreePBX Phone Registered</h3>
+            <div class="zoom-box">
+                <img src="/phone/phone-registered.confirmed.PNG" alt="FreePBX Asterisk Registration Confirmation">
+            </div>
+        </div>
+
+        <!-- Image 4 -->
+        <div class="image-card">
+            <h3>CUCM Registered Phone</h3>
+            <div class="zoom-box">
+                <img src="/phone/cucm-registered-phone.PNG" alt="CUCM Device Registration Status">
+            </div>
+        </div>
+
     </div>
 </div>
 
