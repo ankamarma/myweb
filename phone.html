@@ -89,34 +89,26 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
         }
-        .gallery-item h3 {
-            margin: 0 0 10px 0;
-            font-size: 1rem;
-            color: var(--primary-color);
-        }
-        
-        /* Thumbnail Layout */
-        .zoom-box {
-            position: relative;
-            display: inline-block;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            width: 100%;
-            background: #fafafa;
-            overflow: hidden;
-        }
-        .zoom-box img {
+        .gallery-item img {
             width: 100%;
             height: auto;
             display: block;
             cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid #ddd;
             transition: opacity 0.2s ease;
         }
-        .zoom-box img:hover {
+        .gallery-item img:hover {
             opacity: 0.85;
         }
+        .gallery-item p {
+            margin: 10px 0 0 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
 
-        /* Fullscreen Lightbox CSS-only Toggle */
+        /* LIGHTBOX SYSTEM */
         .lightbox {
             position: fixed;
             top: 0;
@@ -132,6 +124,10 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
+        .lightbox.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
         .lightbox img {
             max-width: 90%;
             max-height: 90%;
@@ -139,19 +135,22 @@
             border-radius: 4px;
             cursor: zoom-out;
         }
-        /* Activated via :target fragment identifier */
-        .lightbox:target {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .close-overlay {
+        .close {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            cursor: zoom-out;
-            text-decoration: none;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -166,8 +165,8 @@
         <ul>
             <li>Hardware Switch: Catalyst 2960</li>
             <li>Hypervisor Platform: VMware 7.0</li>
-            <li>PBX Server 1: FreePBX 17.0.32</li>
-            <li>PBX Server 2: CUCM 14.0.1.11900-132 (Single Instance Node)</li>
+            <li>FreePBX 17.0.32</li>
+            <li>CUCM 14.0.1.11900-132 (Single Instance Node)</li>
             <li>Endpoint Device: Cisco IP Phone 8864</li>
         </ul>
     </div>
@@ -223,50 +222,62 @@
 
     <!-- Reference Gallery at the bottom -->
     <h2 class="gallery-title">Deployment Diagrams & Configuration References</h2>
-    <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -10px;">Click any image to zoom in full screen. Click the zoomed image to close.</p>
     
     <div class="image-gallery">
         
         <!-- Image 1 -->
         <div class="gallery-item">
-            <h3>Switch Configuration</h3>
-            <div class="zoom-box">
-                <a href="#view-img1">
-                    <img src="phone/switch-configuration.PNG" alt="Catalyst 2960 Switch Configuration">
-                </a>
-            </div>
+            <img 
+                src="phone/switch-configuration.PNG" 
+                alt="Switch Configuration"
+                onclick="openImage(this.src)"
+            >
+            <p>Switch Configuration</p>
         </div>
 
         <!-- Image 2 -->
         <div class="gallery-item">
-            <h3>Phone SIP Configuration</h3>
-            <div class="zoom-box">
-                <a href="#view-img2">
-                    <img src="phone/configure-onphone-sip.PNG" alt="Phone SIP Settings GUI">
-                </a>
-            </div>
+            <img 
+                src="phone/configure-onphone-sip.PNG" 
+                alt="Phone SIP Configuration"
+                onclick="openImage(this.src)"
+            >
+            <p>Phone SIP Configuration</p>
         </div>
 
         <!-- Image 3 -->
         <div class="gallery-item">
-            <h3>FreePBX Phone Registered</h3>
-            <div class="zoom-box">
-                <a href="#view-img3">
-                    <img src="phone/phone-registered.confirmed.PNG" alt="FreePBX Asterisk Registration Confirmation">
-                </a>
-            </div>
+            <img 
+                src="phone/phone-registered.confirmed.PNG" 
+                alt="FreePBX Phone Registered"
+                onclick="openImage(this.src)"
+            >
+            <p>FreePBX Phone Registered</p>
         </div>
 
         <!-- Image 4 -->
         <div class="gallery-item">
-            <h3>CUCM Registered Phone</h3>
-            <div class="zoom-box">
-                <a href="#view-img4">
-                    <img src="phone/cucm-registered-phone.PNG" alt="CUCM Device Registration Status">
-                </a>
-            </div>
+            <img 
+                src="phone/cucm-registered-phone.PNG" 
+                alt="CUCM Registered Phone"
+                onclick="openImage(this.src)"
+            >
+            <p>CUCM Registered Phone</p>
         </div>
 
     </div>
 </div>
 
+<!-- IMAGE VIEWER LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeImage()">
+    <span class="close">&times;</span>
+    <img id="largeImage" src="" alt="Zoomed image" onclick="event.stopPropagation()">
+</div>
+
+<footer>
+    VoIP Lab Documentation
+</footer>
+
+<script>
+function openImage(src) {
+    document.getElementById("largeImage").src = src;
