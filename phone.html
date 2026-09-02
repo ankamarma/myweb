@@ -64,171 +64,189 @@
             font-weight: bold;
             color: #1a73e8;
         }
+        
+        /* GALLERY LAYOUT STYLING */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .gallery-item {
             background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-        .img-container {
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            border: 1px solid #eee;
-            padding: 8px;
+            border: 1px solid #ddd;
             border-radius: 6px;
-            background: #fafafa;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .img-container:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .thumbnail {
+        .gallery-item img {
             width: 100%;
-            height: 120px;
+            height: 140px;
             object-fit: cover;
             border-radius: 4px;
-            background-color: #ddd;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        .img-label {
-            font-size: 12px;
-            margin-top: 8px;
+        .gallery-item img:hover {
+            transform: scale(1.02);
+        }
+        .gallery-item p {
+            margin: 8px 0 0 0;
+            font-size: 13px;
             color: #555;
             word-break: break-all;
             font-weight: 500;
         }
-        /* Zoomable Modal Setup */
-        .modal {
+
+        /* LIGHTBOX/IMAGE VIEWER STYLING */
+        .lightbox {
             display: none;
             position: fixed;
             z-index: 1000;
-            padding-top: 50px;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
             background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
         }
-        .modal-content {
-            margin: auto;
-            display: block;
+        .lightbox.show {
+            display: flex;
+        }
+        .lightbox img {
             max-width: 90%;
             max-height: 80vh;
             border-radius: 4px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-        #caption {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-            text-align: center;
-            color: #ccc;
-            padding: 15px 0;
-            font-size: 16px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
         .close {
             position: absolute;
             top: 20px;
             right: 35px;
-            color: #f1f1f1;
+            color: #fff;
             font-size: 40px;
             font-weight: bold;
-            transition: 0.3s;
             cursor: pointer;
         }
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <h1>VoIP Infrastructure Configuration Guide</h1>
-    
-    <div class="tools-box">
-        <h3>Tools & Infrastructure Used</h3>
-        <ul>
-            <li>🛠️ Catalyst 2960 Switch</li>
-            <li>💻 VMware 7.0 Hypervisor</li>
-            <li>📞 Cisco CUCM 14.0.1.11900-132</li>
-            <li>🍃 FreePBX 17.0.32 Server</li>
-        </ul>
+    <main>
+        <h1>VoIP Infrastructure Configuration Guide</h1>
+        
+        <div class="tools-box">
+            <h3>Tools &amp; Infrastructure Used</h3>
+            <ul>
+                <li>🛠️ Catalyst 2960 Switch</li>
+                <li>💻 VMware 7.0 Hypervisor</li>
+                <li>📞 Cisco CUCM 14.0.1.11900-132</li>
+                <li>🍃 FreePBX 17.0.32 Server</li>
+                <li>☎️ Cisco Phone 8864</li>
+            </ul>
+        </div>
+
+        <h2>FreePBX Setup Procedure</h2>
+        <ol>
+            <li><strong>Install FreePBX Server:</strong> Spin up and install the FreePBX 17.0.32 software package on your virtual machine within VMware 7.0.</li>
+            <li><strong>Multiplatform Firmware:</strong> Verify the endpoint phone is configured with multiplatform firmware capabilities.</li>
+            <li><strong>Create Extension:</strong> Navigate to the main menu page path <code>Connectivity &gt; Extension</code> to construct a new line extension.</li>
+            <li><strong>Network Assignment:</strong> Input the required network topology settings directly onto the device panel layout parameters.</li>
+            <li><strong>Access Phone GUI:</strong> Open a local web browser session and navigate to the IP address of the active phone node.</li>
+            <li><strong>SIP Mapping Details:</strong> Log inside the device profile console, click <code>Advanced &gt; Voice &gt; Extension</code>, and populate the appropriate Port number, Extension Secret string, and the target SIP/FreePBX IP destination.</li>
+            <li><strong>Verify Active Registry:</strong> Review the active session statuses via the management dashboard under <code>Reports &gt; Asterisk Info</code> to confirm successful binding.</li>
+        </ol>
+
+        <h2>Cisco CUCM Setup Procedure</h2>
+        <ol>
+            <li><strong>Install CUCM node:</strong> Run the setup installer for the Cisco CUCM 14.0.1.11900-132 target image deployment inside VMware 7.0.</li>
+            <li><strong>TFTP Network Settings:</strong> Build out your local telephone system routing network and provision the designated CUCM IP value to point to your target TFTP destination.</li>
+            <li><strong>Activate Local TFTP Daemon:</strong> Because the internal TFTP engine is deactivated by default, browse to the <strong>Cisco Unified Serviceability</strong> drop-down menu, go to <code>Tools &gt; Service Activation</code>, locate the primary Feature Services group, and click start.</li>
+            <li><strong>Provision Phone Hardware:</strong> Manually append the new target terminal inside the node database, selecting the <strong>Cisco 8864</strong> appliance model alongside its matching hardware MAC Address string.</li>
+            <li><strong>Bind DN Extension:</strong> Set up and define the specific telephone extensions parameters directly underneath the Directory Number (DN) menu page.</li>
+            <li><strong>DNS-less Hostname Override:</strong> If performing your deployment without an active functional DNS cluster environment, access the <strong>Enterprise Parameters</strong> configuration layout view and substitute the alphanumeric server descriptors with the clear IPv4 address of the running CUCM core node.</li>
+        </ol>
+
+        <section>
+            <h2>Configuration Gallery</h2>
+            
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img
+                        src="phone/switch-configuration.PNG"
+                        alt="Switch Configuration Settings Interface Screen"
+                        onclick="openImage(this.src)"
+                    >
+                    <p>switch-configuration.PNG</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <img
+                        src="phone/configure-onphone-sip.PNG"
+                        alt="Phone Local SIP Endpoint GUI Mapping Parameters"
+                        onclick="openImage(this.src)"
+                    >
+                    <p>configure-onphone-sip.PNG</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <img
+                        src="phone/cucm-registered-phone.PNG"
+                        alt="CUCM Node Active Device Inventory Validation Panel"
+                        onclick="openImage(this.src)"
+                    >
+                    <p>cucm-registered-phone.PNG</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <img
+                        src="phone/phone-registered.confirmed.PNG"
+                        alt="VoIP Operational Registry Terminal Session State Success"
+                        onclick="openImage(this.src)"
+                    >
+                    <p>phone-registered.confirmed.PNG</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- IMAGE VIEWER LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeImage()">
+        <span class="close">&times;</span>
+        <img id="largeImage" src="" alt="Zoomed image" onclick="event.stopPropagation()">
     </div>
 
-    <h2>FreePBX Setup Procedure</h2>
-    <ol>
-        <li><strong>Install FreePBX Server:</strong> Spin up and install the FreePBX 17.0.32 software package on your virtual machine within VMware 7.0.</li>
-        <li><strong>Multiplatform Firmware:</strong> Verify the endpoint phone is configured with multiplatform firmware capabilities.</li>
-        <li><strong>Create Extension:</strong> Navigate to the main menu page path <code>Connectivity &gt; Extensions</code> to construct a new line extension.</li>
-        <li><strong>Network Assignment:</strong> Input the required network topology settings directly onto the device panel layout parameters.</li>
-        <li><strong>Access Phone GUI:</strong> Open a local web browser session and navigate to the IP address of the active phone node.</li>
-        <li><strong>SIP Mapping Details:</strong> Log inside the device profile console, click <code>Advanced &gt; Voice &gt; Extension</code>, and populate the appropriate Port number, Extension Secret string, and the target SIP/FreePBX IP destination.</li>
-        <li><strong>Verify Active Registry:</strong> Review the active session statuses via the management dashboard under <code>Reports &gt; Asterisk Info</code> to confirm successful binding.</li>
-    </ol>
-
-    <h2>Cisco CUCM Setup Procedure</h2>
-    <ol>
-        <li><strong>Install CUCM node:</strong> Run the setup installer for the Cisco CUCM 14.0.1.11900-132 target image deployment inside VMware 7.0.</li>
-        <li><strong>TFTP Network Settings:</strong> Build out your local telephone system routing network and provision the designated CUCM IP value to point to your target TFTP destination.</li>
-        <li><strong>Activate Local TFTP Daemon:</strong> Because the internal TFTP engine is deactivated by default, browse to the <strong>Cisco Unified Serviceability</strong> drop-down menu, go to <code>Tools &gt; Service Activation</code>, locate the primary Feature Services group, and click start.</li>
-        <li><strong>Provision Phone Hardware:</strong> Manually append the new target terminal inside the node database (e.g., Cisco 8864 appliance) alongside its matching hardware MAC Address string.</li>
-        <li><strong>Bind DN Extension:</strong> Set up and define the specific telephone extensions parameters directly underneath the Directory Number (DN) menu page.</li>
-        <li><strong>DNS-less Hostname Override:</strong> If performing your deployment without an active functional DNS cluster environment, access the <strong>Enterprise Parameters</strong> configuration layout view and substitute the alphanumeric server descriptors with the clear IPv4 address of the running CUCM core node.</li>
-    </ol>
-
-    <h2>Configuration Graphics &amp; Verification Panel</h2>
-    <p><em>Select any visualization tile below to open the native image zoom view layout modal interface.</em></p>
-    
-    <div class="gallery">
-        <div class="img-container" onclick="openModal('myweb/phone/switch-configuration.PNG', 'Catalyst 2960 Switch Local Configuration Layout Profile')">
-            <img class="thumbnail" src="myweb/phone/switch-configuration.PNG" alt="Switch Configuration Settings Interface Screen">
-            <div class="img-label">switch-configuration.PNG</div>
-        </div>
-        
-        <div class="img-container" onclick="openModal('myweb/phone/configure-onphone-sip.PNG', 'SIP Parameter Context Bindings on Phone Advanced Web GUI Panel')">
-            <img class="thumbnail" src="myweb/phone/configure-onphone-sip.PNG" alt="Phone Local SIP Endpoint GUI Mapping Parameters">
-            <div class="img-label">configure-onphone-sip.PNG</div>
-        </div>
-        
-        <div class="img-container" onclick="openModal('myweb/phone/cucm-registered-phone.PNG', 'Cisco Unified Communications Manager Node Endpoint Registration Panel')">
-            <img class="thumbnail" src="myweb/phone/cucm-registered-phone.PNG" alt="CUCM Node Active Device Inventory Validation Panel">
-            <div class="img-label">cucm-registered-phone.PNG</div>
-        </div>
-        
-        <div class="img-container" onclick="openModal('myweb/phone/phone-registered.confirmed.PNG', 'Active VoIP Registry Terminal Operational Validation State')">
-            <img class="thumbnail" src="myweb/phone/phone-registered.confirmed.PNG" alt="VoIP Operational Registry Terminal Session State Success">
-            <div class="img-label">phone-registered.confirmed.PNG</div>
-        </div>
-    </div>
-
-    <!-- Zoom Modal Framework Elements -->
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalTargetImg" alt="VoIP Deployment Step Diagram Expansion Modal Graphic View">
-        <div id="caption"></div>
-    </div>
+    <footer>
+        VoIP Lab Documentation
+    </footer>
 
     <script>
-        function openModal(imgSrc, captionText) {
-            var modal = document.getElementById("imageModal");
-            var modalImg = document.getElementById("modalTargetImg");
-            var caption = document.getElementById("caption");
-            
-            modal.style.display = "block";
-            modalImg.src = imgSrc;
-            caption.innerHTML = captionText;
+        function openImage(src) {
+            document.getElementById("largeImage").src = src;
+            document.getElementById("lightbox").classList.add("show");
         }
 
-        function closeModal() {
-            document.getElementById("imageModal").style.display = "none";
+        function closeImage() {
+            document.getElementById("lightbox").classList.remove("show");
         }
+        
+        // Let escape key close lightbox view modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeImage();
+            }
+        });
+    </script>
 
-        // Close layout element target boundaries on external panel wrapper space click event instances
+</body>
+</html>
