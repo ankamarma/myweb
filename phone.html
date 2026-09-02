@@ -158,23 +158,23 @@
 
         <h2>FreePBX Setup Procedure</h2>
         <ol>
-            <li><strong>Install FreePBX Server:</strong> Spin up and install the FreePBX 17.0.32 software package on your virtual machine within VMware 7.0.</li>
-            <li><strong>Multiplatform Firmware:</strong> Verify the endpoint phone is configured with multiplatform firmware capabilities.</li>
-            <li><strong>Create Extension:</strong> Navigate to the main menu page path <code>Connectivity &gt; Extension</code> to construct a new line extension.</li>
-            <li><strong>Network Assignment:</strong> Input the required network topology settings directly onto the device panel layout parameters.</li>
-            <li><strong>Access Phone GUI:</strong> Open a local web browser session and navigate to the IP address of the active phone node.</li>
-            <li><strong>SIP Mapping Details:</strong> Log inside the device profile console, click <code>Advanced &gt; Voice &gt; Extension</code>, and populate the appropriate Port number, Extension Secret string, and the target SIP/FreePBX IP destination.</li>
-            <li><strong>Verify Active Registry:</strong> Review the active session statuses via the management dashboard under <code>Reports &gt; Asterisk Info</code> to confirm successful binding.</li>
+            <li>install freepbx server</li>
+            <li>Phone shoul be multiplatform</li>
+            <li>Make extension by going to Connectivity&gt;extension</li>
+            <li>put network info on phone.</li>
+            <li>Access the webgui of the phone</li>
+            <li>Put the port number, secret from the extension during extension creation SIP/FREEPBX IP on phone webgui on advanced&gt;voice&gt;extension</li>
+            <li>Check whether it is registered under report&gt;asterick info</li>
         </ol>
 
         <h2>Cisco CUCM Setup Procedure</h2>
         <ol>
-            <li><strong>Install CUCM node:</strong> Run the setup installer for the Cisco CUCM 14.0.1.11900-132 target image deployment inside VMware 7.0.</li>
-            <li><strong>TFTP Network Settings:</strong> Build out your local telephone system routing network and provision the designated CUCM IP value to point to your target TFTP destination.</li>
-            <li><strong>Activate Local TFTP Daemon:</strong> Because the internal TFTP engine is deactivated by default, browse to the <strong>Cisco Unified Serviceability</strong> drop-down menu, go to <code>Tools &gt; Service Activation</code>, locate the primary Feature Services group, and click start.</li>
-            <li><strong>Provision Phone Hardware:</strong> Manually append the new target terminal inside the node database, selecting the <strong>Cisco 8864</strong> appliance model alongside its matching hardware MAC Address string.</li>
-            <li><strong>Bind DN Extension:</strong> Set up and define the specific telephone extensions parameters directly underneath the Directory Number (DN) menu page.</li>
-            <li><strong>DNS-less Hostname Override:</strong> If performing your deployment without an active functional DNS cluster environment, access the <strong>Enterprise Parameters</strong> configuration layout view and substitute the alphanumeric server descriptors with the clear IPv4 address of the running CUCM core node.</li>
+            <li>install cucm</li>
+            <li>set up phone network and put cucm ip on TFTP</li>
+            <li>By default, TFTP is not deactivated activate it by visiting to cisco servicebility and under tools select service activation and after that under feature service start it.</li>
+            <li>Add and select phone eg 8864 and mac address</li>
+            <li>add extension number under DN</li>
+            <li>if without dns, go to enterprise parameter and replace the ip of cucm that has alpbaet name and picture add at the end. make picture zoomable when click on them</li>
         </ol>
 
         <section>
@@ -184,7 +184,7 @@
                 <div class="gallery-item">
                     <img
                         src="phone/switch-configuration.PNG"
-                        alt="Switch Configuration Settings Interface Screen"
+                        alt="Switch Configuration"
                         onclick="openImage(this.src)"
                     >
                     <p>switch-configuration.PNG</p>
@@ -193,7 +193,7 @@
                 <div class="gallery-item">
                     <img
                         src="phone/configure-onphone-sip.PNG"
-                        alt="Phone Local SIP Endpoint GUI Mapping Parameters"
+                        alt="Configure On-Phone SIP"
                         onclick="openImage(this.src)"
                     >
                     <p>configure-onphone-sip.PNG</p>
@@ -202,7 +202,7 @@
                 <div class="gallery-item">
                     <img
                         src="phone/cucm-registered-phone.PNG"
-                        alt="CUCM Node Active Device Inventory Validation Panel"
+                        alt="CUCM Registered Phone"
                         onclick="openImage(this.src)"
                     >
                     <p>cucm-registered-phone.PNG</p>
@@ -211,7 +211,7 @@
                 <div class="gallery-item">
                     <img
                         src="phone/phone-registered.confirmed.PNG"
-                        alt="VoIP Operational Registry Terminal Session State Success"
+                        alt="Phone Registered Confirmed"
                         onclick="openImage(this.src)"
                     >
                     <p>phone-registered.confirmed.PNG</p>
