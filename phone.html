@@ -94,11 +94,10 @@
             font-size: 1rem;
             color: var(--primary-color);
         }
+        /* Click-to-zoom Lightbox Effect Styling */
         .zoom-box {
-            overflow: hidden;
             position: relative;
             display: inline-block;
-            cursor: zoom-in;
             border-radius: 4px;
             border: 1px solid #ddd;
             width: 100%;
@@ -107,11 +106,51 @@
         .zoom-box img {
             width: 100%;
             height: auto;
-            transition: transform 0.3s ease;
             display: block;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-        .zoom-box:hover img {
-            transform: scale(1.5);
+        .zoom-box img:hover {
+            opacity: 0.9;
+        }
+        /* Lightbox Target Overlay states */
+        .lightbox-target {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-target img {
+            max-width: 90%;
+            max-height: 90%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .lightbox-target:target {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .lightbox-target:target img {
+            transform: scale(1);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: zoom-out;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -127,7 +166,8 @@
             <li>Hardware Switch: Catalyst 2960</li>
             <li>Hypervisor Platform: VMware 7.0</li>
             <li>PBX Server 1: FreePBX 17.0.32</li>
-            <li>PBX Server 2: CUCM 14.0.1.11900-132</li>
+            <li>PBX Server 2: CUCM 14.0.1.11900-132 (Single Instance Node)</li>
+            <li>Endpoint Device: Cisco IP Phone 8864</li>
         </ul>
     </div>
 
@@ -143,11 +183,11 @@
         <li><strong>Create a new extension profile.</strong>
             <span class="step-detail">Navigate to <em>Connectivity &gt; Extensions</em> within the FreePBX administration panel.</span>
         </li>
-        <li><strong>Configure network information on the phone.</strong>
-            <span class="step-detail">Assign local IP, subnet, gateway, and VLAN routing settings via the Catalyst 2960 infrastructure.</span>
+        <li><strong>Configure network information manually on the phone.</strong>
+            <span class="step-detail">Assign local IP, subnet, gateway, and VLAN routing settings via the Catalyst 2960 infrastructure without using DHCP.</span>
         </li>
         <li><strong>Access the phone's web GUI.</strong>
-            <span class="step-detail">Input the local IP address of your endpoint device into a secure web browser.</span>
+            <span class="step-detail">Input the manually configured local IP address of your endpoint device into a secure web browser.</span>
         </li>
         <li><strong>Apply SIP credentials on the phone GUI.</strong>
             <span class="step-detail">Navigate to <em>Advanced &gt; Voice &gt; Extension</em>. Input your port details, target FreePBX server IP, and the custom secret key created with the extension.</span>
@@ -160,17 +200,17 @@
     <!-- CUCM Section -->
     <h2>2. Cisco Unified Communications Manager (CUCM) Deployment Steps</h2>
     <ol>
-        <li><strong>Install the CUCM 14.0.1.11900-132 server.</strong>
-            <span class="step-detail">Provision and build the node cluster machine using your VMware 7.0 virtualization environment.</span>
+        <li><strong>Install the single-node CUCM 14.0.1.11900-132 server.</strong>
+            <span class="step-detail">Provision and build the standalone machine instance using your VMware 7.0 virtualization environment.</span>
         </li>
-        <li><strong>Set up the voice network and map TFTP.</strong>
-            <span class="step-detail">Provision network routing and pass the CUCM IP address via DHCP Option 150 to endpoint hardware.</span>
+        <li><strong>Set up the voice network and manually point to TFTP.</strong>
+            <span class="step-detail">Provision network routing on the Catalyst 2960 switch and manually configure the CUCM IP address as the TFTP server address directly on the Cisco 8864 phone layout.</span>
         </li>
         <li><strong>Activate the TFTP feature service.</strong>
-            <span class="step-detail">Navigate to <em>Cisco Unified Serviceability &gt; Tools &gt; Service Activation</em>. Locate the system features and turn on the Cisco TFTP option.</span>
+            <span class="step-detail">By default, the TFTP service is deactivated. Enable it by navigating to <em>Cisco Unified Serviceability &gt; Tools &gt; Service Activation</em>, locating the feature services, and starting the Cisco TFTP service.</span>
         </li>
         <li><strong>Add the target endpoint hardware.</strong>
-            <span class="step-detail">Select your phone model hardware tier (e.g., Cisco 8864) and manually link the unit's unique physical MAC address.</span>
+            <span class="step-detail">Select your phone model hardware tier (Cisco 8864) and manually link the unit's unique physical MAC address.</span>
         </li>
         <li><strong>Assign a Directory Number (DN).</strong>
             <span class="step-detail">Bind your target numeric extension pattern directly under the active DN structural line parameters.</span>
@@ -182,13 +222,15 @@
 
     <!-- Reference Gallery at the bottom -->
     <h2 class="gallery-title">Deployment Diagrams & Configuration References</h2>
+    <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -10px;">Click any image to view it full screen</p>
+    
     <div class="image-gallery">
         
         <!-- Image 1 -->
         <div class="gallery-item">
             <h3>Switch Configuration</h3>
             <div class="zoom-box">
-                <img src="phone/switch-configuration.PNG" alt="Catalyst 2960 Switch Configuration">
+                <a href="#img1"><img src="phone/switch-configuration.PNG" alt="Catalyst 2960 Switch Configuration"></a>
             </div>
         </div>
 
@@ -196,7 +238,7 @@
         <div class="gallery-item">
             <h3>Phone SIP Configuration</h3>
             <div class="zoom-box">
-                <img src="phone/configure-onphone-sip.PNG" alt="Phone SIP Settings GUI">
+                <a href="#img2"><img src="phone/configure-onphone-sip.PNG" alt="Phone SIP Settings GUI"></a>
             </div>
         </div>
 
@@ -204,7 +246,7 @@
         <div class="gallery-item">
             <h3>FreePBX Phone Registered</h3>
             <div class="zoom-box">
-                <img src="phone/phone-registered.confirmed.PNG" alt="FreePBX Asterisk Registration Confirmation">
+                <a href="#img3"><img src="phone/phone-registered.confirmed.PNG" alt="FreePBX Asterisk Registration Confirmation"></a>
             </div>
         </div>
 
@@ -212,12 +254,13 @@
         <div class="gallery-item">
             <h3>CUCM Registered Phone</h3>
             <div class="zoom-box">
-                <img src="phone/cucm-registered-phone.PNG" alt="CUCM Device Registration Status">
+                <a href="#img4"><img src="phone/cucm-registered-phone.PNG" alt="CUCM Device Registration Status"></a>
             </div>
         </div>
 
     </div>
 </div>
 
-</body>
-</html>
+<!-- Lightbox Click-to-Zoom Targets -->
+<div id="img1" class="lightbox-target">
+    <a href="#close" class="lightbox-close"></a>
