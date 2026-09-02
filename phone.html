@@ -70,3 +70,121 @@
             font-size: 0.95rem;
             margin-top: 4px;
         }
+        
+        /* New Zoomable Image and Lightbox Styles */
+        .topology {
+            text-align: center;
+            margin: 25px 0;
+        }
+        .topology img {
+            max-width: 100%;
+            max-height: 500px;
+            cursor: zoom-in;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .hint {
+            color: #777;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .lightbox.show {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 95%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VoIP Deployment Guide: FreePBX & CUCM</h1>
+
+    <!-- Topology Section with Lightbox Interaction -->
+    <h2>1. Network Topology Diagram</h2>
+    <div class="topology">
+        <img src="images/voip-topology.png" alt="VoIP Integration Topology" onclick="openImage(this.src)">
+        <div class="hint">Click the topology to zoom.</div>
+    </div>
+
+    <h2>2. System Components</h2>
+    <div class="component-list">
+        <h3>Deployment Requirements</h3>
+        <ul>
+            <li>FreePBX Server (Asterisk 16+ / Chan_PJSIP driver)</li>
+            <li>Cisco Unified Communications Manager (CUCM v11.5+)</li>
+            <li>Configured network routing with open SIP (5060/5061) and RTP (10000-20000) ports</li>
+        </ul>
+    </div>
+
+    <h2>3. Configuration Steps</h2>
+    <ol>
+        <li>
+            <strong>Configure FreePBX SIP Trunk:</strong>
+            <span class="step-detail">Create a new Chan_PJSIP trunk targeting the primary CUCM node IP address. Set the context to 'from-internal'.</span>
+        </li>
+        <li>
+            <strong>Configure CUCM SIP Trunk Security Profile:</strong>
+            <span class="step-detail">Navigate to System &gt; Security &gt; SIP Trunk Security Profile. Create a non-secure or secure profile matching your transport layer choice.</span>
+        </li>
+        <li>
+            <strong>Define Inbound and Outbound Dial Plans:</strong>
+            <span class="step-detail">Build patterns to seamlessly steer traffic across matching destination numbers. Route 4-digit strings respectively between architectures.</span>
+        </li>
+    </ol>
+</div>
+
+<!-- Reusable Lightbox Component -->
+<div id="lightbox" class="lightbox" onclick="closeImage()">
+    <span class="close" onclick="event.stopPropagation(); closeImage();">&times;</span>
+    <img id="lightbox-img" src="" alt="Zoomed View">
+</div>
+
+<script>
+    function openImage(src) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        lightboxImg.src = src;
+        lightbox.classList.add('show');
+    }
+
+    function closeImage() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.remove('show');
+    }
+
+    // Escape key handling to exit lightbox view cleanly
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImage();
+        }
+    });
+</script>
+
+</body>
+</html>
