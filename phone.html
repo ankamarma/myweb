@@ -1,1 +1,149 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP Deployment Guide: FreePBX & CUCM</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --card-bg: #fff;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+        .step-detail {
+            color: #555;
+            display: block;
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 40px 0;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .image-container h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .zoom-box {
+            overflow: hidden;
+            position: relative;
+            display: inline-block;
+            cursor: zoom-in;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .zoom-box img {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+        .zoom-box:hover img {
+            transform: scale(1.5);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VoIP Deployment Guide</h1>
+
+    <!-- FreePBX Section -->
+    <h2>1. FreePBX Deployment Steps</h2>
+    <ol>
+        <li><strong>Install the FreePBX server.</strong>
+            <span class="step-detail">Set up the base operating system and FreePBX platform on your dedicated hardware or virtual machine.</span>
+        </li>
+        <li><strong>Ensure the phone is multiplatform.</strong>
+            <span class="step-detail">Verify that your hardware supports open SIP standards to communicate with FreePBX.</span>
+        </li>
+        <li><strong>Create a new extension.</strong>
+            <span class="step-detail">Navigate to <em>Connectivity &gt; Extensions</em> in the FreePBX web interface to add a new device profile.</span>
+        </li>
+        <li><strong>Configure network information on the phone.</strong>
+            <span class="step-detail">Assign a valid IP address, subnet mask, and gateway directly to your physical or software phone.</span>
+        </li>
+        <li><strong>Access the phone's web GUI.</strong>
+            <span class="step-detail">Open a web browser and enter the IP address of the phone to access its configuration portal.</span>
+        </li>
+        <li><strong>Configure SIP settings on the phone.</strong>
+            <span class="step-detail">Navigate to <em>Advanced &gt; Voice &gt; Extension</em>. Enter the port number, the secret (password) generated during extension creation, and the FreePBX server IP.</span>
+        </li>
+        <li><strong>Verify registration status.</strong>
+            <span class="step-detail">Go to <em>Reports &gt; Asterisk Info</em> in FreePBX to confirm the phone has successfully registered.</span>
+        </li>
+    </ol>
+
+    <!-- CUCM Section -->
+    <h2>2. Cisco Unified Communications Manager (CUCM) Deployment Steps</h2>
+    <ol>
+        <li><strong>Install the CUCM server.</strong>
+            <span class="step-detail">Complete the base installation of the Cisco Unified Communications Manager cluster.</span>
+        </li>
+        <li><strong>Configure the network and TFTP settings.</strong>
+            <span class="step-detail">Set up the phone network parameters and ensure the CUCM IP address is provisioned as the TFTP server option (Option 150) in your DHCP scope.</span>
+        </li>
+        <li><strong>Activate the TFTP service.</strong>
+            <span class="step-detail">By default, the TFTP service is deactivated. Enable it by navigating to <em>Cisco Unified Serviceability &gt; Tools &gt; Service Activation</em>, locating the feature services, and starting the Cisco TFTP service.</span>
+        </li>
+        <li><strong>Add the physical device.</strong>
+            <span class="step-detail">Select your phone model (e.g., Cisco 8864) and enter its unique MAC address into the system.</span>
+        </li>
+        <li><strong>Assign a Directory Number (DN).</strong>
+            <span class="step-detail">Add the desired extension number under the DN configuration line for the device.</span>
+        </li>
+        <li><strong>Configure IP-based routing (Non-DNS environments).</strong>
+            <span class="step-detail">If you are operating without a DNS server, navigate to <em>Enterprise Parameters</em> and replace any alphanumeric hostnames with the literal IP address of your CUCM server.</span>
+        </li>
+    </ol>
+
+    <!-- Reference Diagrams (Placeholder) -->
+    <div class="image-container">
+        <h3>Deployment Diagrams & Reference Images</h3>
+        <p>Hover over the image to zoom in on configuration details.</p>
+        <div class="zoom-box">
+            <!-- Replace 'placeholder.jpg' with your actual image path or URL -->
+            <img src="placeholder.jpg" alt="Network deployment and configuration diagram">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
