@@ -158,23 +158,23 @@
 
         <h2>FreePBX Setup Procedure</h2>
         <ol>
-            <li>install freepbx server</li>
-            <li>Phone shoul be multiplatform</li>
-            <li>Make extension by going to Connectivity&gt;extension</li>
-            <li>put network info on phone.</li>
-            <li>Access the webgui of the phone</li>
-            <li>Put the port number, secret from the extension during extension creation SIP/FREEPBX IP on phone webgui on advanced&gt;voice&gt;extension</li>
-            <li>Check whether it is registered under report&gt;asterick info</li>
+            <li>Install the FreePBX server.</li>
+            <li>Ensure the phone is using multiplatform firmware.</li>
+            <li>Create an extension by navigating to <code>Connectivity &gt; Extensions</code>.</li>
+            <li>Configure the network settings on the phone.</li>
+            <li>Access the web GUI of the phone.</li>
+            <li>On the phone web GUI, navigate to <code>Advanced &gt; Voice &gt; Extension</code>. Enter the port number, the secret generated during extension creation, and the SIP/FreePBX IP address.</li>
+            <li>Verify the registration status under <code>Reports &gt; Asterisk Info</code>.</li>
         </ol>
 
         <h2>Cisco CUCM Setup Procedure</h2>
         <ol>
-            <li>install cucm</li>
-            <li>set up phone network and put cucm ip on TFTP</li>
-            <li>By default, TFTP is not deactivated activate it by visiting to cisco servicebility and under tools select service activation and after that under feature service start it.</li>
-            <li>Add and select phone eg 8864 and mac address</li>
-            <li>add extension number under DN</li>
-            <li>if without dns, go to enterprise parameter and replace the ip of cucm that has alpbaet name and picture add at the end. make picture zoomable when click on them</li>
+            <li>Install CUCM.</li>
+            <li>Set up the phone network and assign the CUCM IP address as the TFTP server.</li>
+            <li>By default, TFTP service is deactivated. Activate it by navigating to <strong>Cisco Unified Serviceability</strong>. Under <code>Tools</code>, select <code>Service Activation</code>, find the feature service, and start it.</li>
+            <li>Add and select the phone (e.g., Cisco 8864) and enter its MAC address.</li>
+            <li>Add the extension number under Directory Number (DN).</li>
+            <li>If deploying without DNS, go to <code>Enterprise Parameters</code> and replace the alphabetical CUCM hostnames with the actual CUCM IP address. Click the image below to view details.</li>
         </ol>
 
         <section>
@@ -236,14 +236,17 @@
             document.getElementById("lightbox").classList.add("show");
         }
 
-        function closeImage() {
+        function closeModalView() {
             document.getElementById("lightbox").classList.remove("show");
         }
         
-        // Let escape key close lightbox view modal
+        function closeImage() {
+            closeModalView();
+        }
+        
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                closeImage();
+                closeModalView();
             }
         });
     </script>
