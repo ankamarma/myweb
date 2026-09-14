@@ -1,1 +1,459 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Cisco WLC Wireless Setup Guide</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        background: #f5f7fa;
+        color: #222;
+    }
+
+    header {
+        background: #0b3d62;
+        color: white;
+        padding: 35px 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0 0 8px;
+    }
+
+    header p {
+        margin: 0;
+        color: #dceaf5;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 25px 20px;
+    }
+
+    section {
+        background: white;
+        margin-bottom: 20px;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    h2 {
+        color: #0b3d62;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 8px;
+    }
+
+    h3 {
+        color: #174f78;
+    }
+
+    ol,
+    ul {
+        padding-left: 25px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    code {
+        background: #eef2f5;
+        padding: 3px 6px;
+        border-radius: 4px;
+        color: #333;
+    }
+
+    .note {
+        background: #eef7ff;
+        border-left: 4px solid #0b6fa4;
+        padding: 12px 15px;
+        margin: 15px 0;
+    }
+
+    .warning {
+        background: #fff8e6;
+        border-left: 4px solid #e0a100;
+        padding: 12px 15px;
+        margin: 15px 0;
+    }
+
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .gallery-item {
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        background: #eee;
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: transform 0.2s ease;
+    }
+
+    .gallery-item img:hover {
+        transform: scale(1.02);
+    }
+
+    .gallery-item p {
+        margin: 10px 0 0;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    /* Full-screen image viewer */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+    }
+
+    .modal img {
+        max-width: 95%;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 5px;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    footer {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 15px;
+        }
+
+        section {
+            padding: 18px;
+        }
+
+        .gallery {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+</head> <body> <header> <h1>Cisco WLC Wireless Setup Guide</h1> <p>Cisco Wireless LAN Controller, Access Point, VLAN, SSID, and RADIUS Configuration</p> </header> <div class="container">
+<!-- Tools Used -->
+<section>
+    <h2>Tools Used</h2>
+
+    <ol>
+        <li>Cisco WLC 4504</li>
+        <li>Cisco Aironet AIR-CAP2602I-A-K9 Access Point</li>
+        <li>Distribution Switch</li>
+        <li>Access Switch</li>
+        <li>DHCP Server</li>
+        <li>Active Directory (AD), DNS, and NPS/RADIUS Server</li>
+    </ol>
+</section>
+
+<!-- Requirements -->
+<section>
+    <h2>Requirements</h2>
+
+    <ol>
+        <li>
+            <strong>DHCP Server:</strong>
+            A DHCP server is required for the wireless network.
+            The DHCP server must be reachable from VLAN 10 and VLAN 20,
+            with the appropriate DHCP scopes configured.
+        </li>
+
+        <li>
+            <strong>Active Directory, DNS, and NPS/RADIUS:</strong>
+            Active Directory, DNS, and Network Policy Server (NPS) are required
+            for RADIUS authentication and centralized wireless user authentication.
+        </li>
+
+        <li>
+            <strong>Distribution and Access Switches:</strong>
+            The WLC should be connected to the network through a trunk port.
+            The Access Point should be connected to an appropriate access port
+            on the access switch.
+        </li>
+
+        <li>
+            <strong>VLANs:</strong>
+            The required VLANs must be created and available across the network.
+            In this example, VLAN 10 is used for management/internal traffic
+            and VLAN 20 is used for the Guest wireless network.
+        </li>
+
+        <li>
+            <strong>Network Connectivity:</strong>
+            Routing, gateways, DHCP, DNS, and RADIUS connectivity must be working
+            before testing the wireless network.
+        </li>
+    </ol>
+</section>
+
+<!-- WLC Setup -->
+<section>
+    <h2>WLC Setup</h2>
+
+    <ol>
+        <li>
+            <strong>Assign an IP address to the WLC management interface.</strong>
+            Configure the management IP address, subnet mask, default gateway,
+            and other required network settings.
+        </li>
+
+        <li>
+            <strong>Connect the WLC to the switch.</strong>
+            Connect the WLC to the appropriate switch trunk port and make sure
+            the required VLANs are allowed on the trunk.
+        </li>
+
+        <li>
+            <strong>Access the WLC Web GUI.</strong>
+            After confirming network connectivity, access the WLC management
+            interface using a web browser.
+        </li>
+
+        <li>
+            <strong>Connect the Access Point.</strong>
+            Connect the AP to the access switch. The AP should obtain an IP address
+            through DHCP and attempt to discover and join the WLC.
+        </li>
+
+        <li>
+            <strong>Verify the AP connection.</strong>
+            Log in to the WLC and verify that the AP has successfully joined.
+        </li>
+
+        <li>
+            <strong>Troubleshoot if the AP does not join.</strong>
+            Check DHCP, VLAN configuration, IP connectivity, AP discovery,
+            compatibility, and WLC settings. Review the AP join status and
+            WLC logs for additional information.
+        </li>
+
+        <li>
+            <strong>Configure AP policies.</strong>
+            Once the AP has joined, configure the AP settings and policies
+            according to the wireless network requirements.
+        </li>
+
+        <li>
+            <strong>Confirm the AP is listed.</strong>
+            A successfully joined AP should appear in the WLC's AP management
+            or wireless AP list.
+        </li>
+    </ol>
+</section>
+
+<!-- Interface Setup -->
+<section>
+    <h2>Configure the Wireless Interface</h2>
+
+    <ol>
+        <li>
+            Log in to the WLC Web GUI.
+        </li>
+
+        <li>
+            Navigate to:
+            <code>Controller &gt; Interfaces</code>
+        </li>
+
+        <li>
+            Click <strong>New</strong> to create a new dynamic interface.
+        </li>
+
+        <li>
+            Enter the interface information. Example:
+            <ul>
+                <li><strong>Interface Name:</strong> Guest</li>
+                <li><strong>VLAN ID:</strong> 20</li>
+                <li><strong>IP Address:</strong> Appropriate VLAN 20 address</li>
+                <li><strong>Subnet Mask:</strong> VLAN 20 subnet mask</li>
+                <li><strong>Default Gateway:</strong> VLAN 20 gateway</li>
+            </ul>
+        </li>
+
+        <li>
+            Save the configuration.
+        </li>
+    </ol>
+
+    <div class="note">
+        The WLC dynamic interface maps the wireless SSID to the appropriate VLAN.
+        In this example, the Guest SSID is mapped to VLAN 20.
+    </div>
+</section>
+
+<!-- SSID Setup -->
+<section>
+    <h2>Configure the Wi-Fi SSID</h2>
+
+    <ol>
+        <li>
+            Navigate to:
+            <code>WLANs</code>
+        </li>
+
+        <li>
+            Create a new WLAN.
+        </li>
+
+        <li>
+            Enter the WLAN information. Example:
+            <ul>
+                <li><strong>Profile Name:</strong> Guest</li>
+                <li><strong>SSID:</strong> Guest</li>
+            </ul>
+        </li>
+
+        <li>
+            Enable the WLAN.
+        </li>
+
+        <li>
+            Select the dynamic interface created earlier.
+            For example, select the <strong>Guest</strong> interface
+            associated with <strong>VLAN 20</strong>.
+        </li>
+
+        <li>
+            Save the WLAN configuration.
+        </li>
+    </ol>
+</section>
+
+<!-- Security -->
+<section>
+    <h2>Configure Wi-Fi Security and RADIUS</h2>
+
+    <ol>
+        <li>
+            Open the security settings for the WLAN.
+        </li>
+
+        <li>
+            Under Layer 2 security, select the appropriate
+            <strong>WPA/WPA2</strong> security option.
+        </li>
+
+        <li>
+            Enable the required encryption method, such as
+            <strong>AES</strong>, and select the appropriate WPA2 policy.
+        </li>
+
+        <li>
+            Configure RADIUS/AAA authentication for centralized authentication.
+        </li>
+
+        <li>
+            Add the RADIUS server under:
+            <code>Security &gt; AAA &gt; RADIUS &gt; Authentication</code>
+        </li>
+
+        <li>
+            Enter the RADIUS server IP address and shared secret.
+        </li>
+
+        <li>
+            Return to the WLAN security settings and select the configured
+            RADIUS authentication server under the AAA server settings.
+        </li>
+
+        <li>
+            Save and apply the configuration.
+        </li>
+    </ol>
+
+    <div class="warning">
+        <strong>Important:</strong>
+        The RADIUS shared secret configured on the WLC must match the shared
+        secret configured for the WLC as a RADIUS client on the NPS server.
+    </div>
+</section>
+
+<!-- Testing -->
+<section>
+    <h2>Testing and Verification</h2>
+
+    <ol>
+        <li>
+            Connect a wireless client to the new SSID.
+        </li>
+
+        <li>
+            Verify that the client successfully authenticates.
+        </li>
+
+        <li>
+            Verify that the client receives an IP address from the correct
+            DHCP scope.
+        </li>
+
+        <li>
+            Confirm that the client is placed in the correct VLAN.
+        </li>
+
+        <li>
+            Test connectivity to the required network resources.
+        </li>
+
+        <li>
+            Verify the connected client in the WLC wireless client list.
+        </li>
+
+        <li>
+            If authentication fails, check the NPS logs, RADIUS configuration,
+            shared secret, user/group permissions, and WLAN security settings.
+        </li>
+    </ol>
+</section>
+
+<!-- Evidence -->
+<section>
+    <h2>Configuration Evidence</h2>
+
+    <p>
+        The following screenshots provide evidence of the wireless configuration.
+        Click any image to open it in a larger view.
+    </p>
+
+    <div class="gallery">
+
+        <div class="gallery-item">
+            <img src="wireless/wlc%20overview.PNG"
+                 alt="WLC Overview"
+                 onclick="
