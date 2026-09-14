@@ -441,19 +441,64 @@
         </li>
     </ol>
 </section>
+<section> <h2>Configuration Evidence</h2>
+<p>
+    The following screenshots provide evidence of the wireless configuration.
+    Click any image to view it in full size.
+</p>
 
-<!-- Evidence -->
-<section>
-    <h2>Configuration Evidence</h2>
+<div class="gallery">
 
-    <p>
-        The following screenshots provide evidence of the wireless configuration.
-        Click any image to open it in a larger view.
-    </p>
+    <div class="gallery-item">
+        <img src="./wireless/wlc%20overview.PNG"
+             alt="WLC Overview"
+             onclick="openImage(this.src, this.alt)">
+        <p>WLC Overview</p>
+    </div>
 
-    <div class="gallery">
+    <div class="gallery-item">
+        <img src="./wireless/interface-ip-wlc.PNG"
+             alt="WLC Interface IP Configuration"
+             onclick="openImage(this.src, this.alt)">
+        <p>WLC Interface IP Configuration</p>
+    </div>
 
-        <div class="gallery-item">
-            <img src="wireless/wlc%20overview.PNG"
-                 alt="WLC Overview"
-                 onclick="
+    <div class="gallery-item">
+        <img src="./wireless/wifi-vlans.PNG"
+             alt="Wireless VLAN Configuration"
+             onclick="openImage(this.src, this.alt)">
+        <p>Wireless VLAN Configuration</p>
+    </div>
+
+    <div class="gallery-item">
+        <img src="./wireless/wifi-list.PNG"
+             alt="Wireless SSID List"
+             onclick="openImage(this.src, this.alt)">
+        <p>Wireless SSID List</p>
+    </div>
+
+    <div class="gallery-item">
+        <img src="./wireless/radius-server.PNG"
+             alt="RADIUS Server Configuration"
+             onclick="openImage(this.src, this.alt)">
+        <p>RADIUS Server Configuration</p>
+    </div>
+
+    <div class="gallery-item">
+        <img src="./wireless/ap-list.PNG"
+             alt="Access Point List"
+             onclick="openImage(this.src, this.alt)">
+        <p>Access Point List</p>
+    </div>
+
+    <div class="gallery-item">
+        <img src="./wireless/wifi-client-list.PNG"
+             alt="Wireless Client List"
+             onclick="openImage(this.src, this.alt)">
+        <p>Wireless Client List</p>
+    </div>
+
+</div>
+
+</section> <!-- Full-size image viewer --> <div id="imageModal" class="modal" onclick="closeImage()"> <span class="close">&times;</span> <img id="modalImage" src="" alt=""> </div> <script> function openImage(src, alt) { const modal = document.getElementById("imageModal"); const image = document.getElementById("modalImage"); image.src = src; image.alt = alt; modal.style.display = "flex"; } function closeImage() { document.getElementById("imageModal").style.display = "none"; } document.addEventListener("keydown", function(event) { if (event.key === "Escape") { closeImage(); } }); </script>
+
