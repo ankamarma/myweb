@@ -136,7 +136,7 @@
     <div class="section-layout">
         <div class="text-content">
             <ol>
-               <li>
+ <li>
     <strong>Configure ISAKMP (Phase 1):</strong> Define the authentication, encryption, and hashing algorithms to establish a secure management tunnel between the routers.
     <pre><code>crypto isakmp policy 10
  encryption aes 256
@@ -145,6 +145,7 @@
  group 14
 crypto isakmp key 123456 address 166.66.1.2</code></pre>
 </li>
+                
 <li>
     <strong>Configure IPsec (Phase 2):</strong> Define the transform set and security associations to encrypt the actual data traffic.
     <pre><code>crypto ipsec transform-set ENCRYPT-DATA esp-aes 256 esp-sha256-hmac
@@ -154,7 +155,15 @@ crypto ipsec profile IPSEC_PROFILE
  set pfs group14</code></pre>
 </li>
 
-                <li><strong>Configure the Tunnel Interface:</strong> Create a virtual GRE tunnel interface, assign IP addresses, and apply the IPsec profile to encrypt the tunnel traffic.</li>
+<li>
+    <strong>Configure the Tunnel Interface:</strong> Create the virtual GRE tunnel interface, assign IP addresses, and link the IPsec profile to encrypt the tunnel traffic.
+    <pre><code>interface Tunnel1
+ ip address 192.168.1.1 255.255.255.0
+ tunnel source 166.66.4.2
+ tunnel destination 166.66.1.2
+ tunnel protection ipsec profile IPSEC_PROFILE</code></pre>
+</li>
+
             </ol>
         </div>
         <div class="image-content">
