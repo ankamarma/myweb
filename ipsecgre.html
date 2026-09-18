@@ -1,1 +1,250 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Configuration Guides</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+        h1 {
+            color: #1a365d;
+            border-bottom: 3px solid #2b6cb0;
+            padding-bottom: 12px;
+            text-align: center;
+        }
+        h2 {
+            color: #2b6cb0;
+            margin-top: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .section-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        @media(min-width: 768px) {
+            .section-layout {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .text-content {
+                flex: 1;
+            }
+            .image-content {
+                flex: 1;
+            }
+        }
+        ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+        strong {
+            color: #2d3748;
+        }
+        
+        /* Interactive Zooming Elements */
+        .zoomable-img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        .zoomable-img:hover {
+            opacity: 0.9;
+        }
+        .image-wrapper {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .caption {
+            font-size: 0.85rem;
+            color: #4a5568;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Lightbox Modal System */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .lightbox-caption {
+            position: absolute;
+            bottom: 20px;
+            color: #fff;
+            font-size: 1.1rem;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VPN Configuration Guides</h1>
+    <p>Below is the structured breakdown of the configuration steps mapped with your respective network topology diagrams and configuration files. Click on any image to open the expanded view.</p>
+
+    <!-- SECTION 1: SITE-TO-SITE VPN -->
+    <h2>Simple Site-to-Site IPsec over GRE</h2>
+    <div class="section-layout">
+        <div class="text-content">
+            <ol>
+                <li><strong>Configure ISAKMP (Phase 1):</strong> Define the authentication, encryption, and hashing algorithms to establish a secure management tunnel between the routers.</li>
+                <li><strong>Configure IPsec (Phase 2):</strong> Define the transform set and security associations to encrypt the actual data traffic.</li>
+                <li><strong>Configure the Tunnel Interface:</strong> Create a virtual GRE tunnel interface, assign IP addresses, and apply the IPsec profile to encrypt the tunnel traffic.</li>
+            </ol>
+        </div>
+        <div class="image-content">
+            <div class="image-wrapper">
+                <img class="zoomable-img" src="site-to-site-ipsec-gre-topology.PNG" alt="Site-to-Site IPsec over GRE Topology Diagram">
+                <div class="caption">Network Topology Diagram</div>
+            </div>
+            
+            <div class="screenshot-grid">
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="both-config-ipsec-gre-config.PNG" alt="Router CLI Complete Configurations">
+                    <div class="caption">Router CLI Configurations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: DMVPN -->
+    <h2>DMVPN (Dynamic Multipoint VPN)</h2>
+    <div class="section-layout">
+        <div class="text-content">
+            <ol>
+                <li><strong>Configure ISAKMP (Phase 1):</strong> Define the authentication and encryption parameters to establish the management tunnel between the hub and spoke routers.</li>
+                <li><strong>Configure IPsec (Phase 2):</strong> Define the transform set and IPsec profile used to protect the data payload.</li>
+                <li><strong>Configure the Tunnel Interface:</strong> Create the multipoint GRE (mGRE) tunnel interface, assign IP addresses, and link the IPsec profile.</li>
+                <li><strong>Configure the Hub Router:</strong> Enable Next Hop Resolution Protocol (NHRP) on the hub's tunnel interface, designating it as the Next Hop Server (NHS).</li>
+                <li><strong>Configure the Spoke Routers:</strong> Under the spoke tunnel interfaces, map the virtual tunnel IP to the hub's public IP address, and point NHRP to the hub router.</li>
+            </ol>
+        </div>
+        <div class="image-content">
+            <div class="image-wrapper">
+                <img class="zoomable-img" src="dmvpn+ospf-topology.png" alt="DMVPN Architecture & OSPF Topology Diagram">
+                <div class="caption">DMVPN Architecture & OSPF Topology</div>
+            </div>
+            
+            <div class="screenshot-grid">
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="hub-config.PNG" alt="Hub Core System Configuration">
+                    <div class="caption">Hub Configuration</div>
+                </div>
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="hub-dmvpn-nhrp.PNG" alt="Hub NHRP Routing Policy Settings">
+                    <div class="caption">Hub NHRP Settings</div>
+                </div>
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="spoke1-config.PNG" alt="Spoke 1 Base Interface Settings">
+                    <div class="caption">Spoke 1 Config</div>
+                </div>
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="spoke1-dmvpn.PNG" alt="Spoke 1 DMVPN Profile and Tunnel Config">
+                    <div class="caption">Spoke 1 DMVPN</div>
+                </div>
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="spoke2-config.PNG" alt="Spoke 2 Base Interface Settings">
+                    <div class="caption">Spoke 2 Config</div>
+                </div>
+                <div class="image-wrapper">
+                    <img class="zoomable-img" src="spoke2-dmvpn.PNG" alt="Spoke 2 DMVPN Profile and Tunnel Config">
+                    <div class="caption">Spoke 2 DMVPN</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay Lightbox Container -->
+<div id="lightboxOverlay" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" class="lightbox-content" src="" alt="">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+</div>
+
+<script>
+    // Handles opening the image in fullscreen modal
+    const images = document.querySelectorAll('.zoomable-img');
+    const lightbox = document.getElementById('lightboxOverlay');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+
+    images.forEach(img => {
+        img.addEventListener('click', function() {
+            lightboxImg.src = this.src;
+            lightboxImg.alt = this.alt;
+            // Uses the description text right below the image container
+            const parentWrapper = this.closest('.image-wrapper');
+            const description = parentWrapper.querySelector('.caption').textContent;
+            lightboxCaption.textContent = description;
+            
+            lightbox.style.display = 'flex';
+        });
+    });
+
+    // Close on overlay click
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+        lightboxImg.src = "";
+        lightboxCaption.textContent = "";
+    }
+
+    // Close on Escape keyboard tap
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+</script>
+
+</body>
+</html>
