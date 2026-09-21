@@ -82,7 +82,8 @@
         #tab-main:checked ~ .tab-bar .label-main,
         #tab-tfvars:checked ~ .tab-bar .label-tfvars,
         #tab-variables:checked ~ .tab-bar .label-variables,
-        #tab-deploy:checked ~ .tab-bar .label-deploy {
+        #tab-deploy:checked ~ .tab-bar .label-deploy,
+        #tab-images:checked ~ .tab-bar .label-images {
             background-color: #fff;
             color: #007bff;
             border-bottom: 2px solid #007bff;
@@ -92,7 +93,8 @@
         #tab-main:checked ~ #content-main,
         #tab-tfvars:checked ~ #content-tfvars,
         #tab-variables:checked ~ #content-variables,
-        #tab-deploy:checked ~ #content-deploy {
+        #tab-deploy:checked ~ #content-deploy,
+        #tab-images:checked ~ #content-images {
             display: block;
         }
 
@@ -107,6 +109,41 @@
             line-height: 1.4;
             white-space: pre-wrap;
             word-wrap: break-word;
+        }
+
+        /* Gallery Layout inside the images tab */
+        .image-gallery {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            background: #fafafa;
+        }
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .gallery-item img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            transition: opacity 0.2s;
+        }
+        .gallery-item img:hover {
+            opacity: 0.85;
+        }
+        .image-caption {
+            margin-top: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #555;
         }
     </style>
 </head>
@@ -147,12 +184,14 @@
         <input type="radio" id="tab-tfvars" name="config-tabs">
         <input type="radio" id="tab-variables" name="config-tabs">
         <input type="radio" id="tab-deploy" name="config-tabs">
+        <input type="radio" id="tab-images" name="config-tabs">
 
         <div class="tab-bar">
             <label for="tab-main" class="tab-label label-main">main.tf</label>
             <label for="tab-tfvars" class="tab-label label-tfvars">terraform.tfvars</label>
             <label for="tab-variables" class="tab-label label-variables">variables.tf</label>
             <label for="tab-deploy" class="tab-label label-deploy">deploy.sh</label>
+            <label for="tab-images" class="tab-label label-images">Images</label>
         </div>
 
         <!-- main.tf -->
@@ -228,7 +267,7 @@ resource "esxi_guest" "kali_vms" {
         </div>
 
         <!-- terraform.tfvars -->
-        <div id="tfvars" class="tab-content">
+        <div id="content-tfvars" class="tab-content">
 <pre>esxi_hostname = "192.168.10.129"
 esxi_username = "root"
 esxi_password = "Marma@12"</pre>
@@ -258,37 +297,3 @@ variable "esxi_username" {
 variable "esxi_password" {
   type      = string
   sensitive = true
-}
-
-variable "vm_name_prefix" {
-  type    = string
-  default = "node-"
-}</pre>
-        </div>
-
-        <!-- deploy.sh -->
-        <div id="content-deploy" class="tab-content">
-<pre>#!/bin/bash
-
-read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
-OS_CHOICE=$(echo "$OS_CHOICE" | tr '[:upper:]' '[:lower:]')
-
-read -p "How many NEW virtual machines do you want to add?: " NEW_VM_COUNT
-
-if [ "$OS_CHOICE" == "ubuntu" ]; then
-    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.ubuntu_vms" || echo 0)
-    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
-    terraform apply -var="os_choice=ubuntu" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.ubuntu_vms
-
-elif [ "$OS_CHOICE" == "kali" ]; then
-    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.kali_vms" || echo 0)
-    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
-    terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
-else
-    echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
-fi</pre>
-        </div>
-    </div>
-
-</body>
-</html>
