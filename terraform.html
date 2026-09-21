@@ -1,1 +1,269 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Configuration Viewer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            display: flex;
+            height: 100vh;
+        }
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background-color: #252526;
+            border-right: 1px solid #3c3c3c;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 15px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #858585;
+            border-bottom: 1px solid #3c3c3c;
+        }
+        .file-list {
+            list-style: none;
+            padding: 10px 0;
+        }
+        .file-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #9cdcfe;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .file-item:hover {
+            background-color: #2a2d2e;
+        }
+        .file-item.active {
+            background-color: #37373d;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .file-item::before {
+            content: "📄";
+            margin-right: 8px;
+            font-size: 12px;
+        }
+        /* Content Area Styling */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e1e;
+        }
+        .content-header {
+            background-color: #2d2d2d;
+            padding: 10px 20px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            border-bottom: 1px solid #3c3c3c;
+            color: #ffffff;
+        }
+        .code-container {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+        pre {
+            font-family: "Consolas", "Courier New", Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar File Navigator -->
+    <div class="sidebar">
+        <div class="sidebar-header">TERRAFORM WORKSPACE</div>
+        <ul class="file-list">
+            <li class="file-item active" onclick="showFile('deploy.sh', this)">deploy.sh</li>
+            <li class="file-item" onclick="showFile('main.tf', this)">main.tf</li>
+            <li class="file-item" onclick="showFile('terraform.tfvars', this)">terraform.tfvars</li>
+            <li class="file-item" onclick="showFile('variables.tf', this)">variables.tf</li>
+        </ul>
+    </div>
+
+    <!-- Code Display Area -->
+    <div class="content-area">
+        <div class="content-header" id="current-filename">deploy.sh</div>
+        <div class="code-container">
+            <pre id="code-viewer"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Storage object mapping filenames to your configuration text
+        const files = {
+            "deploy.sh": `#!/bin/bash
+
+# 1. Ask the user for their OS choice
+read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
+OS_CHOICE=$(echo "$OS_CHOICE" | tr '[:upper:]' '[:lower:]')
+
+# 2. Ask how many NEW virtual machines to add
+read -p "How many NEW virtual machines do you want to add?: " NEW_VM_COUNT
+
+# 3. Check the current state to see how many already exist
+if [ "$OS_CHOICE" == "ubuntu" ]; then
+    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.ubuntu_vms" || echo 0)
+    # Calculate the new final total target number
+    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
+    # Run Terraform to scale up only the Ubuntu fleet
+    terraform apply -var="os_choice=ubuntu" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.ubuntu_vms
+
+elif [ "$OS_CHOICE" == "kali" ]; then
+    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.kali_vms" || echo 0)
+    # Calculate the new final total target number
+    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
+    # Run Terraform to scale up only the Kali fleet
+    terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
+
+else
+    echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
+fi`,
+
+            "main.tf": `terraform {
+  required_providers {
+    esxi = {
+      source  = "josenk/esxi"
+      version = "1.10.3"
+    }
+  }
+}
+
+provider "esxi" {
+  esxi_hostname = var.esxi_hostname
+  esxi_username = var.esxi_username
+  esxi_password = var.esxi_password
+}
+
+# UBUNTU FLEET
+resource "esxi_guest" "ubuntu_vms" {
+  count              = lower(var.os_choice) == "ubuntu" ? var.vm_count : 0
+  guest_name         = "ubuntu-node-\${count.index + 1}"
+  disk_store         = "automation-storage"
+  ovf_source         = "/home/administrator/virtualbox-ova/noble-server-cloudimg-amd64.ova"
+  memsize            = "2048"
+  numvcpus           = "2"
+  power              = "on"
+  resource_pool_name = "/"
+
+  network_interfaces {
+    virtual_network = "VM Network"
+  }
+
+  guestinfo = {
+    "userdata"          = base64encode(<<-EOF
+        #cloud-config
+        user: admin
+        password: automation@12
+        chpasswd: { expire: False }
+        ssh_pwauth: True
+        EOF
+    )
+    "userdata.encoding" = "base64"
+  }
+}
+
+# KALI FLEET
+resource "esxi_guest" "kali_vms" {
+  count              = lower(var.os_choice) == "kali" ? var.vm_count : 0
+  guest_name         = "kali-box-\${count.index + 1}"
+  disk_store         = "automation-storage"
+  ovf_source         = "/home/administrator/virtualbox-ova/kali-linux-2026.2-vmware-amd64.ova"
+  memsize            = "2048"
+  numvcpus           = "2"
+  power              = "on"
+  resource_pool_name = "/"
+
+  network_interfaces {
+    virtual_network = "VM Network"
+  }
+
+  guestinfo = {
+    "userdata"          = base64encode(<<-EOF
+        #cloud-config
+        user: admin
+        password: automation@12
+        chpasswd: { expire: False }
+        ssh_pwauth: True
+        EOF
+    )
+    "userdata.encoding" = "base64"
+  }
+}`,
+
+            "terraform.tfvars": `esxi_hostname = "192.168.10.129"  # Your ESXi host IP
+esxi_username = "root"
+esxi_password = "Marma@12"`,
+
+            "variables.tf": `variable "os_choice" {
+  type        = string
+  description = "Which OS do you want to deploy? (Type: ubuntu OR kali)"
+}
+
+variable "vm_count" {
+  type        = number
+  description = "How many virtual machines do you want to deploy?"
+  # DO NOT PUT A DEFAULT LINE HERE
+}
+
+# Hidden backend variables loaded silently via terraform.tfvars
+variable "esxi_hostname" {
+  type = string
+}
+
+variable "esxi_username" {
+  type    = string
+  default = "root"
+}
+
+variable "esxi_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "vm_name_prefix" {
+  type    = string
+  default = "node-"
+}`
+        };
+
+        // Function to switch viewable content
+        function showFile(filename, element) {
+            // Update code display area text
+            document.getElementById('code-viewer').textContent = files[filename];
+            document.getElementById('current-filename').textContent = filename;
+
+            // Manage active state classes in sidebar
+            const items = document.querySelectorAll('.file-item');
+            items.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Initialize with default file view on load
+        window.onload = function() {
+            document.getElementById('code-viewer').textContent = files['deploy.sh'];
+        };
+    </script>
+</body>
+</html>
