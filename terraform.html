@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terraform Configuration Viewer</title>
+    <title>Terraform ESXi Deployment Workspace</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,29 +16,58 @@
             color: #d4d4d4;
             display: flex;
             height: 100vh;
+            overflow: hidden;
         }
         /* Sidebar Styling */
         .sidebar {
-            width: 250px;
+            width: 325px;
             background-color: #252526;
             border-right: 1px solid #3c3c3c;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+        }
+        .sidebar-section {
+            padding: 15px;
+            border-bottom: 1px solid #3c3c3c;
         }
         .sidebar-header {
-            padding: 15px;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #858585;
-            border-bottom: 1px solid #3c3c3c;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
+        /* Instructions Text Styling */
+        .instructions-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #cccccc;
+        }
+        .instructions-text p {
+            margin-bottom: 10px;
+        }
+        .instructions-text ul, .instructions-text ol {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        .instructions-text li {
+            margin-bottom: 6px;
+        }
+        .instructions-text code {
+            font-family: monospace;
+            background-color: #2d2d2d;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #ce9178;
+        }
+        /* File List Menu */
         .file-list {
             list-style: none;
-            padding: 10px 0;
         }
         .file-item {
-            padding: 10px 20px;
+            padding: 8px 10px;
             cursor: pointer;
             font-family: "Courier New", Courier, monospace;
             font-size: 14px;
@@ -47,6 +75,8 @@
             transition: background 0.2s;
             display: flex;
             align-items: center;
+            border-radius: 4px;
+            margin-bottom: 2px;
         }
         .file-item:hover {
             background-color: #2a2d2e;
@@ -61,6 +91,41 @@
             margin-right: 8px;
             font-size: 12px;
         }
+        /* Screenshot Gallery Thumbnails */
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .thumbnail-container {
+            cursor: pointer;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            background-color: #1e1e1e;
+            transition: border-color 0.2s;
+        }
+        .thumbnail-container:hover {
+            border-color: #007acc;
+        }
+        .thumbnail-container img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            display: block;
+        }
+        .thumbnail-label {
+            font-size: 10px;
+            padding: 4px;
+            text-align: center;
+            background-color: #2d2d2d;
+            color: #aaaaaa;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         /* Content Area Styling */
         .content-area {
             flex: 1;
@@ -70,7 +135,7 @@
         }
         .content-header {
             background-color: #2d2d2d;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-family: "Courier New", Courier, monospace;
             font-size: 14px;
             border-bottom: 1px solid #3c3c3c;
@@ -87,19 +152,99 @@
             line-height: 1.5;
             white-space: pre-wrap;
         }
+        /* Lightbox Modal Window Setup */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+        .lightbox-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 2px solid #3c3c3c;
+            border-radius: 4px;
+            cursor: default;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #ffffff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar File Navigator -->
+    <!-- Sidebar Layout -->
     <div class="sidebar">
-        <div class="sidebar-header">TERRAFORM WORKSPACE</div>
-        <ul class="file-list">
-            <li class="file-item active" onclick="showFile('deploy.sh', this)">deploy.sh</li>
-            <li class="file-item" onclick="showFile('main.tf', this)">main.tf</li>
-            <li class="file-item" onclick="showFile('terraform.tfvars', this)">terraform.tfvars</li>
-            <li class="file-item" onclick="showFile('variables.tf', this)">variables.tf</li>
-        </ul>
+        <!-- Section 1: Project Overview & Steps -->
+        <div class="sidebar-section">
+            <div class="sidebar-header">Deployment Guide</div>
+            <div class="instructions-text">
+                <p><strong>Overview:</strong> This workspace provisions virtual machines on a VMware ESXi host running on Cisco C220 M4 hardware using Terraform. The operating system OVA deployment files are located locally in the <code>virtualbox-ova</code> directory inside the host Ubuntu environment.</p>
+                
+                <p><strong>Tools Used:</strong></p>
+                <ul>
+                    <li>VMware ESXi Host (Cisco C220 M4)</li>
+                    <li>Terraform</li>
+                    <li>OS OVA Source Images</li>
+                </ul>
+
+                <div class="sidebar-header" style="margin-top:15px; margin-bottom:5px;">Workflow Steps</div>
+                <ol>
+                    <li>Configure Windows Subsystem for Linux (WSL) running Ubuntu.</li>
+                    <li>Install Terraform inside the Ubuntu WSL instance.</li>
+                    <li>Create <code>terraform.tfvars</code> to securely store the ESXi host IP address and login credentials.</li>
+                    <li>Create <code>variables.tf</code> to define inputs and variable declarations for interactive prompt parameters.</li>
+                    <li>Create <code>main.tf</code> to define the target ESXi infrastructure configuration provider and guest resources.</li>
+                </ol>
+                <p style="font-size: 12px; color: #b5cea8; border-left: 2px solid #b5cea8; padding-left: 5px;">
+                    <em>Note: Default Terraform behaviors will replace resource tracks when modifying counts. The custom Bash script acts as a state wrapper to scale fleets incrementally without destroying active nodes.</em>
+                </p>
+                <ol start="6">
+                    <li>Create <code>deploy.sh</code> to inspect the current environment state, dynamically calculate the fleet delta, and cleanly scale up virtual machines without causing resource destruction.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Section 2: Interactive File Tree Switcher -->
+        <div class="sidebar-section">
+            <div class="sidebar-header">Workspace Files</div>
+            <ul class="file-list">
+                <li class="file-item active" onclick="showFile('deploy.sh', this)">deploy.sh</li>
+                <li class="file-item" onclick="showFile('main.tf', this)">main.tf</li>
+                <li class="file-item" onclick="showFile('terraform.tfvars', this)">terraform.tfvars</li>
+                <li class="file-item" onclick="showFile('variables.tf', this)">variables.tf</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Graphical Attachments Image Gallery -->
+        <div class="sidebar-section" style="border-bottom: none;">
+            <div class="sidebar-header">Visual Attachments</div>
+            <div class="screenshot-gallery">
+                <div class="thumbnail-container" onclick="openLightbox('files-list-n-promt.PNG')">
+                    <img src="files-list-n-promt.PNG" alt="Files List and Prompts View">
+                    <div class="thumbnail-label">files-list-n-promt.PNG</div>
+                </div>
+                <div class="thumbnail-container" onclick="openLightbox('vm-esxi-creation.PNG')">
+                    <img src="vm-esxi-creation.PNG" alt="VM ESXi Creation Flow">
+                    <div class="thumbnail-label">vm-esxi-creation.PNG</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Code Display Area -->
@@ -110,8 +255,14 @@
         </div>
     </div>
 
+    <!-- Lightbox Zoom Component Overlay -->
+    <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Zoomed View" onclick="event.stopPropagation();">
+    </div>
+
     <script>
-        // Storage object mapping filenames to your configuration text
+        // Data maps housing source texts
         const files = {
             "deploy.sh": `#!/bin/bash
 
@@ -120,150 +271,3 @@ read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
 OS_CHOICE=$(echo "$OS_CHOICE" | tr '[:upper:]' '[:lower:]')
 
 # 2. Ask how many NEW virtual machines to add
-read -p "How many NEW virtual machines do you want to add?: " NEW_VM_COUNT
-
-# 3. Check the current state to see how many already exist
-if [ "$OS_CHOICE" == "ubuntu" ]; then
-    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.ubuntu_vms" || echo 0)
-    # Calculate the new final total target number
-    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
-    # Run Terraform to scale up only the Ubuntu fleet
-    terraform apply -var="os_choice=ubuntu" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.ubuntu_vms
-
-elif [ "$OS_CHOICE" == "kali" ]; then
-    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.kali_vms" || echo 0)
-    # Calculate the new final total target number
-    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
-    # Run Terraform to scale up only the Kali fleet
-    terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
-
-else
-    echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
-fi`,
-
-            "main.tf": `terraform {
-  required_providers {
-    esxi = {
-      source  = "josenk/esxi"
-      version = "1.10.3"
-    }
-  }
-}
-
-provider "esxi" {
-  esxi_hostname = var.esxi_hostname
-  esxi_username = var.esxi_username
-  esxi_password = var.esxi_password
-}
-
-# UBUNTU FLEET
-resource "esxi_guest" "ubuntu_vms" {
-  count              = lower(var.os_choice) == "ubuntu" ? var.vm_count : 0
-  guest_name         = "ubuntu-node-\${count.index + 1}"
-  disk_store         = "automation-storage"
-  ovf_source         = "/home/administrator/virtualbox-ova/noble-server-cloudimg-amd64.ova"
-  memsize            = "2048"
-  numvcpus           = "2"
-  power              = "on"
-  resource_pool_name = "/"
-
-  network_interfaces {
-    virtual_network = "VM Network"
-  }
-
-  guestinfo = {
-    "userdata"          = base64encode(<<-EOF
-        #cloud-config
-        user: admin
-        password: automation@12
-        chpasswd: { expire: False }
-        ssh_pwauth: True
-        EOF
-    )
-    "userdata.encoding" = "base64"
-  }
-}
-
-# KALI FLEET
-resource "esxi_guest" "kali_vms" {
-  count              = lower(var.os_choice) == "kali" ? var.vm_count : 0
-  guest_name         = "kali-box-\${count.index + 1}"
-  disk_store         = "automation-storage"
-  ovf_source         = "/home/administrator/virtualbox-ova/kali-linux-2026.2-vmware-amd64.ova"
-  memsize            = "2048"
-  numvcpus           = "2"
-  power              = "on"
-  resource_pool_name = "/"
-
-  network_interfaces {
-    virtual_network = "VM Network"
-  }
-
-  guestinfo = {
-    "userdata"          = base64encode(<<-EOF
-        #cloud-config
-        user: admin
-        password: automation@12
-        chpasswd: { expire: False }
-        ssh_pwauth: True
-        EOF
-    )
-    "userdata.encoding" = "base64"
-  }
-}`,
-
-            "terraform.tfvars": `esxi_hostname = "192.168.10.129"  # Your ESXi host IP
-esxi_username = "root"
-esxi_password = "Marma@12"`,
-
-            "variables.tf": `variable "os_choice" {
-  type        = string
-  description = "Which OS do you want to deploy? (Type: ubuntu OR kali)"
-}
-
-variable "vm_count" {
-  type        = number
-  description = "How many virtual machines do you want to deploy?"
-  # DO NOT PUT A DEFAULT LINE HERE
-}
-
-# Hidden backend variables loaded silently via terraform.tfvars
-variable "esxi_hostname" {
-  type = string
-}
-
-variable "esxi_username" {
-  type    = string
-  default = "root"
-}
-
-variable "esxi_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "vm_name_prefix" {
-  type    = string
-  default = "node-"
-}`
-        };
-
-        // Function to switch viewable content
-        function showFile(filename, element) {
-            // Update code display area text
-            document.getElementById('code-viewer').textContent = files[filename];
-            document.getElementById('current-filename').textContent = filename;
-
-            // Manage active state classes in sidebar
-            const items = document.querySelectorAll('.file-item');
-            items.forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-        }
-
-        // Initialize with default file view on load
-        window.onload = function() {
-            document.getElementById('code-viewer').textContent = files['deploy.sh'];
-        };
-    </script>
-</body>
-</html>
