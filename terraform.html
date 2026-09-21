@@ -18,9 +18,12 @@
             height: 100vh;
             overflow: hidden;
         }
-        /* Sidebar Styling */
+        
+        /* ==========================================================================
+           Sidebar Components & Containers
+           ========================================================================== */
         .sidebar {
-            width: 325px;
+            width: 360px;
             background-color: #252526;
             border-right: 1px solid #3c3c3c;
             display: flex;
@@ -28,105 +31,135 @@
             overflow-y: auto;
         }
         .sidebar-section {
-            padding: 15px;
+            padding: 20px;
             border-bottom: 1px solid #3c3c3c;
         }
         .sidebar-header {
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             color: #858585;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
-        /* Instructions Text Styling */
+        
+        /* ==========================================================================
+           Instructions Panel Readability
+           ========================================================================== */
         .instructions-text {
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 13.5px;
+            line-height: 1.6;
             color: #cccccc;
         }
         .instructions-text p {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .instructions-text ul, .instructions-text ol {
             padding-left: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
         .instructions-text li {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         .instructions-text code {
-            font-family: monospace;
-            background-color: #2d2d2d;
-            padding: 2px 4px;
-            border-radius: 3px;
+            font-family: "Consolas", "Courier New", monospace;
+            background-color: #1e1e1e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #3c3c3c;
             color: #ce9178;
+            font-size: 12.5px;
         }
-        /* File List Menu */
+        .note-callout {
+            font-size: 12.5px;
+            color: #b5cea8;
+            border-left: 3px solid #b5cea8;
+            padding: 8px 10px;
+            background-color: #1e1e1e;
+            margin: 14px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        /* ==========================================================================
+           File Selection List Tree
+           ========================================================================== */
         .file-list {
             list-style: none;
         }
         .file-item {
-            padding: 8px 10px;
+            padding: 10px 12px;
             cursor: pointer;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 14px;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 13.5px;
             color: #9cdcfe;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            border-radius: 4px;
-            margin-bottom: 2px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            background-color: #2d2d2d;
+            border: 1px solid transparent;
         }
         .file-item:hover {
-            background-color: #2a2d2e;
+            background-color: #37373d;
+            border-color: #444;
         }
         .file-item.active {
-            background-color: #37373d;
+            background-color: #0e639c;
             color: #ffffff;
-            font-weight: bold;
+            font-weight: 600;
+            border-color: #1177bb;
         }
         .file-item::before {
             content: "📄";
-            margin-right: 8px;
-            font-size: 12px;
+            margin-right: 10px;
+            font-size: 13px;
         }
-        /* Screenshot Gallery Thumbnails */
+        
+        /* ==========================================================================
+           Image Gallery Grid
+           ========================================================================== */
         .screenshot-gallery {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 10px;
+            gap: 12px;
+            margin-top: 6px;
         }
         .thumbnail-container {
             cursor: pointer;
             border: 1px solid #3c3c3c;
-            border-radius: 4px;
+            border-radius: 6px;
             overflow: hidden;
             position: relative;
             background-color: #1e1e1e;
-            transition: border-color 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .thumbnail-container:hover {
             border-color: #007acc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .thumbnail-container img {
             width: 100%;
-            height: 80px;
+            height: 90px;
             object-fit: cover;
             display: block;
         }
         .thumbnail-label {
-            font-size: 10px;
-            padding: 4px;
+            font-size: 10.5px;
+            padding: 6px;
             text-align: center;
             background-color: #2d2d2d;
             color: #aaaaaa;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: monospace;
         }
-        /* Content Area Styling */
+        
+        /* ==========================================================================
+           Primary Workspace Content Viewport
+           ========================================================================== */
         .content-area {
             flex: 1;
             display: flex;
@@ -135,24 +168,35 @@
         }
         .content-header {
             background-color: #2d2d2d;
-            padding: 12px 20px;
-            font-family: "Courier New", Courier, monospace;
+            padding: 14px 24px;
+            font-family: "Consolas", "Courier New", monospace;
             font-size: 14px;
             border-bottom: 1px solid #3c3c3c;
             color: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+        .content-header::before {
+            content: "👁️";
+            margin-right: 8px;
         }
         .code-container {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow: auto;
+            background-color: #181818;
         }
         pre {
-            font-family: "Consolas", "Courier New", Courier, monospace;
+            font-family: "Consolas", "Fira Code", "Courier New", monospace;
             font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap;
+            line-height: 1.6;
+            white-space: pre;
+            color: #d4d4d4;
         }
-        /* Lightbox Modal Window Setup */
+        
+        /* ==========================================================================
+           Interactive Lightbox Window Overlay
+           ========================================================================== */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -161,113 +205,74 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(10, 10, 10, 0.9);
             justify-content: center;
             align-items: center;
             cursor: zoom-out;
+            backdrop-filter: blur(4px);
         }
         .lightbox-modal img {
-            max-width: 90%;
-            max-height: 90%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border: 2px solid #3c3c3c;
-            border-radius: 4px;
+            max-width: 85%;
+            max-height: 85%;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+            border: 1px solid #555555;
+            border-radius: 6px;
             cursor: default;
+            animation: scaleUp 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         .lightbox-close {
             position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #ffffff;
-            font-size: 40px;
-            font-weight: bold;
+            top: 25px;
+            right: 35px;
+            color: #aaaaaa;
+            font-size: 36px;
+            font-weight: 300;
             cursor: pointer;
             user-select: none;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover {
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Layout -->
+    <!-- Workspace Sidebar Panel Layout -->
     <div class="sidebar">
-        <!-- Section 1: Project Overview & Steps -->
+        <!-- Section 1: Core System Architecture & Guidelines -->
         <div class="sidebar-section">
             <div class="sidebar-header">Deployment Guide</div>
             <div class="instructions-text">
-                <p><strong>Overview:</strong> This workspace provisions virtual machines on a VMware ESXi host running on Cisco C220 M4 hardware using Terraform. The operating system OVA deployment files are located locally in the <code>virtualbox-ova</code> directory inside the host Ubuntu environment.</p>
+                <p><strong>Overview:</strong> This engine provisions virtual infrastructure targets on a dedicated VMware ESXi cluster running on Cisco C220 M4 metal frameworks utilizing Terraform configurations.</p>
                 
-                <p><strong>Tools Used:</strong></p>
+                <p><strong>Environment Prerequisite Vectors:</strong></p>
                 <ul>
-                    <li>VMware ESXi Host (Cisco C220 M4)</li>
-                    <li>Terraform</li>
-                    <li>OS OVA Source Images</li>
+                    <li>Cisco C220 M4 Bare-Metal Host Platform</li>
+                    <li>HashiCorp Terraform Deployment Binary</li>
+                    <li>Local <code>virtualbox-ova</code> Directory Storage Core</li>
                 </ul>
 
-                <div class="sidebar-header" style="margin-top:15px; margin-bottom:5px;">Workflow Steps</div>
+                <div class="sidebar-header" style="margin-top:20px; margin-bottom:6px;">Procedural Directives</div>
                 <ol>
-                    <li>Configure Windows Subsystem for Linux (WSL) running Ubuntu.</li>
-                    <li>Install Terraform inside the Ubuntu WSL instance.</li>
-                    <li>Create <code>terraform.tfvars</code> to securely store the ESXi host IP address and login credentials.</li>
-                    <li>Create <code>variables.tf</code> to define inputs and variable declarations for interactive prompt parameters.</li>
-                    <li>Create <code>main.tf</code> to define the target ESXi infrastructure configuration provider and guest resources.</li>
+                    <li>Initialize an instance of Windows Subsystem for Linux (WSL) running Ubuntu.</li>
+                    <li>Install the structural Terraform distribution framework within the shell execution terminal environment.</li>
+                    <li>Establish the local configuration asset matrix named <code>terraform.tfvars</code> to host secure connection points.</li>
+                    <li>Construct the environment parameters definition engine named <code>variables.tf</code>.</li>
+                    <li>Compose the structural build definitions profile sheet named <code>main.tf</code>.</li>
                 </ol>
-                <p style="font-size: 12px; color: #b5cea8; border-left: 2px solid #b5cea8; padding-left: 5px;">
-                    <em>Note: Default Terraform behaviors will replace resource tracks when modifying counts. The custom Bash script acts as a state wrapper to scale fleets incrementally without destroying active nodes.</em>
-                </p>
+                
+                <div class="note-callout">
+                    <strong>State Tracker Engine Notice:</strong> Custom script architecture tracks environment footprints to match index deltas, safeguarding existing assets during incremental scale processes.
+                </div>
+                
                 <ol start="6">
-                    <li>Create <code>deploy.sh</code> to inspect the current environment state, dynamically calculate the fleet delta, and cleanly scale up virtual machines without causing resource destruction.</li>
+                    <li>Launch the workflow execution harness <code>deploy.sh</code> to seamlessly execute configuration upgrades.</li>
                 </ol>
             </div>
         </div>
 
-        <!-- Section 2: Interactive File Tree Switcher -->
-        <div class="sidebar-section">
-            <div class="sidebar-header">Workspace Files</div>
-            <ul class="file-list">
-                <li class="file-item active" onclick="showFile('deploy.sh', this)">deploy.sh</li>
-                <li class="file-item" onclick="showFile('main.tf', this)">main.tf</li>
-                <li class="file-item" onclick="showFile('terraform.tfvars', this)">terraform.tfvars</li>
-                <li class="file-item" onclick="showFile('variables.tf', this)">variables.tf</li>
-            </ul>
-        </div>
-
-        <!-- Section 3: Graphical Attachments Image Gallery -->
-        <div class="sidebar-section" style="border-bottom: none;">
-            <div class="sidebar-header">Visual Attachments</div>
-            <div class="screenshot-gallery">
-                <div class="thumbnail-container" onclick="openLightbox('files-list-n-promt.PNG')">
-                    <img src="files-list-n-promt.PNG" alt="Files List and Prompts View">
-                    <div class="thumbnail-label">files-list-n-promt.PNG</div>
-                </div>
-                <div class="thumbnail-container" onclick="openLightbox('vm-esxi-creation.PNG')">
-                    <img src="vm-esxi-creation.PNG" alt="VM ESXi Creation Flow">
-                    <div class="thumbnail-label">vm-esxi-creation.PNG</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Code Display Area -->
-    <div class="content-area">
-        <div class="content-header" id="current-filename">deploy.sh</div>
-        <div class="code-container">
-            <pre id="code-viewer"></pre>
-        </div>
-    </div>
-
-    <!-- Lightbox Zoom Component Overlay -->
-    <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="Zoomed View" onclick="event.stopPropagation();">
-    </div>
-
-    <script>
-        // Data maps housing source texts
-        const files = {
-            "deploy.sh": `#!/bin/bash
-
-# 1. Ask the user for their OS choice
-read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
-OS_CHOICE=$(echo "$OS_CHOICE" | tr '[:upper:]' '[:lower:]')
-
-# 2. Ask how many NEW virtual machines to add
