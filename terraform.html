@@ -9,7 +9,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
@@ -42,6 +42,60 @@
             margin: 20px 0;
             border-radius: 0 4px 4px 0;
         }
+        
+        /* Tab component styling */
+        .tab-container {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .tab-bar {
+            display: flex;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-button {
+            background: none;
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            font-family: inherit;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-right: 1px solid #ddd;
+        }
+        .tab-button:hover {
+            background-color: #e9ecef;
+            color: #333;
+        }
+        .tab-button.active {
+            background-color: #fff;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: -1px;
+        }
+        .tab-content {
+            display: none;
+            padding: 0;
+            background-color: #fff;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        pre {
+            margin: 0;
+            padding: 20px;
+            background-color: #282c34;
+            color: #abb2bf;
+            overflow-x: auto;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -60,35 +114,181 @@
 
     <h2>Step-by-Step Instructions</h2>
     <ol>
-        <li>
-            <strong>Set up the Environment:</strong> 
-            Open and configure your WSL Ubuntu environment on Windows.
-        </li>
-        <li>
-            <strong>Install Terraform:</strong> 
-            Download and install the appropriate Terraform binary on your WSL Ubuntu instance.
-        </li>
-        <li>
-            <strong>Configure Secrets (<code>terraform.tfvars</code>):</strong> 
-            Create a file named <code>terraform.tfvars</code> to securely store your ESXi host IP address and login credentials.
-        </li>
-        <li>
-            <strong>Define Variables (<code>variables.tf</code>):</strong> 
-            Create a file named <code>variables.tf</code> to define the target input parameters required for your automated prompt and deployment.
-        </li>
-        <li>
-            <strong>Create Main Configuration (<code>main.tf</code>):</strong> 
-            Develop your core infrastructure configuration inside <code>main.tf</code>, specifying the VMware vSphere/ESXi provider and local OVA source configurations.
-        </li>
-        <li>
-            <strong>Implement the Deployment Automation Script (<code>deploy.sh</code>):</strong> 
-            Create a companion Bash wrapper script to scale out your environment seamlessly.
-        </li>
+        <li><strong>Set up the Environment:</strong> Open and configure your WSL Ubuntu environment on Windows.</li>
+        <li><strong>Install Terraform:</strong> Download and install the appropriate Terraform binary on your WSL Ubuntu instance.</li>
+        <li><strong>Configure Secrets (<code>terraform.tfvars</code>):</strong> Create your credentials mapping file.</li>
+        <li><strong>Define Variables (<code>variables.tf</code>):</strong> Establish deployment target options.</li>
+        <li><strong>Create Main Configuration (<code>main.tf</code>):</strong> Standardize your target architecture code.</li>
+        <li><strong>Implement Deployment Automation (<code>deploy.sh</code>):</strong> Scale elements live using dynamic state tracking.</li>
     </ol>
 
     <div class="note">
         <strong>Important Automation Note:</strong> By default, declarative tools like Terraform attempt to tightly manage a fixed state file, which can result in existing VMs being destroyed or overwritten when you attempt to spin up additional independent instances. The <code>deploy.sh</code> script dynamically queries the existing VM count on the host, allowing you to safely scale up and provision new VMs sequentially without disrupting the existing infrastructure.
     </div>
 
-</body>
-</html>
+    <h2>Configuration Files &amp; Scripts</h2>
+    <p>Select a file tab below to view the configuration contents matching your deployment workspace directory:</p>
+
+    <!-- Interactive Tabs Component -->
+    <div class="tab-container">
+        <div class="tab-bar">
+            <button class="tab-button active" onclick="openFile(event, 'main-tf')">main.tf</button>
+            <button class="tab-button" onclick="openFile(event, 'tfvars')">terraform.tfvars</button>
+            <button class="tab-button" onclick="openFile(event, 'variables-tf')">variables.tf</button>
+            <button class="tab-button" onclick="openFile(event, 'deploy-sh')">deploy.sh</button>
+        </div>
+
+        <!-- main.tf -->
+        <div id="main-tf" class="tab-content active">
+<pre><code>terraform {
+  required_providers {
+    esxi = {
+      source  = "josenk/esxi"
+      version = "1.10.3"
+    }
+  }
+}
+
+provider "esxi" {
+  esxi_hostname = var.esxi_hostname
+  esxi_username = var.esxi_username
+  esxi_password = var.esxi_password
+}
+
+# UBUNTU FLEET
+resource "esxi_guest" "ubuntu_vms" {
+  count              = lower(var.os_choice) == "ubuntu" ? var.vm_count : 0
+  guest_name         = "ubuntu-node-${count.index + 1}"
+  disk_store         = "automation-storage"
+  ovf_source         = "/home/administrator/virtualbox-ova/noble-server-cloudimg-amd64.ova"
+  memsize            = "2048"
+  numvcpus           = "2"
+  power              = "on"
+  resource_pool_name = "/"
+
+  network_interfaces { virtual_network = "VM Network" }
+
+  guestinfo = {
+    "userdata" = base64encode(&lt;&lt;-EOF
+      #cloud-config
+      user: admin
+      password: automation@12
+      chpasswd: { expire: False }
+      ssh_pwauth: True
+    EOF
+    )
+    "userdata.encoding" = "base64"
+  }
+}
+
+# KALI FLEET
+resource "esxi_guest" "kali_vms" {
+  count              = lower(var.os_choice) == "kali" ? var.vm_count : 0
+  guest_name         = "kali-box-${count.index + 1}"
+  disk_store         = "automation-storage"
+  ovf_source         = "/home/administrator/virtualbox-ova/kali-linux-2026.2-vmware-amd64.ova"
+  memsize            = "2048"
+  numvcpus           = "2"
+  power              = "on"
+  resource_pool_name = "/"
+
+  network_interfaces { virtual_network = "VM Network" }
+
+  guestinfo = {
+    "userdata" = base64encode(&lt;&lt;-EOF
+      #cloud-config
+      user: admin
+      password: automation@12
+      chpasswd: { expire: False }
+      ssh_pwauth: True
+    EOF
+    )
+    "userdata.encoding" = "base64"
+  }
+}</code></pre>
+        </div>
+
+        <!-- terraform.tfvars -->
+        <div id="tfvars" class="tab-content">
+<pre><code>esxi_hostname = "192.168.10.129" # Your ESXi host IP
+esxi_username = "root"
+esxi_password = "Marma@12"</code></pre>
+        </div>
+
+        <!-- variables.tf -->
+        <div id="variables-tf" class="tab-content">
+<pre><code>variable "os_choice" {
+  type        = string
+  description = "Which OS do you want to deploy? (Type: ubuntu OR kali)"
+}
+
+variable "vm_count" {
+  type        = number
+  description = "How many virtual machines do you want to deploy?"
+  # DO NOT PUT A DEFAULT LINE HERE
+}
+
+# Hidden backend variables loaded silently via terraform.tfvars
+variable "esxi_hostname" {
+  type = string
+}
+
+variable "esxi_username" {
+  type    = string
+  default = "root"
+}
+
+variable "esxi_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "vm_name_prefix" {
+  type    = string
+  default = "node-"
+}</code></pre>
+        </div>
+
+        <!-- deploy.sh -->
+        <div id="deploy-sh" class="tab-content">
+<pre><code>#!/bin/bash
+
+# 1. Ask the user for their OS choice
+read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
+OS_CHOICE=$(echo "$OS_CHOICE" | tr '[:upper:]' '[:lower:]')
+
+# 2. Ask how many NEW virtual machines to add
+read -p "How many NEW virtual machines do you want to add?: " NEW_VM_COUNT
+
+# 3. Check the current state to see how many already exist
+if [ "$OS_CHOICE" == "ubuntu" ]; then
+    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.ubuntu_vms" || echo 0)
+
+    # Calculate the new final total target number
+    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
+
+    # Run Terraform to scale up only the Ubuntu fleet
+    terraform apply -var="os_choice=ubuntu" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.ubuntu_vms
+
+elif [ "$OS_CHOICE" == "kali" ]; then
+    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.kali_vms" || echo 0)
+
+    # Calculate the new final total target number
+    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
+
+    # Run Terraform to scale up only the Kali fleet
+    terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
+else
+    echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
+fi</code></pre>
+        </div>
+    </div>
+
+    <!-- JavaScript Handling Tab Switching -->
+    <script>
+        function openFile(evt, fileName) {
+            var i, tabcontent, tablinks;
+            
+            // Hide all contents
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
