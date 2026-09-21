@@ -40,7 +40,7 @@
             border-radius: 0 4px 4px 0;
         }
         
-        /* CSS-ONLY TAB SYSTEM */
+        /* FIXED CSS-ONLY TAB SYSTEM */
         .tab-container {
             margin: 30px 0;
             border: 1px solid #ddd;
@@ -50,7 +50,7 @@
         }
         
         .tab-container input[type="radio"] {
-            display: none;
+            display: none !important;
         }
         
         .tab-bar {
@@ -67,6 +67,7 @@
             transition: all 0.2s;
             border-right: 1px solid #ddd;
             user-select: none;
+            background-color: #f8f9fa;
         }
         .tab-label:hover {
             background-color: #e9ecef;
@@ -79,12 +80,14 @@
             background-color: #fff;
         }
         
-        #tab-main:checked ~ .tab-bar .label-main,
-        #tab-tfvars:checked ~ .tab-bar .label-tfvars,
-        #tab-variables:checked ~ .tab-bar .label-variables,
-        #tab-deploy:checked ~ .tab-bar .label-deploy {
-            background-color: #fff;
-            color: #007bff;
+        /* Fixed matching selectors using Attribute rules for absolute safety */
+        #tab-main:checked ~ .tab-bar [for="tab-main"],
+        #tab-tfvars:checked ~ .tab-bar [for="tab-tfvars"],
+        #tab-variables:checked ~ .tab-bar [for="tab-variables"],
+        #tab-deploy:checked ~ .tab-bar [for="tab-deploy"],
+        #tab-images:checked ~ .tab-bar [for="tab-images"] {
+            background-color: #fff !important;
+            color: #007bff !important;
             border-bottom: 2px solid #007bff;
             padding-bottom: 11px;
         }
@@ -92,8 +95,9 @@
         #tab-main:checked ~ #content-main,
         #tab-tfvars:checked ~ #content-tfvars,
         #tab-variables:checked ~ #content-variables,
-        #tab-deploy:checked ~ #content-deploy {
-            display: block;
+        #tab-deploy:checked ~ #content-deploy,
+        #tab-images:checked ~ #content-images {
+            display: block !important;
         }
 
         pre {
@@ -108,12 +112,46 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+
+        /* Gallery System Styles */
+        .image-gallery {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            background: #fafafa;
+        }
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .gallery-item img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            transition: opacity 0.2s;
+        }
+        .gallery-item img:hover {
+            opacity: 0.85;
+        }
+        .image-caption {
+            margin-top: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #555;
+        }
     </style>
 </head>
 <body>
 
     <h1>VM Deployment Guide on VMware ESXi Using Terraform</h1>
-    
 
     <h2>Environment &amp; Tools</h2>
     <ul>
@@ -134,23 +172,23 @@
         <li><strong>Create the automation script (<code>deploy.sh</code>):</strong> Create this script to count existing virtual machines and add new ones safely without deleting the old ones.</li>
     </ol>
 
-
-
     <h2>Configuration Files &amp; Scripts</h2>
     <p>Select a file tab below to view the configuration contents matching your deployment workspace directory:</p>
 
-    <!-- CSS-Only Interactive Tabs Component -->
+    <!-- Corrected Pure CSS Functional Component Container -->
     <div class="tab-container">
         <input type="radio" id="tab-main" name="config-tabs" checked>
         <input type="radio" id="tab-tfvars" name="config-tabs">
         <input type="radio" id="tab-variables" name="config-tabs">
         <input type="radio" id="tab-deploy" name="config-tabs">
+        <input type="radio" id="tab-images" name="config-tabs">
 
         <div class="tab-bar">
-            <label for="tab-main" class="tab-label label-main">main.tf</label>
-            <label for="tab-tfvars" class="tab-label label-tfvars">terraform.tfvars</label>
-            <label for="tab-variables" class="tab-label label-variables">variables.tf</label>
-            <label for="tab-deploy" class="tab-label label-deploy">deploy.sh</label>
+            <label for="tab-main" class="tab-label">main.tf</label>
+            <label for="tab-tfvars" class="tab-label">terraform.tfvars</label>
+            <label for="tab-variables" class="tab-label">variables.tf</label>
+            <label for="tab-deploy" class="tab-label">deploy.sh</label>
+            <label for="tab-images" class="tab-label">Images</label>
         </div>
 
         <!-- main.tf -->
@@ -226,7 +264,7 @@ resource "esxi_guest" "kali_vms" {
         </div>
 
         <!-- terraform.tfvars -->
-        <div id="tfvars" class="tab-content">
+        <div id="content-tfvars" class="tab-content">
 <pre>esxi_hostname = "192.168.10.129"
 esxi_username = "root"
 esxi_password = "Marma@12"</pre>
@@ -276,17 +314,3 @@ read -p "How many NEW virtual machines do you want to add?: " NEW_VM_COUNT
 if [ "$OS_CHOICE" == "ubuntu" ]; then
     CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.ubuntu_vms" || echo 0)
     TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
-    terraform apply -var="os_choice=ubuntu" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.ubuntu_vms
-
-elif [ "$OS_CHOICE" == "kali" ]; then
-    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.kali_vms" || echo 0)
-    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
-    terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
-else
-    echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
-fi</pre>
-        </div>
-    </div>
-
-</body>
-</html>
