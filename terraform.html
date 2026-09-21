@@ -29,11 +29,8 @@
             margin-bottom: 10px;
         }
         code {
-            background-color: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 4px;
             font-family: "Courier New", Courier, monospace;
-            font-size: 0.9em;
+            font-size: 0.95em;
         }
         .note {
             background-color: #fff3cd;
@@ -89,12 +86,14 @@
         pre {
             margin: 0;
             padding: 20px;
-            background-color: #282c34;
-            color: #abb2bf;
+            background-color: #ffffff;
+            color: #000000;
             overflow-x: auto;
             font-family: "Courier New", Courier, monospace;
-            font-size: 0.9em;
+            font-size: 0.95em;
             line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -140,7 +139,7 @@
 
         <!-- main.tf -->
         <div id="main-tf" class="tab-content active">
-<pre><code>terraform {
+<pre>terraform {
   required_providers {
     esxi = {
       source  = "josenk/esxi"
@@ -205,19 +204,19 @@ resource "esxi_guest" "kali_vms" {
     )
     "userdata.encoding" = "base64"
   }
-}</code></pre>
+}</pre>
         </div>
 
         <!-- terraform.tfvars -->
         <div id="tfvars" class="tab-content">
-<pre><code>esxi_hostname = "192.168.10.129" # Your ESXi host IP
+<pre>esxi_hostname = "192.168.10.129" # Your ESXi host IP
 esxi_username = "root"
-esxi_password = "Marma@12"</code></pre>
+esxi_password = "Marma@12"</pre>
         </div>
 
         <!-- variables.tf -->
         <div id="variables-tf" class="tab-content">
-<pre><code>variable "os_choice" {
+<pre>variable "os_choice" {
   type        = string
   description = "Which OS do you want to deploy? (Type: ubuntu OR kali)"
 }
@@ -246,12 +245,12 @@ variable "esxi_password" {
 variable "vm_name_prefix" {
   type    = string
   default = "node-"
-}</code></pre>
+}</pre>
         </div>
 
         <!-- deploy.sh -->
         <div id="deploy-sh" class="tab-content">
-<pre><code>#!/bin/bash
+<pre>#!/bin/bash
 
 # 1. Ask the user for their OS choice
 read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
@@ -280,7 +279,7 @@ elif [ "$OS_CHOICE" == "kali" ]; then
     terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
 else
     echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
-fi</code></pre>
+fi</pre>
         </div>
     </div>
 
@@ -292,3 +291,7 @@ fi</code></pre>
             // Hide all contents
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].className = tabcontent[i].className.replace(" active", "");
+            }
+            
+            // Deactivate all buttons
