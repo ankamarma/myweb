@@ -40,7 +40,7 @@
             border-radius: 0 4px 4px 0;
         }
         
-        /* CSS-ONLY TAB SYSTEM STYLING */
+        /* CSS-ONLY TAB SYSTEM */
         .tab-container {
             margin: 30px 0;
             border: 1px solid #ddd;
@@ -49,7 +49,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         
-        /* Hide the actual radio input selectors completely */
         .tab-container input[type="radio"] {
             display: none;
         }
@@ -60,7 +59,6 @@
             border-bottom: 1px solid #ddd;
         }
         
-        /* Style labels to look exactly like buttons */
         .tab-label {
             padding: 12px 20px;
             font-weight: 600;
@@ -75,14 +73,12 @@
             color: #333;
         }
         
-        /* Hide all text blocks by default */
         .tab-content {
             display: none;
             padding: 0;
             background-color: #fff;
         }
         
-        /* Target and display contents safely based on which button is clicked */
         #tab-main:checked ~ .tab-bar .label-main,
         #tab-tfvars:checked ~ .tab-bar .label-tfvars,
         #tab-variables:checked ~ .tab-bar .label-variables,
@@ -90,7 +86,7 @@
             background-color: #fff;
             color: #007bff;
             border-bottom: 2px solid #007bff;
-            padding-bottom: 11px; /* Keeps layout aligned over the container border */
+            padding-bottom: 11px;
         }
         
         #tab-main:checked ~ #content-main,
@@ -147,13 +143,11 @@
 
     <!-- CSS-Only Interactive Tabs Component -->
     <div class="tab-container">
-        <!-- Hidden functional triggers -->
         <input type="radio" id="tab-main" name="config-tabs" checked>
         <input type="radio" id="tab-tfvars" name="config-tabs">
         <input type="radio" id="tab-variables" name="config-tabs">
         <input type="radio" id="tab-deploy" name="config-tabs">
 
-        <!-- Visible Navigation Bar -->
         <div class="tab-bar">
             <label for="tab-main" class="tab-label label-main">main.tf</label>
             <label for="tab-tfvars" class="tab-label label-tfvars">terraform.tfvars</label>
@@ -161,7 +155,7 @@
             <label for="tab-deploy" class="tab-label label-deploy">deploy.sh</label>
         </div>
 
-        <!-- main.tf Content Container -->
+        <!-- main.tf -->
         <div id="content-main" class="tab-content">
 <pre>terraform {
   required_providers {
@@ -178,7 +172,6 @@ provider "esxi" {
   esxi_password = var.esxi_password
 }
 
-# UBUNTU FLEET
 resource "esxi_guest" "ubuntu_vms" {
   count              = lower(var.os_choice) == "ubuntu" ? var.vm_count : 0
   guest_name         = "ubuntu-node-${count.index + 1}"
@@ -189,7 +182,9 @@ resource "esxi_guest" "ubuntu_vms" {
   power              = "on"
   resource_pool_name = "/"
 
-  network_interfaces { virtual_network = "VM Network" }
+  network_interfaces {
+    virtual_network = "VM Network"
+  }
 
   guestinfo = {
     "userdata" = base64encode(&lt;&lt;-EOF
@@ -204,7 +199,6 @@ resource "esxi_guest" "ubuntu_vms" {
   }
 }
 
-# KALI FLEET
 resource "esxi_guest" "kali_vms" {
   count              = lower(var.os_choice) == "kali" ? var.vm_count : 0
   guest_name         = "kali-box-${count.index + 1}"
@@ -215,7 +209,9 @@ resource "esxi_guest" "kali_vms" {
   power              = "on"
   resource_pool_name = "/"
 
-  network_interfaces { virtual_network = "VM Network" }
+  network_interfaces {
+    virtual_network = "VM Network"
+  }
 
   guestinfo = {
     "userdata" = base64encode(&lt;&lt;-EOF
@@ -231,14 +227,14 @@ resource "esxi_guest" "kali_vms" {
 }</pre>
         </div>
 
-        <!-- terraform.tfvars Content Container -->
+        <!-- terraform.tfvars -->
         <div id="content-tfvars" class="tab-content">
-<pre>esxi_hostname = "192.168.10.129" # Your ESXi host IP
+<pre>esxi_hostname = "192.168.10.129"
 esxi_username = "root"
 esxi_password = "Marma@12"</pre>
         </div>
 
-        <!-- variables.tf Content Container -->
+        <!-- variables.tf -->
         <div id="content-variables" class="tab-content">
 <pre>variable "os_choice" {
   type        = string
@@ -248,10 +244,8 @@ esxi_password = "Marma@12"</pre>
 variable "vm_count" {
   type        = number
   description = "How many virtual machines do you want to deploy?"
-  # DO NOT PUT A DEFAULT LINE HERE
 }
 
-# Hidden backend variables loaded silently via terraform.tfvars
 variable "esxi_hostname" {
   type = string
 }
@@ -272,21 +266,29 @@ variable "vm_name_prefix" {
 }</pre>
         </div>
 
-        <!-- deploy.sh Content Container -->
+        <!-- deploy.sh -->
         <div id="content-deploy" class="tab-content">
 <pre>#!/bin/bash
 
-# 1. Ask the user for their OS choice
 read -p "Which OS do you want to deploy? (ubuntu/kali): " OS_CHOICE
 OS_CHOICE=$(echo "$OS_CHOICE" | tr '[:upper:]' '[:lower:]')
 
-# 2. Ask how many NEW virtual machines to add
 read -p "How many NEW virtual machines do you want to add?: " NEW_VM_COUNT
 
-# 3. Check the current state to see how many already exist
 if [ "$OS_CHOICE" == "ubuntu" ]; then
     CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.ubuntu_vms" || echo 0)
-
-    # Calculate the new final total target number
     TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
+    terraform apply -var="os_choice=ubuntu" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.ubuntu_vms
 
+elif [ "$OS_CHOICE" == "kali" ]; then
+    CURRENT_COUNT=$(terraform state list | grep -c "esxi_guest.kali_vms" || echo 0)
+    TOTAL_COUNT=$((CURRENT_COUNT + NEW_VM_COUNT))
+    terraform apply -var="os_choice=kali" -var="vm_count=$TOTAL_COUNT" -target=esxi_guest.kali_vms
+else
+    echo "Invalid OS choice. Please choose 'ubuntu' or 'kali'."
+fi</pre>
+        </div>
+    </div>
+
+</body>
+</html>
