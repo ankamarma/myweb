@@ -113,7 +113,7 @@
 <body>
 
     <h1>VM Deployment Guide on VMware ESXi Using Terraform</h1>
-    <p>This guide outlines the procedure for deploying Virtual Machines (VMs) onto a standalone VMware ESXi host utilizing Terraform from a Windows Subsystem for Linux (WSL) environment.</p>
+    
 
     <h2>Environment &amp; Tools</h2>
     <ul>
@@ -134,9 +134,7 @@
         <li><strong>Create the automation script (<code>deploy.sh</code>):</strong> Create this script to count existing virtual machines and add new ones safely without deleting the old ones.</li>
     </ol>
 
-    <div class="note">
-        <strong>Important Automation Note:</strong> By default, declarative tools like Terraform attempt to tightly manage a fixed state file, which can result in existing VMs being destroyed or overwritten when you attempt to spin up additional independent instances. The <code>deploy.sh</code> script dynamically queries the existing VM count on the host, allowing you to safely scale up and provision new VMs sequentially without disrupting the existing infrastructure.
-    </div>
+
 
     <h2>Configuration Files &amp; Scripts</h2>
     <p>Select a file tab below to view the configuration contents matching your deployment workspace directory:</p>
