@@ -3,276 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terraform ESXi Deployment Workspace</title>
+    <title>VM Deployment Guide on ESXi using Terraform</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #d4d4d4;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        /* ==========================================================================
-           Sidebar Components & Containers
-           ========================================================================== */
-        .sidebar {
-            width: 360px;
-            background-color: #252526;
-            border-right: 1px solid #3c3c3c;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        .sidebar-section {
-            padding: 20px;
-            border-bottom: 1px solid #3c3c3c;
-        }
-        .sidebar-header {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #858585;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-        
-        /* ==========================================================================
-           Instructions Panel Readability
-           ========================================================================== */
-        .instructions-text {
-            font-size: 13.5px;
             line-height: 1.6;
-            color: #cccccc;
+            color: #333;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
-        .instructions-text p {
-            margin-bottom: 12px;
+        h1 {
+            color: #1a1a1a;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 10px;
         }
-        .instructions-text ul, .instructions-text ol {
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+        ul, ol {
             padding-left: 20px;
-            margin-bottom: 14px;
         }
-        .instructions-text li {
-            margin-bottom: 8px;
+        li {
+            margin-bottom: 10px;
         }
-        .instructions-text code {
-            font-family: "Consolas", "Courier New", monospace;
-            background-color: #1e1e1e;
+        code {
+            background-color: #f4f4f4;
             padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid #3c3c3c;
-            color: #ce9178;
-            font-size: 12.5px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9em;
         }
-        .note-callout {
-            font-size: 12.5px;
-            color: #b5cea8;
-            border-left: 3px solid #b5cea8;
-            padding: 8px 10px;
-            background-color: #1e1e1e;
-            margin: 14px 0;
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
             border-radius: 0 4px 4px 0;
-        }
-        
-        /* ==========================================================================
-           File Selection List Tree
-           ========================================================================== */
-        .file-list {
-            list-style: none;
-        }
-        .file-item {
-            padding: 10px 12px;
-            cursor: pointer;
-            font-family: "Consolas", "Courier New", monospace;
-            font-size: 13.5px;
-            color: #9cdcfe;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            border-radius: 6px;
-            margin-bottom: 4px;
-            background-color: #2d2d2d;
-            border: 1px solid transparent;
-        }
-        .file-item:hover {
-            background-color: #37373d;
-            border-color: #444;
-        }
-        .file-item.active {
-            background-color: #0e639c;
-            color: #ffffff;
-            font-weight: 600;
-            border-color: #1177bb;
-        }
-        .file-item::before {
-            content: "📄";
-            margin-right: 10px;
-            font-size: 13px;
-        }
-        
-        /* ==========================================================================
-           Image Gallery Grid
-           ========================================================================== */
-        .screenshot-gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 6px;
-        }
-        .thumbnail-container {
-            cursor: pointer;
-            border: 1px solid #3c3c3c;
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-            background-color: #1e1e1e;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .thumbnail-container:hover {
-            border-color: #007acc;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .thumbnail-container img {
-            width: 100%;
-            height: 90px;
-            object-fit: cover;
-            display: block;
-        }
-        .thumbnail-label {
-            font-size: 10.5px;
-            padding: 6px;
-            text-align: center;
-            background-color: #2d2d2d;
-            color: #aaaaaa;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-family: monospace;
-        }
-        
-        /* ==========================================================================
-           Primary Workspace Content Viewport
-           ========================================================================== */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #1e1e1e;
-        }
-        .content-header {
-            background-color: #2d2d2d;
-            padding: 14px 24px;
-            font-family: "Consolas", "Courier New", monospace;
-            font-size: 14px;
-            border-bottom: 1px solid #3c3c3c;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-        }
-        .content-header::before {
-            content: "👁️";
-            margin-right: 8px;
-        }
-        .code-container {
-            flex: 1;
-            padding: 24px;
-            overflow: auto;
-            background-color: #181818;
-        }
-        pre {
-            font-family: "Consolas", "Fira Code", "Courier New", monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre;
-            color: #d4d4d4;
-        }
-        
-        /* ==========================================================================
-           Interactive Lightbox Window Overlay
-           ========================================================================== */
-        .lightbox-modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(10, 10, 10, 0.9);
-            justify-content: center;
-            align-items: center;
-            cursor: zoom-out;
-            backdrop-filter: blur(4px);
-        }
-        .lightbox-modal img {
-            max-width: 85%;
-            max-height: 85%;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
-            border: 1px solid #555555;
-            border-radius: 6px;
-            cursor: default;
-            animation: scaleUp 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes scaleUp {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .lightbox-close {
-            position: absolute;
-            top: 25px;
-            right: 35px;
-            color: #aaaaaa;
-            font-size: 36px;
-            font-weight: 300;
-            cursor: pointer;
-            user-select: none;
-            transition: color 0.2s;
-        }
-        .lightbox-close:hover {
-            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <!-- Workspace Sidebar Panel Layout -->
-    <div class="sidebar">
-        <!-- Section 1: Core System Architecture & Guidelines -->
-        <div class="sidebar-section">
-            <div class="sidebar-header">Deployment Guide</div>
-            <div class="instructions-text">
-                <p><strong>Overview:</strong> This engine provisions virtual infrastructure targets on a dedicated VMware ESXi cluster running on Cisco C220 M4 metal frameworks utilizing Terraform configurations.</p>
-                
-                <p><strong>Environment Prerequisite Vectors:</strong></p>
-                <ul>
-                    <li>Cisco C220 M4 Bare-Metal Host Platform</li>
-                    <li>HashiCorp Terraform Deployment Binary</li>
-                    <li>Local <code>virtualbox-ova</code> Directory Storage Core</li>
-                </ul>
+    <h1>VM Deployment Guide on VMware ESXi Using Terraform</h1>
+    <p>This guide outlines the procedure for deploying Virtual Machines (VMs) onto a standalone VMware ESXi host utilizing Terraform from a Windows Subsystem for Linux (WSL) environment.</p>
 
-                <div class="sidebar-header" style="margin-top:20px; margin-bottom:6px;">Procedural Directives</div>
-                <ol>
-                    <li>Initialize an instance of Windows Subsystem for Linux (WSL) running Ubuntu.</li>
-                    <li>Install the structural Terraform distribution framework within the shell execution terminal environment.</li>
-                    <li>Establish the local configuration asset matrix named <code>terraform.tfvars</code> to host secure connection points.</li>
-                    <li>Construct the environment parameters definition engine named <code>variables.tf</code>.</li>
-                    <li>Compose the structural build definitions profile sheet named <code>main.tf</code>.</li>
-                </ol>
-                
-                <div class="note-callout">
-                    <strong>State Tracker Engine Notice:</strong> Custom script architecture tracks environment footprints to match index deltas, safeguarding existing assets during incremental scale processes.
-                </div>
-                
-                <ol start="6">
-                    <li>Launch the workflow execution harness <code>deploy.sh</code> to seamlessly execute configuration upgrades.</li>
-                </ol>
-            </div>
-        </div>
+    <h2>Environment &amp; Tools</h2>
+    <ul>
+        <li><strong>Hardware Platform:</strong> Cisco UCS C220 M4 Rack Server</li>
+        <li><strong>Hypervisor:</strong> VMware ESXi</li>
+        <li><strong>Infrastructure as Code:</strong> Terraform</li>
+        <li><strong>Local Workstation OS:</strong> Windows with WSL2 (Ubuntu)</li>
+        <li><strong>Source Image:</strong> Operating System OVA file (stored in the Ubuntu <code>virtualbox-ova</code> directory)</li>
+    </ul>
 
+    <h2>Step-by-Step Instructions</h2>
+    <ol>
+        <li>
+            <strong>Set up the Environment:</strong> 
+            Open and configure your WSL Ubuntu environment on Windows.
+        </li>
+        <li>
+            <strong>Install Terraform:</strong> 
+            Download and install the appropriate Terraform binary on your WSL Ubuntu instance.
+        </li>
+        <li>
+            <strong>Configure Secrets (<code>terraform.tfvars</code>):</strong> 
+            Create a file named <code>terraform.tfvars</code> to securely store your ESXi host IP address and login credentials.
+        </li>
+        <li>
+            <strong>Define Variables (<code>variables.tf</code>):</strong> 
+            Create a file named <code>variables.tf</code> to define the target input parameters required for your automated prompt and deployment.
+        </li>
+        <li>
+            <strong>Create Main Configuration (<code>main.tf</code>):</strong> 
+            Develop your core infrastructure configuration inside <code>main.tf</code>, specifying the VMware vSphere/ESXi provider and local OVA source configurations.
+        </li>
+        <li>
+            <strong>Implement the Deployment Automation Script (<code>deploy.sh</code>):</strong> 
+            Create a companion Bash wrapper script to scale out your environment seamlessly.
+        </li>
+    </ol>
+
+    <div class="note">
+        <strong>Important Automation Note:</strong> By default, declarative tools like Terraform attempt to tightly manage a fixed state file, which can result in existing VMs being destroyed or overwritten when you attempt to spin up additional independent instances. The <code>deploy.sh</code> script dynamically queries the existing VM count on the host, allowing you to safely scale up and provision new VMs sequentially without disrupting the existing infrastructure.
+    </div>
+
+</body>
+</html>
