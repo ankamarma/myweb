@@ -126,12 +126,12 @@
 
     <h2>Step-by-Step Instructions</h2>
     <ol>
-        <li><strong>Set up the Environment:</strong> Open and configure your WSL Ubuntu environment on Windows.</li>
-        <li><strong>Install Terraform:</strong> Download and install the appropriate Terraform binary on your WSL Ubuntu instance.</li>
-        <li><strong>Configure Secrets (<code>terraform.tfvars</code>):</strong> Create your credentials mapping file.</li>
-        <li><strong>Define Variables (<code>variables.tf</code>):</strong> Establish deployment target options.</li>
-        <li><strong>Create Main Configuration (<code>main.tf</code>):</strong> Standardize your target architecture code.</li>
-        <li><strong>Implement Deployment Automation (<code>deploy.sh</code>):</strong> Scale elements live using dynamic state tracking.</li>
+        <li><strong>Set up the environment:</strong> Open the Ubuntu WSL terminal on Windows.</li>
+        <li><strong>Install Terraform:</strong> Download and install Terraform inside your Ubuntu environment.</li>
+        <li><strong>Save your credentials (<code>terraform.tfvars</code>):</strong> Create this file to store your ESXi host IP, username, and password.</li>
+        <li><strong>Define your variables (<code>variables.tf</code>):</strong> Create this file to outline the setup options, like the operating system and VM count.</li>
+        <li><strong>Create the main configuration (<code>main.tf</code>):</strong> Create this file to define how to build the Ubuntu and Kali virtual machines on your host.</li>
+        <li><strong>Create the automation script (<code>deploy.sh</code>):</strong> Create this script to count existing virtual machines and add new ones safely without deleting the old ones.</li>
     </ol>
 
     <div class="note">
@@ -228,7 +228,7 @@ resource "esxi_guest" "kali_vms" {
         </div>
 
         <!-- terraform.tfvars -->
-        <div id="content-tfvars" class="tab-content">
+        <div id="tfvars" class="tab-content">
 <pre>esxi_hostname = "192.168.10.129"
 esxi_username = "root"
 esxi_password = "Marma@12"</pre>
