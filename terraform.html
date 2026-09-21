@@ -267,7 +267,7 @@ resource "esxi_guest" "kali_vms" {
         </div>
 
         <!-- terraform.tfvars -->
-        <div id="content-tfvars" class="tab-content">
+        <div id="tfvars" class="tab-content">
 <pre>esxi_hostname = "192.168.10.129"
 esxi_username = "root"
 esxi_password = "Marma@12"</pre>
@@ -297,3 +297,5 @@ variable "esxi_username" {
 variable "esxi_password" {
   type      = string
   sensitive = true
+}
+
